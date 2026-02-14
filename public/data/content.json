@@ -1,0 +1,116 @@
+{
+  "home": {
+    "title": "Software house based in Warsaw",
+    "subtitle": "",
+    "cta": "Let's talk about your project"
+  },
+  "cases": {
+    "projects": [
+      {
+        "category": "mobile application",
+        "title": "chiesi app",
+        "slug": "chiesi-app",
+        "sections": [],
+        "tech": {
+          "icon1": "M",
+          "icon2": "A"
+        }
+      },
+      {
+        "category": "e-commerce",
+        "title": "kompan smaku",
+        "slug": "kompan-smaku",
+        "sections": [],
+        "tech": {
+          "icon1": "E",
+          "icon2": "C"
+        }
+      },
+      {
+        "category": "erp",
+        "title": "cape morris erp",
+        "slug": "cape-morris-erp",
+        "sections": [],
+        "tech": {
+          "icon1": "E",
+          "icon2": "R"
+        }
+      },
+      {
+        "category": "bot / website",
+        "title": "zyrtec ucb",
+        "slug": "zyrtec-ucb",
+        "sections": [],
+        "tech": {
+          "icon1": "B",
+          "icon2": "W"
+        }
+      }
+    ]
+  },
+  "services": {
+    "items": [
+      {
+        "title": "Hotel Brand Management",
+        "description": "We build proprietary hospitality platforms anchored in real estate. Theme-led concepts, operator-grade systems, and owner-aligned structures enable scalable portfolios across urban and tourism markets."
+      },
+      {
+        "title": "Capital Solutions & Investment Vehicles",
+        "description": "We structure capital in fragmented markets. Pooled vehicles, JV and SPV architectures, and disciplined underwriting translate into scalable execution and institutional-quality reporting."
+      },
+      {
+        "title": "Development & Execution Services",
+        "description": "We execute development with a focus on design quality, commercial viability, and long-term operational performance. From land acquisition and diligence to planning, approvals, construction management, leasing, and eventual stabilization or exit, we manage the full asset lifecycle."
+      }
+    ]
+  },
+  "technologies": {
+    "title": "How we do it?",
+    "description": "We are using latest and most advanced technologies to provide products you are looking for.",
+    "items": [
+      {
+        "name": "JavaScript",
+        "icon": "JS"
+      },
+      {
+        "name": "React",
+        "icon": "React"
+      },
+      {
+        "name": "Node.js",
+        "icon": "Node"
+      },
+      {
+        "name": "Python",
+        "icon": "Python"
+      },
+      {
+        "name": "PHP",
+        "icon": "PHP7"
+      },
+      {
+        "name": "MySQL",
+        "icon": "MySQL"
+      }
+    ]
+  },
+  "contact": {
+    "person": {
+      "name": "Mateusz Walaszczyk",
+      "title": "Client Service Director",
+      "email": "m.walaszczyk@361.sh",
+      "phone": "+48 505 931 537"
+    },
+    "address": {
+      "street": "Niedzwiedzia 29a",
+      "city": "02-737 Warsaw",
+      "country": "Poland",
+      "phone": "",
+      "email": ""
+    },
+    "careers": {
+      "text": "Looking for new advntures?",
+      "email": "jobs@361.sh"
+    }
+  }
+}
