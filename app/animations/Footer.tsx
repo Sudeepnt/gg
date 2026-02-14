@@ -108,7 +108,7 @@ export default function Footer() {
                                     <source src="/reel/26619-359604050_tiny.mp4" type="video/mp4" />
                                 </video>
                                 <div className="absolute bottom-3 right-3">
-                                    <div className="bg-black px-3 py-1.5 rounded flex items-center gap-2 border border-white/10 group-hover:bg-white group-hover:text-black transition-colors">
+                                    <div className="bg-black text-white px-3 py-1.5 rounded flex items-center gap-2 border border-white/10 group-hover:bg-white group-hover:text-black transition-colors">
                                         <span className="text-[10px] md:text-xs font-bold tracking-widest leading-none">Play Reel</span>
                                         <Play size={10} fill="currentColor" className="text-white group-hover:text-black" />
                                     </div>

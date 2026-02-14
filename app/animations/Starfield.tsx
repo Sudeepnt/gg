@@ -32,7 +32,7 @@ function Stars({ isGG }: { isGG: boolean }) {
   // Determine count once on mount
   const count = useMemo(() => {
     if (typeof window === 'undefined') return 15000;
-    return window.innerWidth < 768 ? 10500 : 35000;
+    return window.innerWidth < 768 ? 10500 : 60000;
   }, []);
 
   // Generate random positions

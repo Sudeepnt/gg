@@ -1,42 +1,117 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion, useMotionValue } from 'framer-motion';
-import { usePathname } from 'next/navigation';
+import { useEffect, useState } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 
-export default function CustomCursor() {
-    const pathname = usePathname();
-    const cursorX = useMotionValue(-100); // Start off-screen
+export default function Cursor() {
+    const [isHovered, setIsHovered] = useState(false);
+    const [isDarkBg, setIsDarkBg] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
+    const cursorX = useMotionValue(-100);
     const cursorY = useMotionValue(-100);
 
+    // Spring configuration for the trailing effect
+    const springConfig = { damping: 25, stiffness: 300, mass: 0.5 };
+    const springX = useSpring(cursorX, springConfig);
+    const springY = useSpring(cursorY, springConfig);
+
     useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            cursorX.set(e.clientX - 12);
-            cursorY.set(e.clientY - 12);
+        const moveCursor = (e: MouseEvent) => {
+            cursorX.set(e.clientX);
+            cursorY.set(e.clientY);
+            setIsVisible(true);
+
+            const target = e.target as HTMLElement;
+
+            // Check if hovering over a clickable element
+            const isClickable =
+                target.tagName === "BUTTON" ||
+                target.tagName === "A" ||
+                target.closest("button") ||
+                target.closest("a") ||
+                window.getComputedStyle(target).cursor === "pointer";
+
+            setIsHovered(!!isClickable);
+
+            // Check for dark background theme
+            const darkThemeElement = target.closest('[data-theme="dark-teal"]');
+            setIsDarkBg(!!darkThemeElement);
         };
 
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
+        const handleMouseLeave = () => {
+            setIsVisible(false);
+        };
+
+        const handleMouseEnter = () => {
+            setIsVisible(true);
+        };
+
+        window.addEventListener("mousemove", moveCursor);
+        document.addEventListener("mouseleave", handleMouseLeave);
+        document.addEventListener("mouseenter", handleMouseEnter);
+
+        return () => {
+            window.removeEventListener("mousemove", moveCursor);
+            document.removeEventListener("mouseleave", handleMouseLeave);
+            document.removeEventListener("mouseenter", handleMouseEnter);
+        };
     }, [cursorX, cursorY]);
 
     return (
-        <motion.div
-            className={`fixed top-0 left-0 pointer-events-none z-[2147483647] hidden md:block ${pathname === '/gg-productions' ? 'text-black mix-blend-normal' : 'text-white mix-blend-difference'}`}
-            style={{
-                x: cursorX,
-                y: cursorY,
-            }}
-        >
-            <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6 block"
+        <>
+            {/* Central Dot - Always Visible & Instant Movement */}
+            <motion.div
+                className="hidden md:flex fixed top-0 left-0 pointer-events-none z-[9999] items-center justify-center"
+                style={{
+                    x: cursorX,
+                    y: cursorY,
+                    translateX: "-50%",
+                    translateY: "-50%",
+                }}
+                animate={{
+                    opacity: isVisible ? 1 : 0,
+                }}
+                transition={{
+                    opacity: { duration: 0.2 }
+                }}
             >
-                <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z" />
-            </svg>
-        </motion.div>
+                <div
+                    className="w-1 h-1 rounded-full z-10 transition-colors duration-200"
+                    style={{ backgroundColor: "#FFFFFF" }}
+                />
+            </motion.div>
+
+            {/* Outer Circle - Changes based on state & Trailing Movement */}
+            <motion.div
+                className="hidden md:flex fixed top-0 left-0 pointer-events-none z-[9999] items-center justify-center"
+                style={{
+                    x: springX,
+                    y: springY,
+                    translateX: "-50%",
+                    translateY: "-50%",
+                }}
+                animate={{
+                    opacity: isVisible ? 1 : 0,
+                }}
+                transition={{
+                    opacity: { duration: 0.2 }
+                }}
+            >
+                <motion.div
+                    animate={{
+                        width: isHovered ? 36 : 27,
+                        height: isHovered ? 36 : 27,
+                        backgroundColor: isHovered
+                            ? "rgba(255, 255, 255, 0.2)"
+                            : "transparent",
+                        border: isHovered
+                            ? "none"
+                            : "1px solid rgba(255, 255, 255, 0.5)",
+                    }}
+                    transition={{ duration: 0.15 }}
+                    className="rounded-full flex items-center justify-center"
+                />
+            </motion.div>
+        </>
     );
 }

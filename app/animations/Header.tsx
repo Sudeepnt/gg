@@ -36,13 +36,13 @@ export default function Header() {
                             <li key={item.name} className="shrink-0">
                                 <Link
                                     href={item.href}
-                                    className={`block text-[10px] md:text-xs font-bold transition-all border px-2 md:px-5 py-1.5 md:py-2 whitespace-nowrap
+                                    className={`relative block text-[10px] md:text-xs font-bold px-2 md:px-5 py-1.5 md:py-2 whitespace-nowrap overflow-hidden border transition-[background-size,color] duration-300 bg-no-repeat bg-left
                                     ${isGG
-                                            ? `border-black/10 hover:bg-black hover:text-white text-black`
-                                            : `border-white/10 hover:bg-white hover:text-black text-white`
-                                        }`}
+                                            ? `border-black/10 text-black hover:text-white bg-gradient-to-r from-black to-black`
+                                            : `border-white/10 text-white hover:text-black bg-gradient-to-r from-white to-white`
+                                        } bg-[length:0%_100%] hover:bg-[length:100%_100%]`}
                                 >
-                                    {item.name}
+                                    <span className="relative z-10">{item.name}</span>
                                 </Link>
                             </li>
                         )
