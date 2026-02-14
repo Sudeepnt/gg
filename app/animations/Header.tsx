@@ -36,7 +36,7 @@ export default function Header() {
                             <li key={item.name} className="shrink-0">
                                 <Link
                                     href={item.href}
-                                    className={`relative block text-[10px] md:text-xs font-bold px-2 md:px-5 py-1.5 md:py-2 whitespace-nowrap overflow-hidden border transition-[background-size,color] duration-300 bg-no-repeat bg-left
+                                    className={`relative block text-[10px] md:text-xs font-bold px-2 md:px-5 py-1.5 md:py-2 whitespace-nowrap overflow-hidden border transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left
                                     ${isGG
                                             ? `border-black/10 text-black hover:text-white bg-gradient-to-r from-black to-black`
                                             : `border-white/10 text-white hover:text-black bg-gradient-to-r from-white to-white`
@@ -51,12 +51,13 @@ export default function Header() {
 
                 <Link
                     href="/pitch"
-                    className={`border px-2 md:px-5 py-1.5 md:py-2 text-[10px] md:text-xs font-bold transition-colors shrink-0 whitespace-nowrap
+                    className={`relative px-2 md:px-5 py-1.5 md:py-2 text-[10px] md:text-xs font-bold shrink-0 whitespace-nowrap overflow-hidden border transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left
                         ${pathname === '/gg-productions'
-                            ? 'bg-black text-white border-black hover:bg-white hover:text-black hover:border-black'
-                            : 'bg-white text-black border-white hover:bg-black hover:text-white hover:border-white'}`}
+                            ? 'bg-black text-white border-black hover:text-black bg-gradient-to-r from-white to-white'
+                            : 'bg-white text-black border-white hover:text-white bg-gradient-to-r from-black to-black'
+                        } bg-[length:0%_100%] hover:bg-[length:100%_100%]`}
                 >
-                    Pitch Us
+                    <span className="relative z-10">Pitch Us</span>
                 </Link>
             </div>
         </nav>
