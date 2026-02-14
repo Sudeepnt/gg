@@ -11,7 +11,7 @@ export default function Pitch() {
                         Inbound Form
                     </h1>
 
-                    <div className="flex flex-col gap-2 md:gap-5 text-base md:text-lg text-white/90 leading-normal font-bold tracking-wide w-full max-w-4xl mx-auto">
+                    <div className="flex flex-col gap-2 md:gap-5 text-xs md:text-sm text-white/90 leading-normal font-bold tracking-wide w-full max-w-4xl mx-auto">
                         <p className="md:px-6 border-0 px-0 text-left md:text-center w-full">
                             Pitch with clarity and conviction. We want to see what you are building, why it matters, and how you plan to ship it end to end.
                         </p>
