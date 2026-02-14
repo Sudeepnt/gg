@@ -18,7 +18,7 @@ export default function PrivacyStatement() {
 
                     <div className="space-y-8 text-black text-base leading-relaxed mb-32">
                         <p className="font-medium">
-                            ATit Capital Management LLP ("ATit Capital", "we", "us", "our") respects your privacy and is committed to protecting your personal information.
+                            Gattabara Games LLP ("Gattabara Games", "we", "us", "our") respects your privacy and is committed to protecting your personal information.
                         </p>
 
                         <div>
@@ -72,15 +72,15 @@ export default function PrivacyStatement() {
                                 <li>Withdraw consent at any time</li>
                             </ul>
                             <p className="mt-4">
-                                Requests can be sent to <a href="mailto:info@ATitCapital.com" className="text-[#13343e] underline">info@ATitCapital.com</a>.
+                                Requests can be sent to <a href="mailto:contact@gattabaragames.com" className="text-[#13343e] underline">contact@gattabaragames.com</a>.
                             </p>
                         </div>
 
                         <div>
                             <h2 className="text-[#13343e] text-lg font-bold mb-4">Contact Information</h2>
                             <div className="space-y-1">
-                                <p className="font-bold">ATit Capital Management LLP</p>
-                                <p>Email: <a href="mailto:info@ATitCapital.com" className="text-[#13343e] underline">info@ATitCapital.com</a></p>
+                                <p className="font-bold">Gattabara Games LLP</p>
+                                <p>Email: <a href="mailto:contact@gattabaragames.com" className="text-[#13343e] underline">contact@gattabaragames.com</a></p>
                                 <p>Phone: +91 9900114038</p>
                                 <div className="mt-4">
                                     <p className="font-bold">Address:</p>

@@ -23,8 +23,8 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata: Metadata = {
-  title: "ATit Capital",
-  description: "ATit Capital operates at the intersection of people, capital, and land in India.",
+  title: "Gattabara Games",
+  description: "Gattabara Games Layout",
   icons: {
     icon: "/logos/logo1white.png",
     apple: "/logos/logo1white.png",

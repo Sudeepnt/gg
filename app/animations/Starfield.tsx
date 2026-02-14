@@ -32,7 +32,7 @@ function Stars({ isGG }: { isGG: boolean }) {
   // Determine count once on mount
   const count = useMemo(() => {
     if (typeof window === 'undefined') return 15000;
-    return window.innerWidth < 768 ? 10500 : 19500;
+    return window.innerWidth < 768 ? 10500 : 35000;
   }, []);
 
   // Generate random positions
@@ -137,7 +137,7 @@ export default function Starfield() {
   const isGG = pathname === '/gg-productions';
 
   return (
-    <div className={`fixed inset-0 z-0 transition-colors duration-500 ${isGG ? '' : 'bg-black'}`}>
+    <div className={`fixed inset-0 z-0 transition-colors duration-500 ${isGG ? 'bg-white' : 'bg-black'}`}>
       <Canvas camera={{ position: [0, 0, 5] }}>
         <Stars isGG={isGG} />
       </Canvas>

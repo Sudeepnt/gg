@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-const ParticleText: React.FC = () => {
+const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = 'white', height }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -37,7 +37,7 @@ const ParticleText: React.FC = () => {
       const responsiveHorizontalScale = isMobile ? 1.1 : 1.25;
       const responsiveFont = `900 ${responsiveFontSize}px "Montserrat", "Bebas Neue", sans-serif`;
 
-      ctx.fillStyle = 'white';
+      ctx.fillStyle = color;
       ctx.font = responsiveFont;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -67,7 +67,7 @@ const ParticleText: React.FC = () => {
               vx: 0,
               vy: 0,
               size: particleSize,
-              color: 'white'
+              color: color
             });
           }
         }
@@ -136,7 +136,7 @@ const ParticleText: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="w-full h-screen flex justify-center items-center overflow-hidden bg-transparent"
+      className={`w-full ${height || 'h-screen'} flex justify-center items-center overflow-hidden bg-transparent`}
     >
       <canvas ref={canvasRef} className="max-w-full" />
     </div>

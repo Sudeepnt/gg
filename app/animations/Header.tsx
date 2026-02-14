@@ -22,6 +22,7 @@ export default function Header() {
                     alt="Logo"
                     fill
                     className="object-contain"
+                    priority
                 />
             </Link>
 
@@ -49,7 +50,7 @@ export default function Header() {
                 </ul>
 
                 <Link
-                    href="/pitch-us"
+                    href="/pitch"
                     className={`border px-2 md:px-5 py-1.5 md:py-2 text-[10px] md:text-xs font-bold transition-colors shrink-0 whitespace-nowrap
                         ${pathname === '/gg-productions'
                             ? 'bg-black text-white border-black hover:bg-white hover:text-black hover:border-black'
