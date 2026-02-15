@@ -109,7 +109,7 @@ export default function Footer() {
                                 </video>
                                 <div className="absolute bottom-2 right-3">
                                     <div className="bg-black/50 text-white px-3 py-1.5 flex items-center gap-2 border border-white/10 group-hover:bg-white group-hover:text-black transition-colors">
-                                        <span className="text-[10px] md:text-xs font-bold tracking-widest leading-none">Play Reel</span>
+                                        <span className="text-[7px] md:text-[9px] font-bold tracking-widest leading-none">Play Reel</span>
                                         <Play size={10} fill="currentColor" className="text-white group-hover:text-black" />
                                     </div>
                                 </div>
@@ -126,7 +126,7 @@ export default function Footer() {
                                     </h3>
                                 </div>
                                 <div className="self-end mt-3 md:mt-0 z-10">
-                                    <Link href="/contact" className="bg-white text-black border border-white px-3 py-1.5 text-[10px] md:text-xs font-bold tracking-widest transition-colors flex items-center gap-2 hover:bg-white/90 whitespace-nowrap leading-none">
+                                    <Link href="/contact" className="bg-white text-black border border-white px-3 py-1.5 text-[7px] md:text-[9px] font-bold tracking-widest transition-colors flex items-center gap-2 hover:bg-white/90 whitespace-nowrap leading-none">
                                         Contact Us
                                     </Link>
                                 </div>
