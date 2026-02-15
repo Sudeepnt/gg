@@ -96,7 +96,7 @@ export default function Footer() {
                                     setShowVideo(true);
                                     setIsPlaying(true);
                                 }}
-                                className="col-span-2 lg:col-span-1 bg-[#13343e] h-36 md:h-40 rounded flex flex-col justify-between group cursor-pointer hover:bg-[#1a4552] transition-colors relative overflow-hidden order-2"
+                                className="col-span-2 lg:col-span-1 bg-[#13343e] h-36 md:h-40 flex flex-col justify-between group cursor-pointer hover:bg-[#1a4552] transition-colors relative overflow-hidden order-2"
                             >
                                 <video
                                     autoPlay
@@ -107,8 +107,8 @@ export default function Footer() {
                                 >
                                     <source src="/reel/26619-359604050_tiny.mp4" type="video/mp4" />
                                 </video>
-                                <div className="absolute bottom-3 right-3">
-                                    <div className="bg-black text-white px-3 py-1.5 rounded flex items-center gap-2 border border-white/10 group-hover:bg-white group-hover:text-black transition-colors">
+                                <div className="absolute bottom-2 right-3">
+                                    <div className="bg-black/50 text-white px-3 py-1.5 flex items-center gap-2 border border-white/10 group-hover:bg-white group-hover:text-black transition-colors">
                                         <span className="text-[10px] md:text-xs font-bold tracking-widest leading-none">Play Reel</span>
                                         <Play size={10} fill="currentColor" className="text-white group-hover:text-black" />
                                     </div>

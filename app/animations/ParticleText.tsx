@@ -88,12 +88,12 @@ const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = '
           p.vx -= (dx / distance) * force * 20;
           p.vy -= (dy / distance) * force * 20;
         } else {
-          p.vx -= (p.x - p.originX) * 0.04;
-          p.vy -= (p.y - p.originY) * 0.04;
+          p.vx -= (p.x - p.originX) * 0.02;
+          p.vy -= (p.y - p.originY) * 0.02;
         }
 
-        p.vx *= 0.92;
-        p.vy *= 0.92;
+        p.vx *= 0.96;
+        p.vy *= 0.96;
         p.x += p.vx;
         p.y += p.vy;
         ctx.fillStyle = p.color;
