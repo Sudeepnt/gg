@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 export default function Cursor() {
+    const pathname = usePathname();
+    const isGG = pathname === "/gg-productions";
     const [isHovered, setIsHovered] = useState(false);
     const [isDarkBg, setIsDarkBg] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
@@ -35,7 +38,21 @@ export default function Cursor() {
 
             // Check for dark background theme
             const darkThemeElement = target.closest('[data-theme="dark-teal"]');
-            setIsDarkBg(!!darkThemeElement);
+
+            // On GG Productions page, check if hovering over light/white elements
+            if (isGG) {
+                // Check if hovering over elements with white/light backgrounds
+                const isOverWhiteElement =
+                    target.classList.contains('game-overlay') ||
+                    target.closest('.game-image-container') ||
+                    target.closest('.about-shouts-badge') ||
+                    target.tagName === 'VIDEO' ||
+                    target.tagName === 'IMG';
+
+                setIsDarkBg(!!isOverWhiteElement);
+            } else {
+                setIsDarkBg(!!darkThemeElement);
+            }
         };
 
         const handleMouseLeave = () => {
@@ -55,7 +72,7 @@ export default function Cursor() {
             document.removeEventListener("mouseleave", handleMouseLeave);
             document.removeEventListener("mouseenter", handleMouseEnter);
         };
-    }, [cursorX, cursorY]);
+    }, [cursorX, cursorY, isGG]);
 
     return (
         <>
@@ -77,7 +94,11 @@ export default function Cursor() {
             >
                 <div
                     className="w-1 h-1 rounded-full z-10 transition-colors duration-200"
-                    style={{ backgroundColor: "#FFFFFF" }}
+                    style={{
+                        backgroundColor: isGG
+                            ? (isDarkBg ? "#FFFFFF" : "#000000")
+                            : "#FFFFFF"
+                    }}
                 />
             </motion.div>
 
@@ -102,11 +123,15 @@ export default function Cursor() {
                         width: isHovered ? 36 : 27,
                         height: isHovered ? 36 : 27,
                         backgroundColor: isHovered
-                            ? "rgba(255, 255, 255, 0.2)"
+                            ? (isGG
+                                ? (isDarkBg ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.2)")
+                                : "rgba(255, 255, 255, 0.2)")
                             : "transparent",
                         border: isHovered
                             ? "none"
-                            : "1px solid rgba(255, 255, 255, 0.5)",
+                            : (isGG
+                                ? (isDarkBg ? "1px solid rgba(255, 255, 255, 0.5)" : "1px solid rgba(0, 0, 0, 0.5)")
+                                : "1px solid rgba(255, 255, 255, 0.5)"),
                     }}
                     transition={{ duration: 0.15 }}
                     className="rounded-full flex items-center justify-center"

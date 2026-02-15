@@ -14,7 +14,7 @@ const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = '
 
     const textToRender = "STUDIO LUMIO";
     const particleGap = 2;
-    const particleSize = 2.2;
+    const particleSize = 2.86;
     const mouse = { x: 0, y: 0, radius: 80 };
     let isHovering = false;
     let particles: any[] = [];
@@ -88,12 +88,12 @@ const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = '
           p.vx -= (dx / distance) * force * 20;
           p.vy -= (dy / distance) * force * 20;
         } else {
-          p.vx -= (p.x - p.originX) * 0.08;
-          p.vy -= (p.y - p.originY) * 0.08;
+          p.vx -= (p.x - p.originX) * 0.04;
+          p.vy -= (p.y - p.originY) * 0.04;
         }
 
-        p.vx *= 0.85;
-        p.vy *= 0.85;
+        p.vx *= 0.92;
+        p.vy *= 0.92;
         p.x += p.vx;
         p.y += p.vy;
         ctx.fillStyle = p.color;

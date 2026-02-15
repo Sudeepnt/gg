@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Starfield from "../animations/Starfield";
@@ -32,177 +32,16 @@ const games = [
 export default function AboutPage() {
   const rootRef = useRef<HTMLElement | null>(null);
 
-  useEffect(() => {
-    let mounted = true;
-    const splits: any[] = [];
-    const cleanups: Array<() => void> = [];
-
-    (async () => {
-      const [{ gsap }, { ScrollTrigger }, { default: SplitType }] = await Promise.all([
-        import("gsap"),
-        import("gsap/ScrollTrigger"),
-        import("split-type"),
-      ]);
-
-      if (!mounted || !rootRef.current) return;
-
-      gsap.registerPlugin(ScrollTrigger);
-
-      const splitWords = (
-        selector: string,
-        opts: {
-          baseOpacity?: number;
-          start?: string;
-          end?: string;
-          stagger?: number;
-          duration?: number;
-        } = {}
-      ) => {
-        const {
-          baseOpacity = 0,
-          start = "top 90%",
-          end = "bottom 60%",
-          stagger = 0.05,
-          duration = 2,
-        } = opts;
-
-        rootRef.current!.querySelectorAll<HTMLElement>(selector).forEach((el) => {
-          const split = new (SplitType as any)(el, { types: "words" });
-          splits.push(split);
-          const words = split.words as HTMLElement[];
-
-          gsap.set(words, { opacity: baseOpacity, y: 0 });
-
-          const tween = gsap.to(words, {
-            opacity: 1,
-            y: 0,
-            duration,
-            ease: "power3.inOut",
-            stagger,
-            scrollTrigger: {
-              trigger: el,
-              start,
-              end,
-              scrub: true,
-            },
-          });
-
-          cleanups.push(() => {
-            tween.scrollTrigger?.kill();
-            tween.kill();
-          });
-        });
-      };
-
-      const fadeByTrigger = (targets: string, trigger: string, stagger = 0, duration = 1) => {
-        const els = gsap.utils.toArray(targets) as HTMLElement[];
-        if (!els.length) return;
-
-        gsap.set(els, { opacity: 0 });
-
-        const tween = gsap.to(els, {
-          opacity: 1,
-          duration,
-          ease: "power3.inOut",
-          stagger,
-          scrollTrigger: {
-            trigger,
-            start: "top 90%",
-            end: "bottom 60%",
-            scrub: true,
-          },
-        });
-
-        cleanups.push(() => {
-          tween.scrollTrigger?.kill();
-          tween.kill();
-        });
-      };
-
-      // Center opacity reveal for main text
-      const paragraphs = Array.from(
-        rootRef.current!.querySelectorAll<HTMLElement>(".about-brief-text p")
-      );
-
-      const briefSplits = paragraphs.map((p) => new (SplitType as any)(p, { types: "words" }));
-      briefSplits.forEach(s => splits.push(s));
-      const words = briefSplits.flatMap((s: any) => s.words as HTMLElement[]);
-
-      const minOpacity = 0.06;
-      const update = () => {
-        const viewportCenter = window.innerHeight * 0.5;
-        const fullOpacityRadius = window.innerHeight * 0.16;
-        const fadeOutRadius = window.innerHeight * 0.42;
-
-        words.forEach((w) => {
-          const r = w.getBoundingClientRect();
-          const wordCenter = r.top + r.height / 2;
-          const dist = Math.abs(wordCenter - viewportCenter);
-
-          let opacity = minOpacity;
-          if (dist <= fullOpacityRadius) {
-            opacity = 1;
-          } else if (dist < fadeOutRadius) {
-            const t = (dist - fullOpacityRadius) / (fadeOutRadius - fullOpacityRadius);
-            opacity = gsap.utils.interpolate(1, minOpacity, t);
-          }
-
-          gsap.set(w, { opacity });
-        });
-      };
-
-      const st = ScrollTrigger.create({
-        trigger: ".about-brief-text",
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
-        onUpdate: update,
-        onRefresh: update,
-      });
-
-      window.addEventListener("resize", update);
-      update();
-
-      cleanups.push(() => {
-        window.removeEventListener("resize", update);
-        st.kill();
-      });
-
-      splitWords(".about-shouts-p");
-      splitWords(".about-footer h2");
-      splitWords(".copyright-p", { start: "top 100%", end: "bottom 100%", stagger: 0.1 });
-
-      fadeByTrigger(".about-services-h2", ".about-services-h2");
-
-      rootRef.current!.querySelectorAll<HTMLElement>(".about-services-dl").forEach((dl, i) => {
-        const cls = `svc-${i}`;
-        dl.classList.add(cls);
-        fadeByTrigger(`.${cls} .about-services-dt`, `.${cls}`, 0.1);
-      });
-
-      rootRef.current!.querySelectorAll<HTMLElement>(".about-shouts-item").forEach((item, i) => {
-        const cls = `shout-${i}`;
-        item.classList.add(cls);
-        fadeByTrigger(`.${cls}`, `.${cls}`);
-      });
-
-      fadeByTrigger(".about-shouts-badge", ".about-shouts-svgs", 0.1);
-      fadeByTrigger(".footer-cta-text", ".about-footer");
-
-      ScrollTrigger.refresh();
-    })();
-
-    return () => {
-      mounted = false;
-      cleanups.forEach((fn) => fn());
-      splits.forEach((s) => s?.revert?.());
-    };
-  }, []);
+  // Removed scroll-based opacity effect - now using viewport gradient shadows instead
 
   return (
     <>
       <Starfield />
       <main ref={rootRef} className="about">
+        {/* Top and Bottom Gradient Shadows for Focus */}
+        <div className="viewport-shadow-top" />
+        <div className="viewport-shadow-bottom" />
+
         <header className="about-header">
           <div className="about-particle-container">
             <ParticleText color="black" height="h-64" />
@@ -234,14 +73,7 @@ export default function AboutPage() {
           {/* Games Section */}
           <div className="games-grid">
             {games.map((game, index) => (
-              <motion.div
-                key={index}
-                className="game-item"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
+              <div key={index} className="game-item">
                 <h2 className="game-title">
                   {game.title}
                 </h2>
@@ -257,7 +89,7 @@ export default function AboutPage() {
                 <p className="game-description">
                   {game.description}
                 </p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </section>
@@ -319,13 +151,17 @@ export default function AboutPage() {
           color: #111;
           font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
         }
+        ::selection {
+          background-color: #000000;
+          color: #ffffff;
+        }
       `}</style>
 
         <style jsx>{`
         .about {
           width: min(91rem, calc(100% - 2rem));
           margin: 0 auto;
-          padding: 0 0 5rem;
+          padding: 0 0 1rem;
           position: relative;
           z-index: 10;
         }
@@ -341,18 +177,12 @@ export default function AboutPage() {
           position: relative;
           z-index: 20;
         }
-        .about-h1 {
-          margin: 0 0 clamp(5rem, 15vw, 12rem);
-          font-size: clamp(3rem, 13vw, 11rem);
-          line-height: 0.95;
-          letter-spacing: 0.03em;
-          text-transform: uppercase;
-        }
         .about-brief-reel {
-          margin: 0;
+          margin: 0 12vw;
           border: 1px solid rgba(0, 0, 0, 0.12);
           border-radius: 4px;
           overflow: hidden;
+          will-change: opacity;
         }
         .about-brief-reel video {
           width: 100%;
@@ -361,7 +191,7 @@ export default function AboutPage() {
           display: block;
         }
         .about-brief-text {
-          margin-top: clamp(4rem, 10vw, 8rem);
+          margin: clamp(4rem, 10vw, 8rem) 12vw 0 12vw;
           display: grid;
           gap: 1.4rem;
         }
@@ -371,9 +201,10 @@ export default function AboutPage() {
           line-height: 1.25;
           letter-spacing: -0.03em;
           font-weight: 600;
+          will-change: opacity;
         }
         .games-grid {
-          margin-top: clamp(4rem, 10vw, 8rem);
+          margin: clamp(4rem, 10vw, 8rem) 12vw 0 12vw;
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: clamp(5rem, 8vw, 8rem) clamp(0.5rem, 1.5vw, 1.5rem);
@@ -387,6 +218,7 @@ export default function AboutPage() {
           display: flex;
           flex-direction: column;
           gap: 1.5rem;
+          will-change: opacity;
         }
         .game-title {
           color: rgba(0, 0, 0, 0.8);
@@ -428,7 +260,7 @@ export default function AboutPage() {
           margin: 0;
         }
         .about-services {
-          margin-top: clamp(6rem, 16vw, 12rem);
+          margin: clamp(6rem, 16vw, 12rem) 12vw 0 12vw;
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 1.2rem 2rem;
@@ -437,6 +269,7 @@ export default function AboutPage() {
           margin: 0;
           font-size: clamp(0.95rem, 1.5vw, 1.25rem);
           color: rgba(0, 0, 0, 0.72);
+          will-change: opacity;
         }
         .about-services-list {
           display: grid;
@@ -444,6 +277,7 @@ export default function AboutPage() {
         }
         .about-services-dl {
           margin: 0;
+          will-change: opacity;
         }
         .about-services-dt {
           margin: 0 0 0.5rem;
@@ -462,6 +296,7 @@ export default function AboutPage() {
         .about-shouts-wrap h2 {
           margin: 0;
           color: rgba(0, 0, 0, 0.8);
+          will-change: opacity;
         }
         .about-shouts-list {
           margin: 0;
@@ -469,6 +304,9 @@ export default function AboutPage() {
           list-style: none;
           display: grid;
           gap: 0.4rem;
+        }
+        .about-shouts-item {
+            will-change: opacity;
         }
         .about-shouts-item p {
           margin: 0;
@@ -493,6 +331,7 @@ export default function AboutPage() {
           flex-wrap: wrap;
           gap: 0.5rem;
           justify-content: center;
+          will-change: opacity;
         }
         .about-shouts-badge {
           width: 90px;
@@ -514,10 +353,11 @@ export default function AboutPage() {
           line-height: 1.35;
           color: rgba(0, 0, 0, 0.72);
           font-weight: 600;
+          will-change: opacity;
         }
         .about-footer {
           margin-top: clamp(8rem, 25vh, 14rem);
-          padding-bottom: 300px;
+          padding-bottom: 60px;
           text-align: center;
           display: grid;
           justify-items: center;
@@ -529,14 +369,17 @@ export default function AboutPage() {
           color: rgba(0, 0, 0, 0.72);
           font-size: clamp(0.9rem, 1.2vw, 1rem);
           line-height: 1.3;
+          font-weight: 700;
+          will-change: opacity;
         }
         .footer-cta-text {
           color: #111;
           text-decoration: none;
-          font-size: clamp(2rem, 5.6vw, 6rem);
+          font-size: clamp(1.5rem, 4.2vw, 4.5rem);
           letter-spacing: -0.05em;
-          font-weight: 600;
+          font-weight: 700;
           position: relative;
+          will-change: opacity;
         }
         .footer-cta-text::after {
           content: "";
@@ -556,15 +399,51 @@ export default function AboutPage() {
         .copyright {
           margin-top: 5rem;
           text-align: center;
+          position: relative;
+          z-index: 9999;
         }
         .copyright-p {
           margin: 0;
-          color: rgba(0, 0, 0, 0.7);
+          color: rgba(0, 0, 0, 0.9);
           letter-spacing: 0.03em;
           font-size: 0.85rem;
+          font-weight: 700;
+          user-select: text;
+          will-change: opacity;
         }
-        :global(.word) {
-          will-change: opacity, transform;
+        .viewport-shadow-top {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 30vh;
+          background: linear-gradient(
+            to bottom, 
+            rgba(255, 255, 255, 0.95) 0%,
+            rgba(255, 255, 255, 0.95) 10vh,
+            rgba(255, 255, 255, 0.7) 20vh,
+            rgba(255, 255, 255, 0.3) 25vh,
+            rgba(255, 255, 255, 0) 30vh
+          );
+          pointer-events: none;
+          z-index: 9998;
+        }
+        .viewport-shadow-bottom {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 30vh;
+          background: linear-gradient(
+            to top, 
+            rgba(255, 255, 255, 0.95) 0%,
+            rgba(255, 255, 255, 0.95) 10vh,
+            rgba(255, 255, 255, 0.7) 20vh,
+            rgba(255, 255, 255, 0.3) 25vh,
+            rgba(255, 255, 255, 0) 30vh
+          );
+          pointer-events: none;
+          z-index: 9998;
         }
         @media (max-width: 768px) {
           .about {

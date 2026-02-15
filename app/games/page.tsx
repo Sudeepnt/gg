@@ -29,7 +29,7 @@ const games = [
 export default function GamesPage() {
     return (
         <div className="min-h-screen pt-40 pb-24 px-2 md:px-6">
-            <div className="w-full mx-auto">
+            <div className="w-full mx-auto px-[12vw]">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-2 md:gap-x-6 gap-y-20 md:gap-y-32">
                     {games.map((game, index) => (
                         <motion.div
@@ -53,7 +53,7 @@ export default function GamesPage() {
                                 {/* Subtle overlay on hover */}
                                 <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 transition-colors duration-500" />
                             </div>
-                            <p className="text-white text-sm md:text-[15px] leading-relaxed font-semibold max-w-xl">
+                            <p className="text-white text-sm md:text-[15px] leading-relaxed font-medium max-w-xl">
                                 {game.description}
                             </p>
                         </motion.div>

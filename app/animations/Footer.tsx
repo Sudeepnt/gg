@@ -86,7 +86,7 @@ export default function Footer() {
                     {isHome ? (
                         <div className="grid grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4 items-end">
                             {/* Card 1: Client Carousel - Half width on mobile */}
-                            <div className="col-span-2 lg:col-span-1 border border-white/10 h-28 md:h-32 flex flex-col justify-between relative overflow-hidden order-1">
+                            <div className="col-span-2 lg:col-span-1 border border-white/10 h-36 md:h-40 flex flex-col justify-between relative overflow-hidden order-1">
                                 <ClientCarousel />
                             </div>
 
@@ -96,7 +96,7 @@ export default function Footer() {
                                     setShowVideo(true);
                                     setIsPlaying(true);
                                 }}
-                                className="col-span-2 lg:col-span-1 bg-[#13343e] h-28 md:h-32 rounded flex flex-col justify-between group cursor-pointer hover:bg-[#1a4552] transition-colors relative overflow-hidden order-2"
+                                className="col-span-2 lg:col-span-1 bg-[#13343e] h-36 md:h-40 rounded flex flex-col justify-between group cursor-pointer hover:bg-[#1a4552] transition-colors relative overflow-hidden order-2"
                             >
                                 <video
                                     autoPlay
@@ -119,14 +119,14 @@ export default function Footer() {
                             <SocialLinks className="col-span-4 lg:col-span-1 order-3 lg:justify-center" />
 
                             {/* Card 4: Description - Full width on mobile */}
-                            <div className="col-span-4 lg:col-span-2 border border-white/10 h-auto min-h-[120px] md:h-32 p-4 md:p-6 flex flex-col justify-between relative order-4">
-                                <div className="z-10">
+                            <div className="col-span-4 lg:col-span-2 border border-white/10 h-36 md:h-40 p-1.5 md:p-3 flex flex-col justify-between relative order-4">
+                                <div className="z-10 flex-1">
                                     <h3 className="text-[10px] md:text-xs font-medium text-white/90 max-w-full tracking-tight leading-relaxed">
                                         GG crafts games internally from the ground up and selectively backs bold creators through a co-ownership model that aligns authorship, artistry, and equity. We pair experimental design with distinctive art direction, preserving creative independence while building fun, commercially strong games that can scale globally.
                                     </h3>
                                 </div>
-                                <div className="self-end mt-4 md:mt-0">
-                                    <Link href="/contact" className="bg-white text-black border border-white px-4 py-1.5 text-[10px] md:text-xs font-bold transition-colors flex items-center gap-2 hover:bg-white/90">
+                                <div className="self-end mt-3 md:mt-0 z-10">
+                                    <Link href="/contact" className="bg-white text-black border border-white px-4 py-1.5 text-[10px] md:text-xs font-bold transition-colors flex items-center gap-2 hover:bg-white/90 whitespace-nowrap">
                                         Contact Us
                                     </Link>
                                 </div>

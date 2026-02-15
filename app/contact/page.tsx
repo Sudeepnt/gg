@@ -24,18 +24,18 @@ export default function ContactPage() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center px-4 py-20">
+        <div className="h-screen overflow-hidden flex flex-col items-center justify-center px-4 py-20">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
                 className="w-full max-w-2xl"
             >
-                <h1 className="text-white text-4xl md:text-5xl font-bold mb-12 text-center">
+                <h1 className="text-white text-4xl md:text-5xl font-bold mb-8 text-center">
                     Contact us
                 </h1>
 
-                <form onSubmit={handleSubmit} className="space-y-8">
+                <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
                         <label htmlFor="name" className="block text-white text-sm mb-2">
                             Your full name
@@ -84,7 +84,7 @@ export default function ContactPage() {
                     <div className="pt-4">
                         <button
                             type="submit"
-                            className="bg-[#CCFF00] text-black px-8 py-3 font-bold text-sm hover:bg-[#b8e600] transition-colors flex items-center gap-2"
+                            className="bg-white text-black px-8 py-3 font-bold text-sm hover:bg-white/90 transition-colors flex items-center gap-2"
                         >
                             Send Message
                             <span>→</span>
