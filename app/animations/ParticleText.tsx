@@ -15,7 +15,7 @@ const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = '
     const textToRender = "STUDIO LUMIO";
     const particleGap = 2;
     const particleSize = 2.86;
-    const mouse = { x: 0, y: 0, radius: 80 };
+    const mouse = { x: 0, y: 0, radius: 60 };
     let isHovering = false;
     let particles: any[] = [];
     let animationFrameId: number;
