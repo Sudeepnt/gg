@@ -126,7 +126,7 @@ export default function Footer() {
                                     </h3>
                                 </div>
                                 <div className="self-end mt-3 md:mt-0 z-10">
-                                    <Link href="/contact" className="bg-white text-black border border-white px-4 py-1.5 text-[10px] md:text-xs font-bold transition-colors flex items-center gap-2 hover:bg-white/90 whitespace-nowrap">
+                                    <Link href="/contact" className="bg-white text-black border border-white px-3 py-1.5 text-[10px] md:text-xs font-bold tracking-widest transition-colors flex items-center gap-2 hover:bg-white/90 whitespace-nowrap leading-none">
                                         Contact Us
                                     </Link>
                                 </div>
