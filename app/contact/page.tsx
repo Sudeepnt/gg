@@ -84,10 +84,10 @@ export default function ContactPage() {
                     <div className="pt-4">
                         <button
                             type="submit"
-                            className="bg-white text-black px-8 py-3 font-bold text-sm hover:bg-white/90 transition-colors flex items-center gap-2"
+                            className="relative overflow-hidden border border-white transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-gradient-to-r from-black to-black bg-[length:0%_100%] hover:bg-[length:100%_100%] bg-white text-black hover:text-white px-8 py-3 font-bold text-sm flex items-center gap-2 group"
                         >
-                            Send Message
-                            <span>→</span>
+                            <span className="relative z-10">Send Message</span>
+                            <span className="relative z-10 transition-transform duration-300 group-hover:translate-x-1">→</span>
                         </button>
                     </div>
                 </form>

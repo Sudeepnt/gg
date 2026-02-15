@@ -108,9 +108,9 @@ export default function Footer() {
                                     <source src="/reel/26619-359604050_tiny.mp4" type="video/mp4" />
                                 </video>
                                 <div className="absolute bottom-2 right-3">
-                                    <div className="bg-black/50 text-white px-3 py-1.5 flex items-center gap-2 border border-white/10 group-hover:bg-white group-hover:text-black transition-colors">
-                                        <span className="text-[7px] md:text-[9px] font-bold tracking-widest leading-none">Play Reel</span>
-                                        <Play size={10} fill="currentColor" className="text-white group-hover:text-black" />
+                                    <div className="relative overflow-hidden border border-white/10 transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%] px-3 py-1.5 flex items-center gap-2 group/btn">
+                                        <span className="relative z-10 text-[7px] md:text-[9px] font-bold tracking-widest leading-none text-white group-hover/btn:text-black transition-colors duration-300">Play Reel</span>
+                                        <Play size={10} fill="currentColor" className="relative z-10 text-white group-hover/btn:text-black transition-colors duration-300" />
                                     </div>
                                 </div>
                             </div>
@@ -126,8 +126,8 @@ export default function Footer() {
                                     </h3>
                                 </div>
                                 <div className="self-end mt-3 md:mt-0 z-10">
-                                    <Link href="/contact" className="bg-white text-black border border-white px-3 py-1.5 text-[7px] md:text-[9px] font-bold tracking-widest transition-colors flex items-center gap-2 hover:bg-white/90 whitespace-nowrap leading-none">
-                                        Contact Us
+                                    <Link href="/contact" className="relative overflow-hidden border border-white/10 transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%] px-3 py-1.5 text-[7px] md:text-[9px] font-bold tracking-widest whitespace-nowrap leading-none text-white hover:text-black flex items-center gap-2">
+                                        <span className="relative z-10">Contact Us</span>
                                     </Link>
                                 </div>
                             </div>
