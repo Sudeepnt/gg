@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Play, ArrowUpRight, Instagram, Twitter, Linkedin, Mail, X, Volume2, Pause } from 'lucide-react';
+import { Play, ArrowUpRight, Instagram, Twitter, Linkedin, Mail, X, Volume2, Pause, VolumeX } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -96,21 +96,21 @@ export default function Footer() {
                                     setShowVideo(true);
                                     setIsPlaying(true);
                                 }}
-                                className="col-span-2 lg:col-span-1 bg-[#13343e] h-36 md:h-40 flex flex-col justify-between group cursor-pointer hover:bg-[#1a4552] transition-colors relative overflow-hidden order-2"
+                                className="col-span-2 lg:col-span-1 bg-[#13343e] h-36 md:h-40 flex flex-col justify-between relative overflow-hidden order-2 cursor-pointer"
                             >
                                 <video
                                     autoPlay
                                     loop
                                     muted
                                     playsInline
-                                    className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity"
+                                    className="absolute inset-0 w-full h-full object-cover opacity-60"
                                 >
                                     <source src="/reel/26619-359604050_tiny.mp4" type="video/mp4" />
                                 </video>
                                 <div className="absolute bottom-2 right-3">
-                                    <div className="relative overflow-hidden border border-white/10 transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%] px-3 py-1.5 flex items-center gap-2 group/btn">
-                                        <span className="relative z-10 text-[7px] md:text-[9px] font-bold tracking-widest leading-none text-white group-hover/btn:text-black transition-colors duration-300">Play Reel</span>
-                                        <Play size={10} fill="currentColor" className="relative z-10 text-white group-hover/btn:text-black transition-colors duration-300" />
+                                    <div className="bg-black/50 text-white px-3 py-1.5 flex items-center gap-2 border border-white/10">
+                                        <span className="text-[7px] md:text-[9px] font-bold tracking-widest leading-none">Play Reel</span>
+                                        <Play size={10} fill="currentColor" />
                                     </div>
                                 </div>
                             </div>
@@ -126,7 +126,7 @@ export default function Footer() {
                                     </h3>
                                 </div>
                                 <div className="self-end mt-3 md:mt-0 z-10">
-                                    <Link href="/contact" className="relative overflow-hidden border border-white/10 transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%] px-3 py-1.5 text-[7px] md:text-[9px] font-bold tracking-widest whitespace-nowrap leading-none text-white hover:text-black flex items-center gap-2">
+                                    <Link href="/contact" className="relative overflow-hidden border border-white/10 transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-white text-black hover:text-white bg-gradient-to-r from-black to-black bg-[length:0%_100%] hover:bg-[length:100%_100%] px-3 py-1.5 text-[7px] md:text-[9px] font-bold tracking-widest whitespace-nowrap leading-none flex items-center gap-2">
                                         <span className="relative z-10">Contact Us</span>
                                     </Link>
                                 </div>
@@ -146,7 +146,6 @@ export default function Footer() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         className="fixed inset-0 z-[100000] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 md:p-12 overflow-hidden"
-                        onClick={() => setShowVideo(false)}
                     >
                         {/* Background Starfield/Ambience */}
                         <div className="absolute inset-0 opacity-30 pointer-events-none bg-[radial-gradient(circle_at_center,_transparent_0%,_#000_100%)]" />
@@ -170,21 +169,7 @@ export default function Footer() {
                                     <source src="/reel/26619-359604050_tiny.mp4" type="video/mp4" />
                                 </video>
 
-                                {/* Play/Pause Indicator Overlay on click */}
-                                <AnimatePresence>
-                                    {!isPlaying && (
-                                        <motion.div
-                                            initial={{ opacity: 0, scale: 0.5 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            exit={{ opacity: 0, scale: 1.5 }}
-                                            className="absolute inset-0 flex items-center justify-center bg-black/20 pointer-events-none z-30"
-                                        >
-                                            <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
-                                                <Play size={40} className="text-white fill-white ml-2" />
-                                            </div>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
+
 
                                 {/* Vignette */}
                                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_20%,_rgba(0,0,0,0.6)_100%)] pointer-events-none" />
@@ -201,7 +186,7 @@ export default function Footer() {
                                         onClick={togglePlay}
                                         className="w-12 h-12 border border-white/20 rounded-full flex items-center justify-center text-white backdrop-blur-md hover:bg-white hover:text-black transition-all"
                                     >
-                                        {isPlaying ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" className="ml-0.5" />}
+                                        {isPlaying ? <Pause size={18} /> : <Play size={20} fill="currentColor" className="ml-0.5" />}
                                     </button>
                                     <button
                                         onClick={(e) => {
@@ -216,7 +201,7 @@ export default function Footer() {
                                         onClick={toggleMute}
                                         className="w-12 h-12 border border-white/20 rounded-full flex items-center justify-center text-white backdrop-blur-md hover:bg-white hover:text-black transition-all"
                                     >
-                                        {isMuted ? <Volume2 size={20} className="opacity-40" /> : <Volume2 size={20} />}
+                                        {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
                                     </button>
                                 </div>
 

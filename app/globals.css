@@ -24,7 +24,6 @@ html {
 body {
   background-color: #ffffff;
   color: #171717;
-  cursor: none;
   /* overscroll-behavior-y: none; */
   /* width: 100vw; */
   /* height: 100vh; */
@@ -36,9 +35,7 @@ body {
 
 
 
-* {
-  cursor: none !important;
-}
+/* Cursor is now default */
 
 /* Custom Selection Color - White background with black text for all pages */
 ::selection {
