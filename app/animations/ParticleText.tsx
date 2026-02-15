@@ -12,7 +12,7 @@ const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = '
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
     if (!ctx) return;
 
-    const textToRender = "STUDIO LUMIO";
+    const textToRender = "Gattabara Games";
     const particleGap = 2;
     const particleSize = 2.86;
     const mouse = { x: 0, y: 0, radius: 60 };
@@ -27,9 +27,7 @@ const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = '
 
       const isMobile = window.innerWidth < 768;
 
-      // Calculate font size to cover ~75% of container width
-      // For "STUDIO LUMIO" (12 chars), roughly 0.15 of width per char? 
-      // Let's use a simpler dynamic calculation
+
       const baseFontSize = isMobile ? (canvas.width * 0.14) : (canvas.width * 0.08);
       const responsiveFontSize = Math.min(baseFontSize, isMobile ? 60 : 160);
 
