@@ -90,7 +90,7 @@ export default function ContactPage({ initialContent }: { initialContent?: any }
     }
 
     return (
-        <div className="min-h-screen w-full flex flex-col items-center justify-start px-[12vw] pt-32 pb-20">
+        <div className="h-screen w-full flex flex-col items-center justify-center px-[12vw]">
             <main className="w-full flex flex-col items-start text-left font-sans">
 
                 {/* Contact Form */}
@@ -102,14 +102,14 @@ export default function ContactPage({ initialContent }: { initialContent?: any }
                     transition={{ delay: 0.01, duration: 0.5 }}
                 >
                     {/* Sentence Layout */}
-                    <div className="mb-12 leading-[1.8] text-white font-normal" style={{ fontSize: 'clamp(1rem, 2vw, 1.8rem)' }}>
+                    <div className="mb-6 leading-[1.8] text-white font-normal" style={{ fontSize: 'clamp(0.8rem, 1.6vw, 1.44rem)' }}>
                         <span>{content.formLine1Start} </span>
                         <input
                             type="text"
                             placeholder={content.namePlaceholder}
                             value={formData.name}
                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            className="bg-white/10 border-0 outline-none px-4 py-1.5 mx-1 rounded text-white placeholder-white/30 inline-block align-baseline w-[clamp(150px,20vw,300px)] h-auto text-left font-sans transition-all focus:bg-white/20"
+                            className="bg-white/10 border-0 outline-none px-4 mx-1 rounded text-white placeholder-white/30 inline-block align-middle w-[clamp(150px,20vw,300px)] h-[clamp(1.1rem,2.2vw,2.25rem)] text-left font-sans transition-all focus:bg-white/20"
                             disabled={status === 'loading' || status === 'success'}
                         />
                         <span> {content.formLine1End}</span>
@@ -120,14 +120,14 @@ export default function ContactPage({ initialContent }: { initialContent?: any }
                             placeholder={content.emailPlaceholder}
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            className="bg-white/10 border-0 outline-none px-4 py-1.5 mx-1 rounded text-white placeholder-white/30 inline-block align-baseline w-[clamp(200px,25vw,400px)] h-auto text-left font-sans transition-all focus:bg-white/20"
+                            className="bg-white/10 border-0 outline-none px-4 mx-1 rounded text-white placeholder-white/30 inline-block align-middle w-[clamp(200px,25vw,400px)] h-[clamp(1.1rem,2.2vw,2.25rem)] text-left font-sans transition-all focus:bg-white/20"
                             disabled={status === 'loading' || status === 'success'}
                         />
                         <span>{content.formLine2End}</span>
                     </div>
 
                     {/* Consent Checkbox */}
-                    <div className="mb-10 w-full max-w-4xl">
+                    <div className="mb-8 w-full max-w-4xl">
                         <label className={`flex items-start gap-4 cursor-pointer group ${status === 'success' ? 'opacity-50 pointer-events-none' : ''}`}>
                             <div className="relative mt-1 shrink-0">
                                 <input
@@ -161,17 +161,17 @@ export default function ContactPage({ initialContent }: { initialContent?: any }
                     </AnimatePresence>
 
                     {/* Action Area */}
-                    <div className="mb-16">
+                    <div className="mb-6">
                         <AnimatePresence mode="wait">
                             {status === 'success' ? (
                                 <motion.div
                                     key="success"
                                     initial={{ opacity: 0, scale: 0.9 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    className="flex items-center gap-3 text-white bg-white/10 px-6 py-4 rounded-lg inline-flex"
+                                    className="flex items-center gap-3 text-black bg-white px-6 py-4 rounded-lg inline-flex"
                                 >
-                                    <div className="bg-white rounded-full p-1 shadow-sm">
-                                        <Check size={20} className="text-black" strokeWidth={3} />
+                                    <div className="bg-black rounded-full p-1 shadow-sm">
+                                        <Check size={20} className="text-white" strokeWidth={3} />
                                     </div>
                                     <span className="font-bold text-lg font-sans">Sent!</span>
                                 </motion.div>
@@ -180,7 +180,7 @@ export default function ContactPage({ initialContent }: { initialContent?: any }
                                     key="submit-btn"
                                     type="submit"
                                     disabled={status === 'loading'}
-                                    className="bg-[#13343e] text-white px-10 py-3 rounded-sm font-sans font-bold text-lg flex items-center gap-6 group hover:bg-[#1a4553] transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                                    className="bg-white text-black px-7 py-3 rounded-sm font-sans font-bold text-lg flex items-center justify-center gap-4 group hover:bg-white/90 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
                                     initial="initial"
                                     whileHover={status === 'loading' ? {} : "hover"}
                                     whileTap={status === 'loading' ? {} : "tap"}
@@ -201,15 +201,14 @@ export default function ContactPage({ initialContent }: { initialContent?: any }
                                             {content.buttonText}
                                             <svg
                                                 width="32"
-                                                height="2"
-                                                viewBox="0 0 32 2"
+                                                height="10"
+                                                viewBox="0 0 32 10"
                                                 fill="none"
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 className="ml-2"
                                             >
-                                                <path d="M0 1H30" stroke="white" strokeWidth="2" />
-                                                <path d="M26 0L31 1L26 2" fill="white" />
-                                                <path d="M26 0L31 1L26 2" stroke="white" strokeWidth="1" />
+                                                <path d="M0 5H30" stroke="black" strokeWidth="2" />
+                                                <path d="M24 1L30 5L24 9" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                             </svg>
                                         </>
                                     )}
@@ -222,13 +221,13 @@ export default function ContactPage({ initialContent }: { initialContent?: any }
                     <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-0 font-sans">
                         {/* Column 1: Company & Contact */}
                         <div className="flex flex-col text-left">
-                            <p className="font-bold mb-2 text-white text-base md:text-lg">{content.companyName}</p>
-                            <p className="text-white/60 text-sm md:text-base">{content.email}</p>
-                            <p className="text-white/60 text-sm md:text-base">{content.phone}</p>
+                            <p className="font-bold mb-2 text-white text-sm md:text-base">{content.companyName}</p>
+                            <p className="text-white/60 text-xs md:text-sm">{content.email}</p>
+                            <p className="text-white/60 text-xs md:text-sm">{content.phone}</p>
                         </div>
 
                         {/* Column 2: Address combined */}
-                        <div className="flex flex-col text-left md:text-right text-white/60 text-sm md:text-base">
+                        <div className="flex flex-col text-left md:text-right text-white/60 text-xs md:text-sm">
                             <p>{content.address1}</p>
                             <p>{content.address2}</p>
                             <p>{content.address3}</p>

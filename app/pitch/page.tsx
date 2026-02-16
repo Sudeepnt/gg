@@ -31,7 +31,7 @@ export default function Pitch() {
                     {/* Button untouched */}
                     <div className="mt-12 md:mt-20 w-full flex justify-center pb-20">
                         <button
-                            className="relative min-w-[280px] md:min-w-[400px] h-[42px] md:h-14 flex items-center justify-center overflow-hidden border border-white/20 text-white font-bold text-sm md:text-base tracking-wide px-6 backdrop-blur-sm cursor-pointer transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left hover:text-black bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%]"
+                            className="relative min-w-[280px] md:min-w-[400px] h-[42px] md:h-14 flex items-center justify-center border border-white bg-white text-black font-bold text-sm md:text-base tracking-wide px-6 backdrop-blur-sm cursor-pointer transition-colors duration-300 hover:bg-white/90"
                         >
                             <span className="relative z-10">Click Here to Start</span>
                         </button>

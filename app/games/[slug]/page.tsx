@@ -125,65 +125,64 @@ export default function GameDetailPage() {
 
     return (
         <div
-            className="relative w-full min-h-screen bg-black text-white"
+            className="relative w-full min-h-screen text-white"
             style={{ "--selection-bg": "#ffffff", "--selection-text": "#000000" } as React.CSSProperties}
         >
-            <div className="fixed top-0 left-0 w-full z-50">
-                <Header />
-            </div>
+            <main className="pt-32 pb-20">
+                {/* Hero Video/Image Section - 80vh with 12vw margins like gg-productions */}
+                <section className="relative w-full px-[12vw]">
+                    <div className="relative h-[60vh] md:h-[80vh] overflow-hidden border border-white/10 rounded-sm">
+                        {game.video ? (
+                            <video
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                className="absolute inset-0 w-full h-full object-cover opacity-60"
+                            >
+                                <source src={game.video} type="video/mp4" />
+                            </video>
+                        ) : game.image ? (
+                            <img
+                                src={game.image}
+                                alt={game.title}
+                                className="absolute inset-0 w-full h-full object-cover opacity-60"
+                            />
+                        ) : null}
 
-            <main className="pt-24 pb-20">
-                {/* Hero Video/Image Section - 80vh */}
-                <section className="relative w-full h-[60vh] md:h-[80vh] overflow-hidden">
-                    {game.video ? (
-                        <video
-                            autoPlay
-                            muted
-                            loop
-                            playsInline
-                            className="absolute inset-0 w-full h-full object-cover opacity-60"
-                        >
-                            <source src={game.video} type="video/mp4" />
-                        </video>
-                    ) : game.image ? (
-                        <img
-                            src={game.image}
-                            alt={game.title}
-                            className="absolute inset-0 w-full h-full object-cover opacity-60"
-                        />
-                    ) : null}
+                        {/* Gradient Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
 
-                    {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-
-                    {/* Game Title - Centered */}
-                    <div className="absolute inset-0 flex items-center justify-center p-8 z-10">
-                        <motion.h1
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="text-4xl md:text-8xl font-black uppercase tracking-tighter text-center"
-                        >
-                            {game.title}
-                        </motion.h1>
+                        {/* Game Title - Centered */}
+                        <div className="absolute inset-0 flex items-center justify-center p-8 z-10">
+                            <motion.h1
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="text-4xl md:text-8xl font-black uppercase tracking-tighter text-center"
+                                style={{ fontFamily: "var(--font-bebas)" }}
+                            >
+                                {game.title}
+                            </motion.h1>
+                        </div>
                     </div>
                 </section>
 
-                <div className="max-w-[1800px] mx-auto">
+                <div className="w-full">
                     {/* Synopsis Section */}
-                    <section className="px-4 md:px-12 py-12 w-full max-w-4xl">
-                        <h3 className="text-sm font-bold text-gray-400 uppercase mb-6 text-[10px] tracking-[0.2em]">Synopsis</h3>
+                    <section className="px-[12vw] py-20 w-full">
+                        <h3 className="text-sm font-bold text-gray-400 uppercase mb-8 text-[10px] tracking-[0.2em]">Synopsis</h3>
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="text-xl md:text-3xl leading-relaxed text-white/90 font-medium"
+                            className="text-xl md:text-3xl leading-relaxed text-white font-semibold"
                         >
                             {game.description}
                         </motion.p>
                     </section>
 
                     {/* Game Details Section */}
-                    <section className="px-4 md:px-12 py-12 w-full border-t border-white/10">
+                    <section className="px-[12vw] py-16 w-full border-t border-white/10">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                             {/* Developed By */}
                             {game.developedBy && (
@@ -257,12 +256,12 @@ export default function GameDetailPage() {
 
                     {/* Screenshots Section */}
                     {game.screenshots && game.screenshots.length > 0 && (
-                        <section className="py-12 border-t border-white/10">
-                            <div className="px-4 md:px-12 w-full mb-8">
-                                <h2 className="text-sm font-bold text-gray-500 uppercase text-[10px] tracking-[0.2em]">Screenshots</h2>
+                        <section className="py-20 border-t border-white/10">
+                            <div className="px-[12vw] w-full mb-10">
+                                <h2 className="text-sm font-bold text-gray-500 uppercase text-[10px] tracking-[0.2em]">Screenshots showcase</h2>
                             </div>
                             <div className="overflow-x-auto scrollbar-hide">
-                                <div className="flex gap-4 px-4 md:px-12 pb-8 w-max">
+                                <div className="flex gap-6 px-[12vw] pb-8 w-max">
                                     {game.screenshots.map((screenshot, idx) => (
                                         <div
                                             key={idx}
@@ -282,9 +281,9 @@ export default function GameDetailPage() {
 
                     {/* Other Games Section */}
                     {otherGames.length > 0 && (
-                        <section className="px-4 md:px-12 py-24 w-full border-t border-white/10">
-                            <h2 className="text-2xl font-bold mb-12">Other Games</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <section className="px-[12vw] py-32 w-full border-t border-white/10">
+                            <h2 className="text-sm font-bold text-gray-400 uppercase mb-16 text-[10px] tracking-[0.2em]">Other Games</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
                                 {otherGames.map((otherGame, idx) => (
                                     <Link
                                         key={idx}
