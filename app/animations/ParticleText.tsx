@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = 'white', height }) => {
+const ParticleText: React.FC<{ color?: string; height?: string; text?: string; forceStack?: boolean }> = ({ color = 'white', height, text = "Gattabara Games", forceStack = false }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -12,7 +12,7 @@ const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = '
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
     if (!ctx) return;
 
-    const textToRender = "Gattabara Games";
+    const textToRender = text;
     const particleGap = 2;
     const particleSize = 2.86;
     const mouse = { x: 0, y: 0, radius: 60 };
@@ -26,13 +26,14 @@ const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = '
       canvas.height = container.clientHeight;
 
       const isMobile = window.innerWidth < 768;
+      const shouldStack = isMobile || forceStack;
 
       // Significantly larger font size for mobile (splitting lines)
-      const baseFontSize = isMobile ? (canvas.width * 0.16) : (canvas.width * 0.08);
-      const responsiveFontSize = Math.min(baseFontSize, isMobile ? 130 : 200);
+      const baseFontSize = shouldStack ? (canvas.width * 0.16) : (canvas.width * 0.08);
+      const responsiveFontSize = Math.min(baseFontSize, shouldStack ? 130 : 200);
 
-      const responsiveVerticalScale = isMobile ? 1.0 : 1.0;
-      const responsiveHorizontalScale = isMobile ? 1.0 : 1.0;
+      const responsiveVerticalScale = 1.0;
+      const responsiveHorizontalScale = 1.0;
       // Use standard weight for local font
       const responsiveFont = `400 ${responsiveFontSize}px 'NT Brick Sans', sans-serif`;
 
@@ -44,27 +45,17 @@ const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = '
       ctx.save();
       ctx.scale(responsiveHorizontalScale, responsiveVerticalScale);
 
-      // Get scroll offset to counteract movement
-      const rect = container.getBoundingClientRect();
-      const scrollOffsetY = rect.top; // This changes as user scrolls
-
-      if (isMobile) {
-        // Multi-line rendering for mobile
+      if (shouldStack) {
+        // Multi-line rendering
         const lineHeight = responsiveFontSize * 1.2;
-        const centerY = (canvas.height * 0.35) / responsiveVerticalScale;
+        const centerY = (canvas.height * 0.5) / responsiveVerticalScale;
 
-        // Subtract scrollOffsetY to keep text fixed relative to viewport
-        const fixedCenterY = centerY - (scrollOffsetY / responsiveVerticalScale);
-
-        ctx.fillText("Gattabara", (canvas.width / 2) / responsiveHorizontalScale, fixedCenterY - (lineHeight * 0.5));
-        ctx.fillText("Games", (canvas.width / 2) / responsiveHorizontalScale, fixedCenterY + (lineHeight * 0.5));
+        ctx.fillText("Gattabara", (canvas.width / 2) / responsiveHorizontalScale, centerY - (lineHeight * 0.5));
+        ctx.fillText("Games", (canvas.width / 2) / responsiveHorizontalScale, centerY + (lineHeight * 0.5));
       } else {
         // Single line for desktop
         const textY = (canvas.height * 0.5);
-        // Subtract scrollOffsetY
-        const fixedTextY = textY - (scrollOffsetY / responsiveVerticalScale);
-
-        ctx.fillText(textToRender, (canvas.width / 2) / responsiveHorizontalScale, fixedTextY / responsiveVerticalScale);
+        ctx.fillText(textToRender, (canvas.width / 2) / responsiveHorizontalScale, textY / responsiveVerticalScale);
       }
 
       ctx.restore();

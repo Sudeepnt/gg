@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import ParticleText from "../animations/ParticleText";
 
 
 const games = [
@@ -48,7 +49,11 @@ export default function AboutPage() {
 
 
 
-        <section className="about-brief">
+        <section className="about-brief pt-[100px]">
+          <div className="w-full h-[30vh] flex items-center justify-center px-[12vw] mt-[100px] mb-[100px]">
+            <ParticleText />
+          </div>
+
           <figure className="about-brief-reel">
             <video src="https://r2.studiolumio.com/lumio-reel.mp4" autoPlay muted loop playsInline />
           </figure>
@@ -180,13 +185,13 @@ export default function AboutPage() {
         .about {
           width: 100%;
           margin: 0 auto;
-          padding: 310px 0.5rem 1rem;
+          padding: 0 0.5rem 1rem;
           position: relative;
           z-index: 10;
         }
         @media (min-width: 768px) {
           .about {
-            padding: 310px 1.5rem 1rem;
+            padding: 0 1.5rem 1rem;
           }
         }
         .about-brief-reel {
@@ -195,6 +200,7 @@ export default function AboutPage() {
           border-radius: 4px;
           overflow: hidden;
           will-change: opacity;
+          position: relative;
         }
         .about-brief-reel video {
           width: 100%;
@@ -380,6 +386,8 @@ export default function AboutPage() {
           display: grid;
           justify-items: center;
           gap: 0.8rem;
+          position: relative;
+          z-index: 100001;
         }
         .about-footer h2 {
           margin: 0;
@@ -419,7 +427,7 @@ export default function AboutPage() {
           padding-bottom: 30px;
           text-align: center;
           position: relative;
-          z-index: 999999;
+          z-index: 100001;
         }
         .copyright-p {
           margin: 0;
