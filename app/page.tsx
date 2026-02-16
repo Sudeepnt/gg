@@ -5,7 +5,7 @@ import CookieConsent from './animations/CookieConsent';
 
 export default function Home() {
   return (
-    <main>
+    <main className="px-[12vw]">
       <ParticleText />
       <CookieConsent />
     </main>

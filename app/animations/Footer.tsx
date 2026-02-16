@@ -49,7 +49,7 @@ export default function Footer() {
 
     const SocialLinks = ({ className = "" }: { className?: string }) => {
         return (
-            <div className={`flex gap-2 md:gap-3 ${className}`}>
+            <div className={`flex gap-2 md:gap-6 ${className}`}>
                 <a href="#" className={`flex-1 lg:flex-none aspect-square w-10 h-10 border flex items-center justify-center relative overflow-hidden transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left 
                     border-white/10 text-white hover:text-black bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%]`}>
                     <Instagram size={16} strokeWidth={1.5} className="relative z-10" />
@@ -75,12 +75,12 @@ export default function Footer() {
             <footer className="fixed bottom-0 left-0 w-full z-50 px-2 md:px-6 py-4 pointer-events-none">
                 <div className="w-full max-w-[1800px] mx-auto pointer-events-auto">
                     {isHome ? (
-                        <div className="grid grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4">
+                        <div className="grid grid-cols-4 lg:grid-cols-5 gap-1 md:gap-0">
                             {/* Card 1: Client Carousel - Half width on mobile */}
-                            <div className="col-span-2 lg:col-span-1 border border-white/10 h-36 md:h-auto flex flex-col justify-between relative overflow-hidden order-1 group">
+                            <div className="col-span-2 lg:col-span-1 border border-white/10 h-[122px] md:h-auto w-[85%] rounded-[1px] flex flex-col justify-between relative overflow-hidden order-1 group">
                                 <ClientCarousel />
                                 <div className="absolute bottom-2 right-3 z-20">
-                                    <Link href="/games" className="relative overflow-hidden border border-white/10 transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-black text-white hover:text-black bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%] px-3 py-1.5 flex items-center gap-2">
+                                    <Link href="/games" className="relative overflow-hidden transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-black text-white hover:text-black bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%] px-3 py-1.5 flex items-center gap-2">
                                         <span className="relative z-10 text-[9px] md:text-[11px] font-bold tracking-widest leading-none">Games</span>
                                     </Link>
                                 </div>
@@ -92,7 +92,7 @@ export default function Footer() {
                                     setShowVideo(true);
                                     setIsPlaying(true);
                                 }}
-                                className="col-span-2 lg:col-span-1 bg-[#13343e] h-36 md:h-auto flex flex-col justify-between relative overflow-hidden order-2 cursor-pointer"
+                                className="col-span-2 lg:col-span-1 bg-[#13343e] h-[122px] md:h-auto w-[85%] rounded-[1px] flex flex-col justify-between relative overflow-hidden order-2 cursor-pointer"
                             >
                                 <video
                                     autoPlay
@@ -111,14 +111,14 @@ export default function Footer() {
                                 </div>
                             </div>
 
-                            {/* Card 3: Socials - 4 boxes on mobile */}
                             <SocialLinks className="col-span-4 lg:col-span-1 order-3 lg:justify-center self-end" />
 
                             {/* Card 4: Description - Full width on mobile */}
-                            <div className="col-span-4 lg:col-span-2 border border-white/10 p-1.5 md:p-3 flex flex-col gap-2 relative order-4">
+                            <div className="col-span-4 lg:col-span-2 border border-white/10 p-1.5 md:px-2 md:py-3 md:ml-6 flex flex-col gap-2 relative order-4">
                                 <div className="z-10">
-                                    <h3 className="text-[11.5px] md:text-xs font-bold text-white opacity-90 max-w-full tracking-tight leading-relaxed">
-                                        Gattabara Games is a video game company and creative studio based in Bengaluru, India, developing and partnering on original titles where experimental design meets distinctive art direction — guided by disciplined production and shared governance.
+                                    <h3 className="text-[13px] md:text-[13.5px] font-bold text-white max-w-full tracking-tight leading-relaxed">
+                                        Gattabara Games is a video game company and creative studio based in Bengaluru, India, developing original titles and partnering with bold creators. We combine experimental design with distinctive art direction, backed by disciplined production and shared governance.
+
                                     </h3>
                                 </div>
                                 <div className="self-end mt-0 z-10">

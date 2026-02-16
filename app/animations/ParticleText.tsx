@@ -1,10 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import { Press_Start_2P } from 'next/font/google';
-
-const pressStart2P = Press_Start_2P({
-  weight: '400',
-  subsets: ['latin'],
-});
 
 const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = 'white', height }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -34,12 +28,13 @@ const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = '
       const isMobile = window.innerWidth < 768;
 
       // Significantly larger font size for mobile (splitting lines)
-      const baseFontSize = isMobile ? (canvas.width * 0.09) : (canvas.width * 0.0485);
-      const responsiveFontSize = Math.min(baseFontSize, isMobile ? 64 : 96);
+      const baseFontSize = isMobile ? (canvas.width * 0.16) : (canvas.width * 0.08);
+      const responsiveFontSize = Math.min(baseFontSize, isMobile ? 130 : 200);
 
       const responsiveVerticalScale = isMobile ? 1.0 : 1.0;
       const responsiveHorizontalScale = isMobile ? 1.0 : 1.0;
-      const responsiveFont = `400 ${responsiveFontSize}px ${pressStart2P.style.fontFamily}, sans-serif`;
+      // Use standard weight for local font
+      const responsiveFont = `400 ${responsiveFontSize}px 'NT Brick Sans', sans-serif`;
 
       ctx.fillStyle = color;
       ctx.font = responsiveFont;
@@ -56,7 +51,7 @@ const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = '
       if (isMobile) {
         // Multi-line rendering for mobile
         const lineHeight = responsiveFontSize * 1.2;
-        const centerY = (canvas.height * 0.3) / responsiveVerticalScale;
+        const centerY = (canvas.height * 0.35) / responsiveVerticalScale;
 
         // Subtract scrollOffsetY to keep text fixed relative to viewport
         const fixedCenterY = centerY - (scrollOffsetY / responsiveVerticalScale);
@@ -65,7 +60,7 @@ const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = '
         ctx.fillText("Games", (canvas.width / 2) / responsiveHorizontalScale, fixedCenterY + (lineHeight * 0.5));
       } else {
         // Single line for desktop
-        const textY = (canvas.height / 2);
+        const textY = (canvas.height * 0.5);
         // Subtract scrollOffsetY
         const fixedTextY = textY - (scrollOffsetY / responsiveVerticalScale);
 
@@ -133,7 +128,13 @@ const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = '
     };
 
     if (typeof document !== 'undefined' && (document as any).fonts) {
-      (document as any).fonts.ready.then(() => {
+      // Explicitly wait for NT Brick Sans to load
+      (document as any).fonts.load("400 16px 'NT Brick Sans'").then(() => {
+        init();
+        animate();
+      }).catch(() => {
+        // Fallback if not found or error
+        console.warn("NT Brick Sans font failed to load or timeout");
         init();
         animate();
       });
@@ -157,12 +158,22 @@ const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = '
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className={`w-full ${height || 'h-screen'} flex justify-center items-center overflow-hidden bg-transparent ${pressStart2P.className}`}
-    >
-      <canvas ref={canvasRef} className="max-w-full" />
-    </div>
+    <>
+      <style jsx global>{`
+        @font-face {
+          font-family: 'NT Brick Sans';
+          src: url('/font/NTBrickSans/NTBrickSans.ttf') format('truetype');
+          font-weight: normal;
+          font-style: normal;
+        }
+      `}</style>
+      <div
+        ref={containerRef}
+        className={`w-full ${height || 'h-screen'} flex justify-center items-center overflow-hidden bg-transparent`}
+      >
+        <canvas ref={canvasRef} className="max-w-full" />
+      </div>
+    </>
   );
 };
 

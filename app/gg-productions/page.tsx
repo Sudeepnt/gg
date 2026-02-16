@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import ParticleText from "../animations/ParticleText";
+
 
 const games = [
   {
@@ -46,11 +46,7 @@ export default function AboutPage() {
         transition={{ duration: 1 }}
       >
 
-        <header className="about-header">
-          <div className="about-particle-container">
-            <ParticleText color="white" height="h-64" />
-          </div>
-        </header>
+
 
         <section className="about-brief">
           <figure className="about-brief-reel">
@@ -152,7 +148,6 @@ export default function AboutPage() {
         body {
           margin: 0;
           color: #ffffff;
-          font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
         }
         ::selection {
           background-color: #ffffff;
@@ -185,26 +180,14 @@ export default function AboutPage() {
         .about {
           width: 100%;
           margin: 0 auto;
-          padding: 0 0.5rem 1rem;
+          padding: 310px 0.5rem 1rem;
           position: relative;
           z-index: 10;
         }
         @media (min-width: 768px) {
           .about {
-            padding: 0 1.5rem 1rem;
+            padding: 310px 1.5rem 1rem;
           }
-        }
-        .about-header {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin-top: 200px;
-          margin-bottom: 65px;
-        }
-        .about-particle-container {
-          width: 100%;
-          position: relative;
-          z-index: 20;
         }
         .about-brief-reel {
           margin: 0 12vw;

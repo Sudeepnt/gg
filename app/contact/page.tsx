@@ -16,20 +16,20 @@ const submitContactForm = async (data: any) => {
 };
 
 const defaultContent = {
-    formLine1Start: "Hi! My name is",
+    formLine1Start: "Hi, my name is",
     namePlaceholder: "your name",
-    formLine1End: ",",
-    formLine2Start: "and I can be reached at",
-    emailPlaceholder: "your email",
+    formLine1End: "and I'm exploring a potential partnership or opportunity with Gattabara Games.",
+    formLine2Start: "Get in touch with me at",
+    emailPlaceholder: "your e-mail",
     formLine2End: ".",
-    consentText: "I agree to the privacy policy and terms of service.",
-    buttonText: "Send Message",
+    consentText: "Hereby I authorise Gattabara Games, to process the given personal information in connection with my the inquiry. I am aware that submitting personal data is voluntary and that I have a right to view, edit and delete all the data concerning myself.",
+    buttonText: "Send",
     companyName: "Gattabara Games",
-    email: "contact@gattabaragames.com",
-    phone: "",
-    address1: "Bengaluru,",
-    address2: "India",
-    address3: ""
+    email: "info@gattabaragames.com",
+    phone: "+91 9900114038",
+    address1: "No. 55, 1st Floor, 10th Cross, 2nd Stage, Mahalakshmipuram,",
+    address2: "WOC Road, Bengaluru, Karnataka,",
+    address3: "India - 560086"
 };
 
 export default function ContactPage({ initialContent }: { initialContent?: any }) {
@@ -90,8 +90,8 @@ export default function ContactPage({ initialContent }: { initialContent?: any }
     }
 
     return (
-        <div className="h-screen overflow-hidden flex flex-col items-center justify-center px-4 py-20">
-            <main className="w-full max-w-5xl flex flex-col justify-center items-center">
+        <div className="min-h-screen w-full flex flex-col items-center justify-start px-[12vw] pt-32 pb-20">
+            <main className="w-full flex flex-col items-start text-left font-sans">
 
                 {/* Contact Form */}
                 <motion.form
@@ -101,48 +101,45 @@ export default function ContactPage({ initialContent }: { initialContent?: any }
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.01, duration: 0.5 }}
                 >
-                    {/* Headline / Input Group 1 */}
-                    <div className="mt-6 mb-6 leading-relaxed text-white font-sans font-normal" style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.5rem)' }}>
+                    {/* Sentence Layout */}
+                    <div className="mb-12 leading-[1.8] text-white font-normal" style={{ fontSize: 'clamp(1rem, 2vw, 1.8rem)' }}>
                         <span>{content.formLine1Start} </span>
                         <input
                             type="text"
                             placeholder={content.namePlaceholder}
                             value={formData.name}
                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            className="bg-white/10 border-0 outline-none px-2 md:px-4 py-1 mx-2 rounded text-white placeholder-white/30 inline-block align-baseline w-[clamp(120px,15vw,200px)] h-[clamp(1.5rem,3vw,3rem)] text-center font-sans font-normal transition-all focus:bg-white/20"
+                            className="bg-white/10 border-0 outline-none px-4 py-1.5 mx-1 rounded text-white placeholder-white/30 inline-block align-baseline w-[clamp(150px,20vw,300px)] h-auto text-left font-sans transition-all focus:bg-white/20"
                             disabled={status === 'loading' || status === 'success'}
                         />
                         <span> {content.formLine1End}</span>
-                    </div>
-
-                    {/* Headline / Input Group 2 */}
-                    <div className="mb-12 leading-relaxed text-white font-sans font-light" style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.5rem)' }}>
-                        <span className="font-normal">{content.formLine2Start} </span>
+                        <br className="hidden md:block" />
+                        <span className="md:mt-4 inline-block">{content.formLine2Start} </span>
                         <input
                             type="email"
                             placeholder={content.emailPlaceholder}
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            className="bg-white/10 border-0 outline-none px-2 md:px-4 py-1 mx-2 rounded text-white placeholder-white/30 inline-block align-baseline w-[clamp(150px,20vw,300px)] h-[clamp(1.5rem,3vw,3rem)] text-center font-sans font-light transition-all focus:bg-white/20"
+                            className="bg-white/10 border-0 outline-none px-4 py-1.5 mx-1 rounded text-white placeholder-white/30 inline-block align-baseline w-[clamp(200px,25vw,400px)] h-auto text-left font-sans transition-all focus:bg-white/20"
                             disabled={status === 'loading' || status === 'success'}
                         />
                         <span>{content.formLine2End}</span>
                     </div>
 
                     {/* Consent Checkbox */}
-                    <div className="mb-10 max-w-3xl">
+                    <div className="mb-10 w-full max-w-4xl">
                         <label className={`flex items-start gap-4 cursor-pointer group ${status === 'success' ? 'opacity-50 pointer-events-none' : ''}`}>
-                            <div className="relative mt-1">
+                            <div className="relative mt-1 shrink-0">
                                 <input
                                     type="checkbox"
                                     checked={formData.consent}
                                     onChange={(e) => setFormData({ ...formData, consent: e.target.checked })}
-                                    className="peer appearance-none w-6 h-6 border-2 border-white/30 rounded cursor-pointer transition-colors checked:bg-white checked:border-white"
+                                    className="peer appearance-none w-5 h-5 border-[1.5px] border-white/50 rounded-sm cursor-pointer transition-colors checked:bg-white checked:border-white"
                                     disabled={status === 'loading' || status === 'success'}
                                 />
-                                <Check size={16} className="absolute top-1 left-1 text-black opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" strokeWidth={3} />
+                                <Check size={14} className="absolute top-0.5 left-0.5 text-black opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" strokeWidth={3} />
                             </div>
-                            <span className="text-[10px] md:text-xs text-white/50 font-sans font-light leading-relaxed pt-0.5 group-hover:text-white transition-colors">
+                            <span className="text-[11px] md:text-sm text-white/60 font-sans font-normal leading-relaxed group-hover:text-white transition-colors">
                                 {content.consentText}
                             </span>
                         </label>
@@ -164,7 +161,7 @@ export default function ContactPage({ initialContent }: { initialContent?: any }
                     </AnimatePresence>
 
                     {/* Action Area */}
-                    <div className="min-h-[60px]">
+                    <div className="mb-16">
                         <AnimatePresence mode="wait">
                             {status === 'success' ? (
                                 <motion.div
@@ -176,14 +173,14 @@ export default function ContactPage({ initialContent }: { initialContent?: any }
                                     <div className="bg-white rounded-full p-1 shadow-sm">
                                         <Check size={20} className="text-black" strokeWidth={3} />
                                     </div>
-                                    <span className="font-bold text-lg font-sans">Message Sent Successfully!</span>
+                                    <span className="font-bold text-lg font-sans">Sent!</span>
                                 </motion.div>
                             ) : (
                                 <motion.button
                                     key="submit-btn"
                                     type="submit"
                                     disabled={status === 'loading'}
-                                    className="bg-white text-black pl-8 pr-6 py-4 rounded font-sans font-bold text-lg flex items-center gap-4 group hover:bg-white/90 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                                    className="bg-[#13343e] text-white px-10 py-3 rounded-sm font-sans font-bold text-lg flex items-center gap-6 group hover:bg-[#1a4553] transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
                                     initial="initial"
                                     whileHover={status === 'loading' ? {} : "hover"}
                                     whileTap={status === 'loading' ? {} : "tap"}
@@ -202,26 +199,18 @@ export default function ContactPage({ initialContent }: { initialContent?: any }
                                     ) : (
                                         <>
                                             {content.buttonText}
-                                            <motion.svg
-                                                width="36"
-                                                height="12"
-                                                viewBox="0 0 36 12"
+                                            <svg
+                                                width="32"
+                                                height="2"
+                                                viewBox="0 0 32 2"
                                                 fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                className="ml-2"
                                             >
-                                                <path d="M30 1L35 6L30 11" />
-                                                <motion.path
-                                                    d="M0 6H35"
-                                                    variants={{
-                                                        initial: { scaleX: 1, originX: 1 },
-                                                        hover: { scaleX: 0.5, originX: 1 }
-                                                    }}
-                                                    transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                                                />
-                                            </motion.svg>
+                                                <path d="M0 1H30" stroke="white" strokeWidth="2" />
+                                                <path d="M26 0L31 1L26 2" fill="white" />
+                                                <path d="M26 0L31 1L26 2" stroke="white" strokeWidth="1" />
+                                            </svg>
                                         </>
                                     )}
                                 </motion.button>
@@ -229,17 +218,17 @@ export default function ContactPage({ initialContent }: { initialContent?: any }
                         </AnimatePresence>
                     </div>
 
-                    {/* Info Grid - Moved inside form, closer to button */}
-                    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 text-white/50 text-sm leading-relaxed text-left mt-8 font-sans font-light">
+                    {/* Info Grid - Aligned to edges of 12vw container */}
+                    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-0 font-sans">
                         {/* Column 1: Company & Contact */}
-                        <div className="flex flex-col">
-                            <p className="font-bold mb-1 font-sans text-white">{content.companyName}</p>
-                            <p>{content.email}</p>
-                            <p>{content.phone}</p>
+                        <div className="flex flex-col text-left">
+                            <p className="font-bold mb-2 text-white text-base md:text-lg">{content.companyName}</p>
+                            <p className="text-white/60 text-sm md:text-base">{content.email}</p>
+                            <p className="text-white/60 text-sm md:text-base">{content.phone}</p>
                         </div>
 
-                        {/* Column 2: Address Combined */}
-                        <div className="flex flex-col">
+                        {/* Column 2: Address combined */}
+                        <div className="flex flex-col text-left md:text-right text-white/60 text-sm md:text-base">
                             <p>{content.address1}</p>
                             <p>{content.address2}</p>
                             <p>{content.address3}</p>

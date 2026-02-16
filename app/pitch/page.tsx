@@ -5,15 +5,15 @@ import React from "react";
 export default function Pitch() {
     return (
         <div className="relative w-full min-h-screen text-white overflow-hidden flex flex-col font-sans">
-            <main className="flex-1 flex flex-col justify-center items-center px-4 md:px-8 w-full pt-16 md:pt-32">
-                <div className="w-full max-w-7xl flex flex-col">
+            <main className="flex-1 flex flex-col justify-start w-full pt-16 md:pt-32 px-[12vw]">
+                <div className="w-full flex flex-col">
 
                     {/* Equal spacing above text block */}
                     <h1 className="text-xl md:text-4xl font-bold text-white text-center uppercase tracking-wider mb-12 md:mb-20">
                         Inbound Form
                     </h1>
 
-                    <div className="w-full max-w-[850px] mx-auto flex flex-col gap-5 md:gap-7 text-sm md:text-lg text-white/95 leading-[1.7] font-extrabold tracking-tight">
+                    <div className="w-full flex flex-col gap-5 md:gap-7 text-sm md:text-lg text-white/95 leading-[1.7] font-extrabold tracking-tight">
                         <p className="text-left w-full">
                             Pitch with clarity and conviction. We want to see what you are building, why it matters, and how you plan to ship it end to end.
                         </p>
