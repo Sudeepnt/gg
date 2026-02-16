@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 
 const games = [
@@ -28,9 +29,9 @@ const games = [
 
 export default function GamesPage() {
     return (
-        <div className="min-h-screen pt-40 pb-24 px-2 md:px-6">
-            <div className="w-full mx-auto px-[12vw]">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-2 md:gap-x-6 gap-y-20 md:gap-y-32">
+        <div className="min-h-screen pt-24 md:pt-32 pb-24 px-1 md:px-4">
+            <div className="w-full max-w-7xl mx-auto px-3.5 md:px-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 md:gap-x-16 gap-y-10 md:gap-y-32">
                     {games.map((game, index) => (
                         <motion.div
                             key={index}
@@ -40,22 +41,24 @@ export default function GamesPage() {
                             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: index * 0.1 }}
                             viewport={{ once: true }}
                         >
-                            <h2 className="text-white text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase opacity-80">
-                                {game.title}
-                            </h2>
-                            <div className="relative aspect-[16/9] w-full overflow-hidden group bg-white/5">
-                                <Image
-                                    src={game.image}
-                                    alt={game.title}
-                                    fill
-                                    className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
-                                />
-                                {/* Subtle overlay on hover */}
-                                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 transition-colors duration-500" />
-                            </div>
-                            <p className="text-white text-sm md:text-[15px] leading-relaxed font-medium max-w-xl">
-                                {game.description}
-                            </p>
+                            <Link href={`/games/${game.title.toLowerCase().replace(/\s+/g, '-')}`} className="block group cursor-pointer">
+                                <h2 className="text-white text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase opacity-80 mb-6">
+                                    {game.title}
+                                </h2>
+                                <div className="relative aspect-[16/9] w-full overflow-hidden bg-white/5 mb-3 md:mb-6">
+                                    <Image
+                                        src={game.image}
+                                        alt={game.title}
+                                        fill
+                                        className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+                                    />
+                                    {/* Subtle overlay on hover */}
+                                    <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 transition-colors duration-500" />
+                                </div>
+                                <p className="text-white text-sm md:text-[15px] leading-relaxed font-medium max-w-xl">
+                                    {game.description}
+                                </p>
+                            </Link>
                         </motion.div>
                     ))}
                 </div>

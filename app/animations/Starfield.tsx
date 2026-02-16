@@ -42,27 +42,53 @@ function Stars({ isGG }: { isGG: boolean }) {
   const originalPositions = useMemo(() => sphere.slice(), [sphere]);
 
   // Scroll/Travel state
-  const targetZ = useRef(0);
-  const currentZ = useRef(0);
+  const travelSpeed = useRef(0);
+  const accumulatedZ = useRef(0);
+  const touchStartY = useRef(0);
 
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
-      targetZ.current += e.deltaY * 0.005;
+      // Increase speed based on scroll intensity
+      travelSpeed.current += e.deltaY * 0.002;
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY.current = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const currentY = e.touches[0].clientY;
+      const deltaY = touchStartY.current - currentY;
+      touchStartY.current = currentY;
+
+      // Apply touch delta to travel speed (similar sensitivity to wheel)
+      travelSpeed.current += deltaY * 0.005;
     };
 
     window.addEventListener('wheel', handleWheel);
-    return () => window.removeEventListener('wheel', handleWheel);
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchmove', handleTouchMove);
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+    };
   }, []);
 
   useFrame((state) => {
     if (!ref.current) return;
 
-    // 1. ZERO LAG Mouse Parallax
+    // 1. Mouse Parallax
     ref.current.rotation.x = -state.mouse.y * 0.1;
     ref.current.rotation.y = state.mouse.x * 0.1;
 
-    // 2. ZERO LAG Scroll Travel
-    currentZ.current = targetZ.current;
+    // 2. Scroll Travel Physics
+    // Apply friction/decay to speed
+    travelSpeed.current *= 0.95;
+
+    // Accumulate distance
+    accumulatedZ.current += travelSpeed.current;
 
     const positions = ref.current.geometry.attributes.position.array;
     const bound = 20;
@@ -71,8 +97,8 @@ function Stars({ isGG }: { isGG: boolean }) {
       const i3 = i * 3;
       const oz = originalPositions[i3 + 2];
 
-      // Apply Scroll Travel (Z-axis)
-      let z = oz + currentZ.current;
+      // Apply Travel (Z-axis)
+      let z = oz + accumulatedZ.current;
 
       // Infinite loop logic
       z = ((z + bound) % 40 + 40) % 40 - 20;
@@ -120,8 +146,8 @@ function Stars({ isGG }: { isGG: boolean }) {
         <PointMaterial
           transparent
           map={starTexture}
-          color={isGG ? "#111111" : "#ffffff"}
-          size={typeof window !== 'undefined' && window.innerWidth < 768 ? 0.08 : (isGG ? 0.025 : 0.035)}
+          color="#ffffff"
+          size={typeof window !== 'undefined' && window.innerWidth < 768 ? 0.08 : 0.035}
           sizeAttenuation={true}
           depthWrite={false}
           opacity={1}
@@ -134,19 +160,16 @@ function Stars({ isGG }: { isGG: boolean }) {
 
 export default function Starfield() {
   const pathname = usePathname();
-  const isGG = pathname === '/gg-productions';
 
   return (
-    <div className={`fixed inset-0 z-0 transition-colors duration-500 ${isGG ? 'bg-white' : 'bg-black'}`}>
+    <div className="fixed inset-0 z-0 transition-colors duration-500 bg-black">
       <Canvas camera={{ position: [0, 0, 5] }}>
-        <Stars isGG={isGG} />
+        <Stars isGG={false} />
       </Canvas>
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: isGG
-            ? 'none'
-            : 'radial-gradient(circle at center, transparent 0%, rgba(0,5,10,0.8) 100%)'
+          background: 'radial-gradient(circle at center, transparent 0%, rgba(0,5,10,0.8) 100%)'
         }}
       />
     </div>

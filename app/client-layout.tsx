@@ -6,11 +6,15 @@ import Starfield from "./animations/Starfield";
 import Header from "./animations/Header";
 import Footer from "./animations/Footer";
 
+import { usePathname } from 'next/navigation';
+
 export default function ClientLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
+    const pathname = usePathname();
+
     return (
         <SmoothScrollProvider>
             <CustomCursor />

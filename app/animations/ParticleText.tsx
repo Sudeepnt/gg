@@ -1,4 +1,10 @@
 import React, { useEffect, useRef } from 'react';
+import { Press_Start_2P } from 'next/font/google';
+
+const pressStart2P = Press_Start_2P({
+  weight: '400',
+  subsets: ['latin'],
+});
 
 const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = 'white', height }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -27,13 +33,13 @@ const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = '
 
       const isMobile = window.innerWidth < 768;
 
+      // Significantly larger font size for mobile (splitting lines)
+      const baseFontSize = isMobile ? (canvas.width * 0.09) : (canvas.width * 0.0485);
+      const responsiveFontSize = Math.min(baseFontSize, isMobile ? 64 : 96);
 
-      const baseFontSize = isMobile ? (canvas.width * 0.14) : (canvas.width * 0.08);
-      const responsiveFontSize = Math.min(baseFontSize, isMobile ? 60 : 160);
-
-      const responsiveVerticalScale = isMobile ? 1.5 : 1.3;
-      const responsiveHorizontalScale = isMobile ? 1.1 : 1.25;
-      const responsiveFont = `900 ${responsiveFontSize}px "Montserrat", "Bebas Neue", sans-serif`;
+      const responsiveVerticalScale = isMobile ? 1.0 : 1.0;
+      const responsiveHorizontalScale = isMobile ? 1.0 : 1.0;
+      const responsiveFont = `400 ${responsiveFontSize}px ${pressStart2P.style.fontFamily}, sans-serif`;
 
       ctx.fillStyle = color;
       ctx.font = responsiveFont;
@@ -41,12 +47,31 @@ const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = '
       ctx.textBaseline = 'middle';
 
       ctx.save();
-      // Apply both horizontal and vertical scaling for the "wide" look
       ctx.scale(responsiveHorizontalScale, responsiveVerticalScale);
 
-      const textY = isMobile ? (canvas.height * 0.45) : (canvas.height / 2);
-      // Adjust X because of horizontal scale
-      ctx.fillText(textToRender, (canvas.width / 2) / responsiveHorizontalScale, textY / responsiveVerticalScale);
+      // Get scroll offset to counteract movement
+      const rect = container.getBoundingClientRect();
+      const scrollOffsetY = rect.top; // This changes as user scrolls
+
+      if (isMobile) {
+        // Multi-line rendering for mobile
+        const lineHeight = responsiveFontSize * 1.2;
+        const centerY = (canvas.height * 0.3) / responsiveVerticalScale;
+
+        // Subtract scrollOffsetY to keep text fixed relative to viewport
+        const fixedCenterY = centerY - (scrollOffsetY / responsiveVerticalScale);
+
+        ctx.fillText("Gattabara", (canvas.width / 2) / responsiveHorizontalScale, fixedCenterY - (lineHeight * 0.5));
+        ctx.fillText("Games", (canvas.width / 2) / responsiveHorizontalScale, fixedCenterY + (lineHeight * 0.5));
+      } else {
+        // Single line for desktop
+        const textY = (canvas.height / 2);
+        // Subtract scrollOffsetY
+        const fixedTextY = textY - (scrollOffsetY / responsiveVerticalScale);
+
+        ctx.fillText(textToRender, (canvas.width / 2) / responsiveHorizontalScale, fixedTextY / responsiveVerticalScale);
+      }
+
       ctx.restore();
 
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -134,7 +159,7 @@ const ParticleText: React.FC<{ color?: string; height?: string }> = ({ color = '
   return (
     <div
       ref={containerRef}
-      className={`w-full ${height || 'h-screen'} flex justify-center items-center overflow-hidden bg-transparent`}
+      className={`w-full ${height || 'h-screen'} flex justify-center items-center overflow-hidden bg-transparent ${pressStart2P.className}`}
     >
       <canvas ref={canvasRef} className="max-w-full" />
     </div>

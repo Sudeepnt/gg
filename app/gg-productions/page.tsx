@@ -3,7 +3,6 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import Starfield from "../animations/Starfield";
 import ParticleText from "../animations/ParticleText";
 
 const games = [
@@ -36,15 +35,20 @@ export default function AboutPage() {
 
   return (
     <>
-      <Starfield />
-      <main ref={rootRef} className="about">
-        {/* Top and Bottom Gradient Shadows for Focus */}
-        <div className="viewport-shadow-top" />
-        <div className="viewport-shadow-bottom" />
+      <div className="gg-viewport-shadow-top" />
+      <div className="gg-viewport-shadow-bottom" />
+
+      <motion.main
+        ref={rootRef}
+        className="about"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
 
         <header className="about-header">
           <div className="about-particle-container">
-            <ParticleText color="black" height="h-64" />
+            <ParticleText color="white" height="h-64" />
           </div>
         </header>
 
@@ -147,30 +151,55 @@ export default function AboutPage() {
         <style jsx global>{`
         body {
           margin: 0;
-          background: #ffffff;
-          color: #111;
+          color: #ffffff;
           font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
         }
         ::selection {
-          background-color: #000000;
-          color: #ffffff;
+          background-color: #ffffff;
+          color: #000000;
+        }
+        
+        .gg-viewport-shadow-top {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 30vh;
+          background: linear-gradient(to bottom, #000000 0%, rgba(0,0,0,0) 100%);
+          pointer-events: none;
+          z-index: 99999;
+        }
+        .gg-viewport-shadow-bottom {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 60vh;
+          background: linear-gradient(to top, #000000 0%, rgba(0,0,0,0) 100%);
+          pointer-events: none;
+          z-index: 99999;
         }
       `}</style>
 
         <style jsx>{`
         .about {
-          width: min(91rem, calc(100% - 2rem));
+          width: 100%;
           margin: 0 auto;
-          padding: 0 0 1rem;
+          padding: 0 0.5rem 1rem;
           position: relative;
           z-index: 10;
+        }
+        @media (min-width: 768px) {
+          .about {
+            padding: 0 1.5rem 1rem;
+          }
         }
         .about-header {
           display: flex;
           justify-content: center;
           align-items: center;
           margin-top: 200px;
-          margin-bottom: 100px;
+          margin-bottom: 65px;
         }
         .about-particle-container {
           width: 100%;
@@ -179,7 +208,7 @@ export default function AboutPage() {
         }
         .about-brief-reel {
           margin: 0 12vw;
-          border: 1px solid rgba(0, 0, 0, 0.12);
+          border: 1px solid rgba(255, 255, 255, 0.2);
           border-radius: 4px;
           overflow: hidden;
           will-change: opacity;
@@ -192,16 +221,22 @@ export default function AboutPage() {
         }
         .about-brief-text {
           margin: clamp(4rem, 10vw, 8rem) 12vw 0 12vw;
-          display: grid;
+          padding-top: 12vh;
+          padding-bottom: 5vh;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          text-align: left;
           gap: 1.4rem;
         }
         .about-brief-text p {
           margin: 0;
-          font-size: clamp(1.1rem, 2.2vw, 2rem);
+          font-size: clamp(1.3rem, 2.6vw, 2.375rem);
           line-height: 1.25;
           letter-spacing: -0.03em;
           font-weight: 600;
           will-change: opacity;
+          text-align: left;
         }
         .games-grid {
           margin: clamp(4rem, 10vw, 8rem) 12vw 0 12vw;
@@ -221,7 +256,7 @@ export default function AboutPage() {
           will-change: opacity;
         }
         .game-title {
-          color: rgba(0, 0, 0, 0.8);
+          color: rgba(255, 255, 255, 0.9);
           font-size: clamp(10px, 0.75vw, 12px);
           font-weight: 700;
           letter-spacing: 0.3em;
@@ -233,7 +268,7 @@ export default function AboutPage() {
           aspect-ratio: 16 / 9;
           width: 100%;
           overflow: hidden;
-          background: rgba(0, 0, 0, 0.05);
+          background: rgba(255, 255, 255, 0.05);
         }
         .game-image {
           object-fit: cover;
@@ -252,7 +287,7 @@ export default function AboutPage() {
           background: rgba(255, 255, 255, 0.05);
         }
         .game-description {
-          color: #111;
+          color: #ddd;
           font-size: clamp(0.875rem, 0.9375vw, 0.9375rem);
           line-height: 1.6;
           font-weight: 600;
@@ -268,7 +303,7 @@ export default function AboutPage() {
         .about-services-h2 {
           margin: 0;
           font-size: clamp(0.95rem, 1.5vw, 1.25rem);
-          color: rgba(0, 0, 0, 0.72);
+          color: rgba(255, 255, 255, 0.8);
           will-change: opacity;
         }
         .about-services-list {
@@ -295,7 +330,7 @@ export default function AboutPage() {
         }
         .about-shouts-wrap h2 {
           margin: 0;
-          color: rgba(0, 0, 0, 0.8);
+          color: rgba(255, 255, 255, 0.9);
           will-change: opacity;
         }
         .about-shouts-list {
@@ -320,7 +355,7 @@ export default function AboutPage() {
         }
         .about-shouts-item sup {
           font-size: 0.72em;
-          border: 1px solid rgba(0, 0, 0, 0.12);
+          border: 1px solid rgba(255, 255, 255, 0.2);
           border-radius: 3px;
           padding: 0.2em 0.45em;
           text-transform: uppercase;
@@ -336,7 +371,7 @@ export default function AboutPage() {
         .about-shouts-badge {
           width: 90px;
           height: 34px;
-          border: 1px solid rgba(0, 0, 0, 0.12);
+          border: 1px solid rgba(255, 255, 255, 0.2);
           border-radius: 2px;
           display: inline-flex;
           align-items: center;
@@ -344,14 +379,14 @@ export default function AboutPage() {
           font-size: 0.72rem;
           font-weight: 600;
           text-transform: uppercase;
-          color: rgba(0, 0, 0, 0.84);
+          color: rgba(255, 255, 255, 0.9);
         }
         .about-shouts-p {
           margin: 1rem 0 0;
           max-width: 28ch;
           font-size: clamp(0.88rem, 1.2vw, 1rem);
           line-height: 1.35;
-          color: rgba(0, 0, 0, 0.72);
+          color: rgba(255, 255, 255, 0.8);
           font-weight: 600;
           will-change: opacity;
         }
@@ -366,14 +401,14 @@ export default function AboutPage() {
         .about-footer h2 {
           margin: 0;
           max-width: 20ch;
-          color: rgba(0, 0, 0, 0.72);
+          color: rgba(255, 255, 255, 0.8);
           font-size: clamp(0.9rem, 1.2vw, 1rem);
           line-height: 1.3;
           font-weight: 700;
           will-change: opacity;
         }
         .footer-cta-text {
-          color: #111;
+          color: #ffffff;
           text-decoration: none;
           font-size: clamp(1.5rem, 4.2vw, 4.5rem);
           letter-spacing: -0.05em;
@@ -398,52 +433,19 @@ export default function AboutPage() {
         }
         .copyright {
           margin-top: 5rem;
+          padding-bottom: 30px;
           text-align: center;
           position: relative;
-          z-index: 9999;
+          z-index: 999999;
         }
         .copyright-p {
           margin: 0;
-          color: rgba(0, 0, 0, 0.9);
+          color: rgba(255, 255, 255, 0.9);
           letter-spacing: 0.03em;
           font-size: 0.85rem;
           font-weight: 700;
           user-select: text;
           will-change: opacity;
-        }
-        .viewport-shadow-top {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 30vh;
-          background: linear-gradient(
-            to bottom, 
-            rgba(255, 255, 255, 0.95) 0%,
-            rgba(255, 255, 255, 0.95) 10vh,
-            rgba(255, 255, 255, 0.7) 20vh,
-            rgba(255, 255, 255, 0.3) 25vh,
-            rgba(255, 255, 255, 0) 30vh
-          );
-          pointer-events: none;
-          z-index: 9998;
-        }
-        .viewport-shadow-bottom {
-          position: fixed;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          height: 30vh;
-          background: linear-gradient(
-            to top, 
-            rgba(255, 255, 255, 0.95) 0%,
-            rgba(255, 255, 255, 0.95) 10vh,
-            rgba(255, 255, 255, 0.7) 20vh,
-            rgba(255, 255, 255, 0.3) 25vh,
-            rgba(255, 255, 255, 0) 30vh
-          );
-          pointer-events: none;
-          z-index: 9998;
         }
         @media (max-width: 768px) {
           .about {
@@ -458,7 +460,7 @@ export default function AboutPage() {
           }
         }
       `}</style>
-      </main>
+      </motion.main>
     </>
   );
 }
