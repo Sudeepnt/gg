@@ -59,8 +59,8 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
                 ease: "power4.inOut",
             },
             onComplete: () => {
-                // Wait longer to let the user soak in the full layout
-                gsap.delayedCall(3.5, exitPreloader);
+                // Reduced pause (3.5s -> 2s)
+                gsap.delayedCall(2, exitPreloader);
             }
         });
         timelineRef.current = tl;
@@ -122,14 +122,14 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
             return;
         }
 
-        // Slow down the reversal significantly for a heavy, deliberate exit (0.5 speed)
-        timelineRef.current.timeScale(0.5).reverse();
+        // Snappier reversal (0.8 speed)
+        timelineRef.current.timeScale(0.8).reverse();
 
-        // Final smooth dissolve after the reverse animation has completed most of its work
-        gsap.delayedCall(4, () => {
+        // Final smooth dissolve (Reduced 4s -> 2.4s)
+        gsap.delayedCall(2.4, () => {
             gsap.to(preloaderRef.current, {
                 opacity: 0,
-                duration: 2.5, // Ultra slow, premium fade out
+                duration: 1.5, // Faster fade
                 ease: "power2.inOut",
                 onComplete: revealPage,
             });
@@ -198,14 +198,6 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
                             </h1>
                         </div>
 
-                        <p
-                            ref={preloaderTextRef}
-                            className="absolute left-1/2 bottom-[calc(var(--preloader-gutter)+max(12vh,60px))] -translate-x-1/2 w-full max-w-[35ch] text-[max(10px,1rem)] font-semibold leading-[1.2] text-center tracking-[-0.02em] text-white opacity-0 pointer-events-none"
-                        >
-                            DESIGN AND DEVELOPMENT IN HARMONY —
-                            DIGITAL EXPERIENCES CRAFTED WITH EMOTION,
-                            INTENTION, AND PRECISION.
-                        </p>
                     </div>
                 )}
             </AnimatePresence>
