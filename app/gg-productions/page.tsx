@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import ParticleText from "../animations/ParticleText";
 
 
@@ -60,93 +61,90 @@ export default function AboutPage() {
 
           <div className="about-brief-text">
             <p>
-              Studio Lumio started as a shared vision between designer and developer, two creatives who
-              believe design and technology should work together, not apart.
+              At GG Productions, we know what it’s like to build games with tight budgets and big ambitions. Every decision is about momentum, what to ship now, what to defer, and where the right support can unblock your next milestone.
             </p>
+
             <p>
-              We create websites and digital experiences that balance beauty with function, and emotion with
-              precision. Every project is an exploration, crafted with care, curiosity, and attention to detail.
+              We stay lean so you can move fast, plugging in exactly the talent you need, when you need it, across art, tech, design, and production.
             </p>
+
             <p>
-              Though we are a small team, we grow when we need to. We collaborate with trusted creatives,
-              studios, and agencies to scale while keeping thoughtful design, clean code, and genuine
-              collaboration at the core.
+              With clear milestones and transparent delivery, we integrate as an extension of your team, whether for full production or focused co-development, so you keep creative control while scaling execution globally.
             </p>
-            <p>Studio Lumio is our craft, built pixel by pixel, idea by idea.</p>
+
           </div>
+
 
           {/* Games Section */}
           <div className="games-grid">
             {games.map((game, index) => (
               <div key={index} className="game-item">
-                <h2 className="game-title">
-                  {game.title}
-                </h2>
-                <div className="game-image-container">
-                  <Image
-                    src={game.image}
-                    alt={game.title}
-                    fill
-                    className="game-image"
-                  />
-                  <div className="game-overlay" />
-                </div>
-                <p className="game-description">
-                  {game.description}
-                </p>
+                <Link href={`/games/${game.title.toLowerCase().replace(/\s+/g, '-')}`} className="block group cursor-pointer text-decoration-none">
+                  <h2 className="game-title">
+                    {game.title}
+                  </h2>
+                  <div className="game-image-container">
+                    <Image
+                      src={game.image}
+                      alt={game.title}
+                      fill
+                      className="game-image transition-transform duration-1000 ease-out group-hover:scale-105"
+                    />
+                    <div className="game-overlay group-hover:bg-white/5 transition-colors duration-500" />
+                  </div>
+                  <p className="game-description">
+                    {game.description}
+                  </p>
+                </Link>
               </div>
             ))}
           </div>
         </section>
 
         <section className="about-services">
-          <h2 className="about-services-h2">Our services</h2>
+          <h2 className="about-services-h2">Our Services</h2>
+
           <div className="about-services-list">
-            <dl className="about-services-dl">
-              <dd className="about-services-dt">Art Direction</dd>
-              <dd className="about-services-dt">Brand Strategy and Identity</dd>
-              <dd className="about-services-dt">Website Design</dd>
-              <dd className="about-services-dt">Product and UI/UX Design</dd>
-              <dd className="about-services-dt">Interaction and Motion Design</dd>
-            </dl>
-            <dl className="about-services-dl">
-              <dd className="about-services-dt">Front-End Engineering</dd>
-              <dd className="about-services-dt">Creative Development (WebGL / Three.js)</dd>
-              <dd className="about-services-dt">Headless CMS Integration</dd>
-              <dd className="about-services-dt">Shopify Development</dd>
-              <dd className="about-services-dt">Webflow Development</dd>
-            </dl>
+
+            <ul className="about-services-dl">
+              <li className="about-services-dt">Game Design & Systems Design</li>
+              <li className="about-services-dt">Gameplay Prototyping</li>
+              <li className="about-services-dt">Level Design</li>
+              <li className="about-services-dt">Combat & Mechanics Design</li>
+              <li className="about-services-dt">Narrative & Worldbuilding</li>
+            </ul>
+
+            <ul className="about-services-dl">
+              <li className="about-services-dt">Technical Game Development (Unity / Unreal)</li>
+              <li className="about-services-dt">Multiplayer & Backend Systems</li>
+              <li className="about-services-dt">Game UI / UX Design</li>
+              <li className="about-services-dt">Art Direction & Visual Development</li>
+              <li className="about-services-dt">Full Production & Co-Development</li>
+            </ul>
+
           </div>
         </section>
 
+
         <section className="about-shouts-wrap">
-          <h2>Shouts</h2>
+          <h2>Our Clients</h2>
           <ul className="about-shouts-list">
-            <li className="about-shouts-item"><p>Awwwards <sup>8x</sup></p></li>
-            <li className="about-shouts-item"><p>CSSDA <sup>14x</sup></p></li>
-            <li className="about-shouts-item"><p>Landing.love <sup>3x</sup></p></li>
-            <li className="about-shouts-item"><p>Codrops</p></li>
+            <li className="about-shouts-item"><p>Nexon Games MapleStory Worlds</p></li>
+            <li className="about-shouts-item"><p>Singular Scheme</p></li>
+            <li className="about-shouts-item"><p>BattleBucks</p></li>
+            <li className="about-shouts-item"><p>Magadha Studios</p></li>
+            <li className="about-shouts-item"><p>Qila Games</p></li>
+            <li className="about-shouts-item"><p>Studio Cupcakes</p></li>
           </ul>
-
-          <div className="about-shouts-svgs">
-            <span className="about-shouts-badge">Awwwards</span>
-            <span className="about-shouts-badge">Commarts</span>
-            <span className="about-shouts-badge">GSAP</span>
-            <span className="about-shouts-badge">CSSDA</span>
-          </div>
-
-          <p className="about-shouts-p">
-            We are proud to be recognized for our dedication to excellence in web design and development.
-          </p>
         </section>
 
         <section className="about-footer">
-          <h2>Looking for a web development partner?</h2>
+          <h2>Looking for a game development partner?</h2>
           <a className="footer-cta-text" href="/contact">Let&apos;s make magic</a>
         </section>
 
         <footer className="copyright">
-          <p className="copyright-p">&copy; {new Date().getFullYear()} STUDIO LUMIO</p>
+          <p className="copyright-p">&copy; {new Date().getFullYear()} Gattabara Games</p>
         </footer>
 
         <style jsx global>{`
@@ -349,27 +347,7 @@ export default function AboutPage() {
           padding: 0.2em 0.45em;
           text-transform: uppercase;
         }
-        .about-shouts-svgs {
-          margin-top: 1rem;
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-          justify-content: center;
-          will-change: opacity;
-        }
-        .about-shouts-badge {
-          width: 90px;
-          height: 34px;
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 2px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 0.72rem;
-          font-weight: 600;
-          text-transform: uppercase;
-          color: rgba(255, 255, 255, 0.9);
-        }
+
         .about-shouts-p {
           margin: 1rem 0 0;
           max-width: 28ch;

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 
 export default function Pitch() {
     return (
@@ -30,11 +31,12 @@ export default function Pitch() {
 
                     {/* Button untouched */}
                     <div className="mt-12 md:mt-20 w-full flex justify-center pb-20">
-                        <button
-                            className="relative min-w-[280px] md:min-w-[400px] h-[42px] md:h-14 flex items-center justify-center border border-white bg-white text-black font-bold text-sm md:text-base tracking-wide px-6 backdrop-blur-sm cursor-pointer transition-colors duration-300 hover:bg-white/90"
+                        <Link
+                            href="/form"
+                            className="relative min-w-[280px] md:min-w-[400px] h-[42px] md:h-14 flex items-center justify-center border border-white transition-[background-size,color] duration-500 bg-no-repeat bg-right hover:bg-left bg-white text-black hover:text-white bg-gradient-to-r from-black to-black bg-[length:0%_100%] hover:bg-[length:100%_100%] font-bold text-sm md:text-base tracking-wide px-6 backdrop-blur-sm cursor-pointer"
                         >
                             <span className="relative z-10">Click Here to Start</span>
-                        </button>
+                        </Link>
                     </div>
 
                 </div>

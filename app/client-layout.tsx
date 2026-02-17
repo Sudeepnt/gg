@@ -15,15 +15,17 @@ export default function ClientLayout({
 }) {
     const pathname = usePathname();
 
+    const isFormPage = pathname === '/form';
+
     return (
         <SmoothScrollProvider>
-            <CustomCursor />
-            <Starfield />
-            <Header />
-            <div className="relative z-10 w-full min-h-screen">
+            {!isFormPage && <CustomCursor />}
+            {!isFormPage && <Starfield />}
+            {!isFormPage && <Header />}
+            <div className={`relative z-10 w-full min-h-screen ${isFormPage ? 'bg-white' : ''}`}>
                 {children}
             </div>
-            <Footer />
+            {!isFormPage && <Footer />}
         </SmoothScrollProvider>
     );
 }

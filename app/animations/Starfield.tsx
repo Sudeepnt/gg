@@ -182,10 +182,6 @@ export default function Starfield() {
       {/* 2. Overlay CSS Noise Animation */}
       <div className="bg"></div>
 
-      {/* Alignment lines */}
-      <div className="fixed top-0 bottom-0 left-[12vw] w-[1px] bg-white/20 z-[5] pointer-events-none"></div>
-      <div className="fixed top-0 bottom-0 right-[12vw] w-[1px] bg-white/20 z-[5] pointer-events-none"></div>
-
       <style jsx global>{`
         body {
           margin: 0;
