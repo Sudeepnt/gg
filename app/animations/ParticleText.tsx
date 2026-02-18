@@ -158,12 +158,6 @@ const ParticleText: React.FC<{ color?: string; height?: string; text?: string; f
   return (
     <>
       <style jsx global>{`
-        @font-face {
-          font-family: 'NT Brick Sans';
-          src: url('/font/NTBrickSans/NTBrickSans.ttf') format('truetype');
-          font-weight: normal;
-          font-style: normal;
-        }
       `}</style>
       <div
         ref={containerRef}

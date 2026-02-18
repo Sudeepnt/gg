@@ -157,6 +157,11 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
                     opacity: 0;
                     will-change: opacity;
                 }
+
+                .splash-heading {
+                    font-family: 'NT Brick Sans', sans-serif !important;
+                    font-weight: 400 !important;
+                }
             `}</style>
 
             <AnimatePresence>
@@ -172,14 +177,14 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
                             <div className="flex flex-row items-center gap-[0.3em] md:contents">
                                 <h1
                                     ref={studioWordRef}
-                                    className="m-0 text-[max(2.4rem,24px)] md:text-[max(3.6rem,32px)] font-semibold tracking-[-0.05em] whitespace-nowrap leading-none text-white opacity-0"
+                                    className="m-0 text-[max(2.4rem,24px)] md:text-[max(3.6rem,32px)] splash-heading whitespace-nowrap leading-none text-white opacity-0"
                                 >
                                     {word1}
                                 </h1>
 
                                 <h1
                                     ref={lumioWordRef}
-                                    className="m-0 text-[max(2.4rem,24px)] md:text-[max(3.6rem,32px)] font-semibold tracking-[-0.05em] whitespace-nowrap leading-none text-white md:order-3 opacity-0"
+                                    className="m-0 text-[max(2.4rem,24px)] md:text-[max(3.6rem,32px)] splash-heading whitespace-nowrap leading-none text-white md:order-3 opacity-0"
                                 >
                                     {word2}
                                 </h1>
