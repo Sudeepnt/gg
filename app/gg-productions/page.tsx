@@ -441,6 +441,10 @@ export default function AboutPage() {
           .about-services {
             grid-template-columns: 1fr;
           }
+          .about-brief-text {
+            margin-top: clamp(2rem, 5vw, 4rem);
+            padding-top: 6vh;
+          }
           .copyright {
             padding-bottom: 100px;
           }
