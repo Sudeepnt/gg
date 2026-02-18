@@ -90,7 +90,7 @@ export default function ContactPage({ initialContent }: { initialContent?: any }
     }
 
     return (
-        <div className="h-screen w-full flex flex-col items-center justify-center px-[6vw] md:px-[12vw]">
+        <div className="min-h-screen w-full flex flex-col items-center justify-start md:justify-center pt-[13vh] md:pt-0 px-[6vw] md:px-[12vw]">
             <main className="w-full flex flex-col items-start text-left font-sans">
 
                 {/* Contact Form */}

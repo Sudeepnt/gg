@@ -191,7 +191,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
                             >
                                 <div
                                     ref={ctaTextRef}
-                                    className="whitespace-nowrap flex items-center justify-center px-4 py-2 border-l border-r border-white/10 mt-[0.2em] md:mt-[0.3em]"
+                                    className="whitespace-nowrap flex items-center justify-center px-4 py-4 border border-white/10 mt-[0.2em] md:mt-[0.3em]"
                                 >
                                     <p className="text-white text-[9px] md:text-[11px] tracking-[0.4em] font-bold text-center leading-none opacity-80">
                                         We Summon Worlds That Eat Reality

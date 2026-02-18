@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export default function AboutPage() {
     return (
-        <div className="min-h-screen w-full flex flex-col items-center justify-start px-[6vw] md:px-[12vw] pt-20 md:pt-32 pb-20">
+        <div className="min-h-screen w-full flex flex-col items-center justify-start px-[6vw] md:px-[12vw] pt-[13vh] md:pt-32 pb-20">
             <div className="w-full text-left">
                 {/* HERO MANIFESTO */}
                 <section className="max-w-6xl">
