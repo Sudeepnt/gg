@@ -22,7 +22,7 @@ export default function PitchForm() {
 
     return (
         <div className="relative w-full min-h-screen text-white overflow-hidden flex flex-col font-sans">
-            <main className="flex-1 flex flex-col justify-center items-center px-4 py-20 md:py-32 w-full z-10">
+            <main className="flex-1 flex flex-col justify-center items-center px-4 pt-10 pb-20 md:py-32 w-full z-10">
                 <div className="w-full max-w-4xl">
                     <form onSubmit={handleSubmit} className="flex flex-col gap-12 text-xl md:text-3xl font-medium leading-relaxed">
 
