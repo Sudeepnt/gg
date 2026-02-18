@@ -77,7 +77,7 @@ export default function Footer() {
                     {isHome ? (
                         <div className="grid grid-cols-4 lg:grid-cols-5 gap-1 md:gap-0">
                             {/* Card 1: Client Carousel - Half width on mobile */}
-                            <div className="col-span-2 lg:col-span-1 border border-white/10 h-[122px] md:h-auto w-[85%] rounded-[1px] flex flex-col justify-between relative overflow-hidden order-1 group">
+                            <div className="col-span-2 lg:col-span-1 border border-white/10 h-[122px] md:h-auto w-full lg:w-[85%] rounded-[1px] flex flex-col justify-between relative overflow-hidden order-1 group">
                                 <ClientCarousel />
                                 <div className="absolute bottom-2 right-3 z-20">
                                     <Link href="/games" className="relative overflow-hidden transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-black text-white hover:text-black bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%] px-3 py-1.5 flex items-center gap-2">
@@ -92,7 +92,7 @@ export default function Footer() {
                                     setShowVideo(true);
                                     setIsPlaying(true);
                                 }}
-                                className="col-span-2 lg:col-span-1 bg-[#13343e] h-[122px] md:h-auto w-[85%] rounded-[1px] flex flex-col justify-between relative overflow-hidden order-2 cursor-pointer"
+                                className="col-span-2 lg:col-span-1 bg-[#13343e] h-[122px] md:h-auto w-full lg:w-[85%] rounded-[1px] flex flex-col justify-between relative overflow-hidden order-2 cursor-pointer"
                             >
                                 <video
                                     autoPlay

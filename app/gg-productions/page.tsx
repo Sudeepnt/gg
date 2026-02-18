@@ -51,8 +51,8 @@ export default function AboutPage() {
 
 
         <section className="about-brief pt-[100px]">
-          <div className="w-full h-[30vh] flex items-center justify-center px-[12vw] mt-[100px] mb-[100px]">
-            <ParticleText />
+          <div className="w-full h-[30vh] flex items-center justify-center px-[6vw] md:px-[12vw] mt-[100px] mb-[100px]">
+            <ParticleText text="GG PRODUCTIONS" mobileScale={0.7} />
           </div>
 
           <figure className="about-brief-reel">
@@ -193,7 +193,7 @@ export default function AboutPage() {
           }
         }
         .about-brief-reel {
-          margin: 0 12vw;
+          margin: 0 6vw;
           border: 1px solid rgba(255, 255, 255, 0.2);
           border-radius: 4px;
           overflow: hidden;
@@ -207,7 +207,7 @@ export default function AboutPage() {
           display: block;
         }
         .about-brief-text {
-          margin: clamp(4rem, 10vw, 8rem) 12vw 0 12vw;
+          margin: clamp(4rem, 10vw, 8rem) 6vw 0 6vw;
           padding-top: 12vh;
           padding-bottom: 5vh;
           display: flex;
@@ -218,7 +218,7 @@ export default function AboutPage() {
         }
         .about-brief-text p {
           margin: 0;
-          font-size: clamp(1.3rem, 2.6vw, 2.375rem);
+          font-size: clamp(1.3rem, 2.6vw, 2.02rem);
           line-height: 1.25;
           letter-spacing: -0.03em;
           font-weight: 600;
@@ -226,7 +226,7 @@ export default function AboutPage() {
           text-align: left;
         }
         .games-grid {
-          margin: clamp(4rem, 10vw, 8rem) 12vw 0 12vw;
+          margin: clamp(4rem, 10vw, 8rem) 6vw 0 6vw;
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: clamp(5rem, 8vw, 8rem) clamp(0.5rem, 1.5vw, 1.5rem);
@@ -282,7 +282,7 @@ export default function AboutPage() {
           margin: 0;
         }
         .about-services {
-          margin: clamp(6rem, 16vw, 12rem) 12vw 0 12vw;
+          margin: clamp(6rem, 16vw, 12rem) 6vw 0 6vw;
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 1.2rem 2rem;
@@ -416,6 +416,23 @@ export default function AboutPage() {
           user-select: text;
           will-change: opacity;
         }
+        @media (min-width: 768px) {
+          .about-brief-reel {
+            margin: 0 12vw;
+          }
+          .about-brief-text {
+            margin-left: 12vw;
+            margin-right: 12vw;
+          }
+          .games-grid {
+            margin-left: 12vw;
+            margin-right: 12vw;
+          }
+          .about-services {
+            margin-left: 12vw;
+            margin-right: 12vw;
+          }
+        }
         @media (max-width: 768px) {
           .about {
             width: calc(100% - 1.2rem);
@@ -424,8 +441,8 @@ export default function AboutPage() {
           .about-services {
             grid-template-columns: 1fr;
           }
-          .about-brief-text {
-            margin-left: 0;
+          .copyright {
+            padding-bottom: 100px;
           }
         }
       `}</style>

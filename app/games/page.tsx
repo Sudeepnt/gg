@@ -30,7 +30,7 @@ const games = [
 export default function GamesPage() {
     return (
         <div className="min-h-screen pt-24 md:pt-32 pb-24">
-            <div className="w-full px-[12vw]">
+            <div className="w-full px-[6vw] md:px-[12vw]">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 md:gap-x-16 gap-y-10 md:gap-y-32">
                     {games.map((game, index) => (
                         <motion.div

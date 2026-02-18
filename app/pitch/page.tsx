@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function Pitch() {
     return (
         <div className="relative w-full min-h-screen text-white overflow-hidden flex flex-col font-sans">
-            <main className="flex-1 flex flex-col justify-start w-full pt-16 md:pt-32 px-[12vw]">
+            <main className="flex-1 flex flex-col justify-start w-full pt-16 md:pt-32 px-[6vw] md:px-[12vw]">
                 <div className="w-full flex flex-col">
 
                     {/* Equal spacing above text block */}

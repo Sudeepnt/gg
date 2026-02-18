@@ -130,7 +130,7 @@ export default function GameDetailPage() {
         >
             <main className="pt-32 pb-20">
                 {/* Hero Video/Image Section - 80vh with 12vw margins like gg-productions */}
-                <section className="relative w-full px-[12vw]">
+                <section className="relative w-full px-[6vw] md:px-[12vw]">
                     <div className="relative h-[60vh] md:h-[80vh] overflow-hidden border border-white/10 rounded-sm">
                         {game.video ? (
                             <video
@@ -169,7 +169,7 @@ export default function GameDetailPage() {
 
                 <div className="w-full">
                     {/* Synopsis Section */}
-                    <section className="px-[12vw] py-20 w-full">
+                    <section className="px-[6vw] md:px-[12vw] py-20 w-full">
                         <h3 className="text-sm font-bold text-gray-400 uppercase mb-8 text-[10px] tracking-[0.2em]">Synopsis</h3>
                         <motion.p
                             initial={{ opacity: 0, x: -50 }}
@@ -182,7 +182,7 @@ export default function GameDetailPage() {
                     </section>
 
                     {/* Game Details Section */}
-                    <section className="px-[12vw] py-16 w-full border-t border-white/10">
+                    <section className="px-[6vw] md:px-[12vw] py-16 w-full border-t border-white/10">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                             {/* Developed By */}
                             {game.developedBy && (
@@ -257,11 +257,11 @@ export default function GameDetailPage() {
                     {/* Screenshots Section */}
                     {game.screenshots && game.screenshots.length > 0 && (
                         <section className="py-20 border-t border-white/10">
-                            <div className="px-[12vw] w-full mb-10">
+                            <div className="px-[6vw] md:px-[12vw] w-full mb-10">
                                 <h2 className="text-sm font-bold text-gray-500 uppercase text-[10px] tracking-[0.2em]">Screenshots showcase</h2>
                             </div>
                             <div className="overflow-x-auto scrollbar-hide">
-                                <div className="flex gap-6 px-[12vw] pb-8 w-max">
+                                <div className="flex gap-6 px-[6vw] md:px-[12vw] pb-8 w-max">
                                     {game.screenshots.map((screenshot, idx) => (
                                         <div
                                             key={idx}
@@ -281,7 +281,7 @@ export default function GameDetailPage() {
 
                     {/* Other Games Section */}
                     {otherGames.length > 0 && (
-                        <section className="px-[12vw] py-32 w-full border-t border-white/10">
+                        <section className="px-[6vw] md:px-[12vw] py-32 w-full border-t border-white/10">
                             <h2 className="text-sm font-bold text-gray-400 uppercase mb-16 text-[10px] tracking-[0.2em]">Other Games</h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
                                 {otherGames.map((otherGame, idx) => (

@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 
-const ParticleText: React.FC<{ color?: string; height?: string; text?: string; forceStack?: boolean }> = ({ color = 'white', height, text = "Gattabara Games", forceStack = false }) => {
+const ParticleText: React.FC<{ color?: string; height?: string; text?: string; forceStack?: boolean; mobileScale?: number; className?: string }> = ({ color = 'white', height, text = "Gattabara Games", forceStack = false, mobileScale = 1, className = "" }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // ... rest of useEffect remains the same ...
   useEffect(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
@@ -29,8 +30,9 @@ const ParticleText: React.FC<{ color?: string; height?: string; text?: string; f
       const shouldStack = isMobile || forceStack;
 
       // Significantly larger font size for mobile (splitting lines)
-      const baseFontSize = shouldStack ? (canvas.width * 0.16) : (canvas.width * 0.08);
-      const responsiveFontSize = Math.min(baseFontSize, shouldStack ? 130 : 200);
+      const mobileMultiplier = isMobile ? mobileScale : 1;
+      const baseFontSize = shouldStack ? (canvas.width * 0.16 * mobileMultiplier) : (canvas.width * 0.08);
+      const responsiveFontSize = Math.min(baseFontSize, (shouldStack ? 130 : 200) * mobileMultiplier);
 
       const responsiveVerticalScale = 1.0;
       const responsiveHorizontalScale = 1.0;
@@ -46,12 +48,17 @@ const ParticleText: React.FC<{ color?: string; height?: string; text?: string; f
       ctx.scale(responsiveHorizontalScale, responsiveVerticalScale);
 
       if (shouldStack) {
-        // Multi-line rendering
+        // Multi-line rendering based on provided text
+        const words = textToRender.split(' ');
         const lineHeight = responsiveFontSize * 1.2;
         const centerY = (canvas.height * 0.5) / responsiveVerticalScale;
 
-        ctx.fillText("Gattabara", (canvas.width / 2) / responsiveHorizontalScale, centerY - (lineHeight * 0.5));
-        ctx.fillText("Games", (canvas.width / 2) / responsiveHorizontalScale, centerY + (lineHeight * 0.5));
+        if (words.length >= 2) {
+          ctx.fillText(words[0], (canvas.width / 2) / responsiveHorizontalScale, centerY - (lineHeight * 0.5));
+          ctx.fillText(words.slice(1).join(' '), (canvas.width / 2) / responsiveHorizontalScale, centerY + (lineHeight * 0.5));
+        } else {
+          ctx.fillText(textToRender, (canvas.width / 2) / responsiveHorizontalScale, centerY);
+        }
       } else {
         // Single line for desktop
         const textY = (canvas.height * 0.5);
@@ -146,7 +153,7 @@ const ParticleText: React.FC<{ color?: string; height?: string; text?: string; f
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', init);
     };
-  }, []);
+  }, [text, color, forceStack, mobileScale]);
 
   return (
     <>
@@ -160,7 +167,7 @@ const ParticleText: React.FC<{ color?: string; height?: string; text?: string; f
       `}</style>
       <div
         ref={containerRef}
-        className={`w-full ${height || 'h-screen'} flex justify-center items-center overflow-hidden bg-transparent`}
+        className={`w-full ${height || 'h-screen'} flex justify-center items-center overflow-hidden bg-transparent ${className}`}
       >
         <canvas ref={canvasRef} className="max-w-full" />
       </div>

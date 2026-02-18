@@ -167,18 +167,27 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
                     >
                         <div
                             ref={preloaderMainRef}
-                            className="flex flex-col md:flex-row items-center justify-center gap-[max(1rem,10px)] md:gap-[max(2rem,20px)]"
+                            className="flex flex-col md:flex-row items-center justify-center gap-[max(1.5rem,15px)] md:gap-[max(2rem,20px)]"
                         >
-                            <h1
-                                ref={studioWordRef}
-                                className="m-0 text-[max(2.4rem,24px)] md:text-[max(3.6rem,32px)] font-semibold tracking-[-0.05em] whitespace-nowrap leading-none text-white order-1 md:order-none opacity-0"
-                            >
-                                {word1}
-                            </h1>
+                            <div className="flex flex-row items-center gap-[0.3em] md:contents">
+                                <h1
+                                    ref={studioWordRef}
+                                    className="m-0 text-[max(2.4rem,24px)] md:text-[max(3.6rem,32px)] font-semibold tracking-[-0.05em] whitespace-nowrap leading-none text-white opacity-0"
+                                >
+                                    {word1}
+                                </h1>
+
+                                <h1
+                                    ref={lumioWordRef}
+                                    className="m-0 text-[max(2.4rem,24px)] md:text-[max(3.6rem,32px)] font-semibold tracking-[-0.05em] whitespace-nowrap leading-none text-white md:order-3 opacity-0"
+                                >
+                                    {word2}
+                                </h1>
+                            </div>
 
                             <div
                                 ref={ctaWrapRef}
-                                className="overflow-hidden w-0 opacity-0 flex items-center justify-center order-3 md:order-none"
+                                className="overflow-hidden w-0 opacity-0 flex items-center justify-center md:order-2"
                             >
                                 <div
                                     ref={ctaTextRef}
@@ -189,13 +198,6 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
                                     </p>
                                 </div>
                             </div>
-
-                            <h1
-                                ref={lumioWordRef}
-                                className="m-0 text-[max(2.4rem,24px)] md:text-[max(3.6rem,32px)] font-semibold tracking-[-0.05em] whitespace-nowrap leading-none text-white order-2 md:order-none opacity-0"
-                            >
-                                {word2}
-                            </h1>
                         </div>
 
                     </div>

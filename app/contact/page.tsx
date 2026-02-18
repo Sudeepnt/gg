@@ -90,7 +90,7 @@ export default function ContactPage({ initialContent }: { initialContent?: any }
     }
 
     return (
-        <div className="h-screen w-full flex flex-col items-center justify-center px-[12vw]">
+        <div className="h-screen w-full flex flex-col items-center justify-center px-[6vw] md:px-[12vw]">
             <main className="w-full flex flex-col items-start text-left font-sans">
 
                 {/* Contact Form */}
@@ -102,14 +102,14 @@ export default function ContactPage({ initialContent }: { initialContent?: any }
                     transition={{ delay: 0.01, duration: 0.5 }}
                 >
                     {/* Sentence Layout */}
-                    <div className="mb-6 leading-[1.8] text-white font-normal" style={{ fontSize: 'clamp(0.8rem, 1.6vw, 1.44rem)' }}>
+                    <div className="mb-6 leading-[1.8] text-white font-normal text-[0.92rem] md:text-[clamp(0.8rem,1.6vw,1.44rem)]">
                         <span>{content.formLine1Start} </span>
                         <input
                             type="text"
                             placeholder={content.namePlaceholder}
                             value={formData.name}
                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            className="bg-white/10 border-0 outline-none px-4 mx-1 rounded text-white placeholder-white/30 inline-block align-middle w-[clamp(150px,20vw,300px)] h-[clamp(1.1rem,2.2vw,2.25rem)] text-left font-sans transition-all focus:bg-white/20"
+                            className="bg-white/10 border-0 outline-none px-4 mx-1 rounded text-white placeholder-white/30 inline-block align-middle w-[clamp(150px,20vw,300px)] h-[1.32rem] md:h-[clamp(1.1rem,2.2vw,2.25rem)] text-left font-sans transition-all focus:bg-white/20"
                             disabled={status === 'loading' || status === 'success'}
                         />
                         <span> {content.formLine1End}</span>
@@ -120,7 +120,7 @@ export default function ContactPage({ initialContent }: { initialContent?: any }
                             placeholder={content.emailPlaceholder}
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            className="bg-white/10 border-0 outline-none px-4 mx-1 rounded text-white placeholder-white/30 inline-block align-middle w-[clamp(200px,25vw,400px)] h-[clamp(1.1rem,2.2vw,2.25rem)] text-left font-sans transition-all focus:bg-white/20"
+                            className="bg-white/10 border-0 outline-none px-4 mx-1 rounded text-white placeholder-white/30 inline-block align-middle w-[clamp(200px,25vw,400px)] h-[1.32rem] md:h-[clamp(1.1rem,2.2vw,2.25rem)] text-left font-sans transition-all focus:bg-white/20"
                             disabled={status === 'loading' || status === 'success'}
                         />
                         <span>{content.formLine2End}</span>
