@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = 'force-dynamic';
+
 import React, { useState, useEffect } from "react";
 import { Upload, ChevronDown, Check, X, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
