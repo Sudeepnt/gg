@@ -17,20 +17,45 @@ export default function ClientLayout({
 }) {
     const pathname = usePathname();
     const [isSplashVisible, setIsSplashVisible] = useState(true);
+    const [hasPlayed, setHasPlayed] = useState(false);
 
     const isFormPage = pathname === '/form';
 
     useEffect(() => {
-        if (isSplashVisible) {
+        // If we are on form page, mark as played immediately
+        if (isFormPage) {
+            sessionStorage.setItem('splashPlayed', 'true');
+            setHasPlayed(true);
+            setIsSplashVisible(false);
+        }
+
+        // Check if splash has already played in this session
+        const played = sessionStorage.getItem('splashPlayed');
+        if (played) {
+            setIsSplashVisible(false);
+            setHasPlayed(true);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (isSplashVisible && !isFormPage) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = '';
         }
-    }, [isSplashVisible]);
+    }, [isSplashVisible, isFormPage]);
+
+    const handleSplashComplete = () => {
+        setIsSplashVisible(false);
+        setHasPlayed(true);
+        sessionStorage.setItem('splashPlayed', 'true');
+    };
 
     return (
         <SmoothScrollProvider>
-            {!isFormPage && <SplashScreen onComplete={() => setIsSplashVisible(false)} />}
+            {!hasPlayed && !isFormPage && (
+                <SplashScreen onComplete={handleSplashComplete} />
+            )}
             {!isFormPage && <CustomCursor />}
             {!isFormPage && <Starfield />}
             {!isFormPage && <Header />}

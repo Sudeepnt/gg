@@ -15,8 +15,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-montserrat);
-  --font-serif: var(--font-libre);
+  --font-sans: var(--font-bai);
+  --font-serif: var(--font-montagu);
 }
 
 /* Strongly enforce black background to prevent white flash */
@@ -31,13 +31,16 @@ html {
 body {
   background-color: #000000;
   color: #ffffff;
-  /* overscroll-behavior-y: none; */
-  /* width: 100vw; */
-  /* height: 100vh; */
-  /* overflow: hidden; */
-  /* position: fixed; */
-  /* left: 0; */
-  /* top: 0; */
+  font-family: var(--font-bai), sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-montagu), serif;
 }
 
 

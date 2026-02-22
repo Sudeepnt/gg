@@ -1,33 +1,38 @@
-'use client';
+"use client";
 
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-
-const games = [
-    {
-        title: "ORBITALS",
-        image: "/clients/Orbitals Environment 2.png",
-        description: "Step into a lovingly crafted retro anime world as explorers Maki and Omura brave the deadly Storm Wall and the perils beyond, all to save their home. In this 2-player co-op puzzle adventure, only brains, heart and unyielding resolve will open the path forward."
-    },
-    {
-        title: "ONTOS",
-        image: "/clients/Machine.png",
-        description: "A sci-fi mystery set on the repurposed moon hotel Samsara. Uncover cryptic experiments, face unsettling encounters, and piece together a mind-bending narrative. The deeper you go, the more the truth unravels as you confront the ultimate question: What is reality?"
-    },
-    {
-        title: "TANKRAT",
-        image: "/clients/TankHead 2025-11-16 21-26-46_666.png",
-        description: "A dying world, flesh given way to steel. Swarms of corrupted mech-monsters roam a desolate land. Search and destroy, scavenge and dismantle, rebuild yourself from the wreckage. What you take becomes what you are. Survive the wasteland. Make it to Highpoint."
-    },
-    {
-        title: "CLAIR OBSCUR",
-        image: "/clients/expedition33-screenshots-01.jpg",
-        description: "Lead the members of Expedition 33 on their quest to destroy the Paintress so that she can never paint death again. Explore a world of wonders inspired by Belle Époque France and battle unique enemies in this turn-based RPG with real-time mechanics."
-    }
-];
+import { getCMSData } from "../actions/cmsActions";
+import ComingSoonLiquid from '../animations/ComingSoonLiquid';
 
 export default function GamesPage() {
+    const [games, setGames] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchContent = async () => {
+            try {
+                const cmsData = await getCMSData();
+                if (cmsData && cmsData.projects) {
+                    setGames(cmsData.projects);
+                }
+            } catch (error) {
+                console.error("Failed to fetch CMS data:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchContent();
+    }, []);
+
+    if (isLoading) return null;
+
+    if (games.length === 0) {
+        return <ComingSoonLiquid />;
+    }
+
     return (
         <div className="min-h-screen pt-[13vh] md:pt-32 pb-24">
             <div className="w-full px-[6vw] md:px-[12vw]">

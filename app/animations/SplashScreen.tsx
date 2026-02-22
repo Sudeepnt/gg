@@ -53,14 +53,14 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
 
         // Build Timeline
         const tl = gsap.timeline({
-            delay: 0.5,
+            delay: 0.3,
             defaults: {
-                duration: 1.35,
+                duration: 0.9,
                 ease: "power4.inOut",
             },
             onComplete: () => {
-                // Reduced pause (3.5s -> 2s)
-                gsap.delayedCall(2, exitPreloader);
+                // Reduced pause (2s -> 1.2s)
+                gsap.delayedCall(1.2, exitPreloader);
             }
         });
         timelineRef.current = tl;
@@ -69,11 +69,11 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         chars.forEach((charEl) => {
             const charTimeline = gsap.timeline();
             const flickerCount = Math.floor(4 * Math.random()) + 3;
-            const charOffset = 0.3 * Math.random();
+            const charOffset = 0.2 * Math.random();
 
             for (let i = 0; i < flickerCount; i++) {
                 const randomOpacity = 0.6 * Math.random() + 0.1;
-                const randomDuration = 0.12 * Math.random() + 0.04;
+                const randomDuration = 0.08 * Math.random() + 0.04;
                 charTimeline.to(charEl, {
                     opacity: randomOpacity,
                     duration: randomDuration,
@@ -83,11 +83,11 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
 
             charTimeline.to(charEl, {
                 opacity: 1,
-                duration: 0.15,
+                duration: 0.1,
                 ease: "power2.out",
             });
 
-            tl.add(charTimeline, charOffset + 0.5);
+            tl.add(charTimeline, charOffset + 0.3);
         });
 
         // Main Sequence
@@ -105,9 +105,9 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
             .to(ctaTextRef.current, {
                 opacity: 1,
                 y: 0,
-                duration: 0.8,
+                duration: 0.6,
                 ease: "power2.out"
-            }, "<+0.2");
+            }, "<+0.1");
 
         return () => {
             if (tl) tl.kill();
@@ -122,14 +122,14 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
             return;
         }
 
-        // Snappier reversal (0.8 speed)
-        timelineRef.current.timeScale(0.8).reverse();
+        // Snappier reversal (1.2 speed)
+        timelineRef.current.timeScale(1.2).reverse();
 
-        // Final smooth dissolve (Reduced 4s -> 2.4s)
-        gsap.delayedCall(2.4, () => {
+        // Final smooth dissolve (Reduced 2.4s -> 1.6s)
+        gsap.delayedCall(1.6, () => {
             gsap.to(preloaderRef.current, {
                 opacity: 0,
-                duration: 1.5, // Faster fade
+                duration: 1.0, // Faster fade
                 ease: "power2.inOut",
                 onComplete: revealPage,
             });
@@ -144,8 +144,6 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
     return (
         <>
             <style jsx global>{`
-                @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&display=swap');
-
                 :root {
                     --preloader-black: #111111;
                     --preloader-white: #ffffff;
@@ -168,13 +166,13 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
                 {isVisible && (
                     <div
                         ref={preloaderRef}
-                        className="fixed inset-0 z-[99999] bg-[#111] flex items-center justify-center p-[--preloader-gutter] font-['Oswald',sans-serif] overflow-hidden"
+                        className="fixed inset-0 z-[99999] bg-[#111] flex items-center justify-center p-[--preloader-gutter] font-sans overflow-hidden"
                     >
                         <div
                             ref={preloaderMainRef}
-                            className="flex flex-col md:flex-row items-center justify-center gap-[max(1.5rem,15px)] md:gap-[max(2rem,20px)]"
+                            className="flex flex-col items-center justify-center gap-[max(1.5rem,15px)]"
                         >
-                            <div className="flex flex-row items-center gap-[0.3em] md:contents">
+                            <div className="flex flex-row items-center gap-[0.3em]">
                                 <h1
                                     ref={studioWordRef}
                                     className="m-0 text-[max(1.8rem,18px)] md:text-[max(3.6rem,32px)] splash-heading whitespace-nowrap leading-none text-white opacity-0"
@@ -184,7 +182,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
 
                                 <h1
                                     ref={lumioWordRef}
-                                    className="m-0 text-[max(1.8rem,18px)] md:text-[max(3.6rem,32px)] splash-heading whitespace-nowrap leading-none text-white md:order-3 opacity-0"
+                                    className="m-0 text-[max(1.8rem,18px)] md:text-[max(3.6rem,32px)] splash-heading whitespace-nowrap leading-none text-white opacity-0"
                                 >
                                     {word2}
                                 </h1>
@@ -192,11 +190,11 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
 
                             <div
                                 ref={ctaWrapRef}
-                                className="overflow-hidden w-0 opacity-0 flex items-center justify-center md:order-2"
+                                className="overflow-hidden w-0 opacity-0 flex items-center justify-center"
                             >
                                 <div
                                     ref={ctaTextRef}
-                                    className="whitespace-nowrap flex items-center justify-center px-4 py-4 border border-white/10 mt-[0.2em] md:mt-[0.3em]"
+                                    className="whitespace-nowrap flex items-center justify-center px-4 py-4 border border-white/10 mt-[0.2em]"
                                 >
                                     <p className="text-white text-[9px] md:text-[11px] tracking-[0.4em] font-bold text-center leading-none opacity-80">
                                         We Summon Worlds That Eat Reality

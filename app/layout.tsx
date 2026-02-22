@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
-import { Libre_Baskerville, Montserrat, Bebas_Neue } from "next/font/google";
+import { Montagu_Slab, Bai_Jamjuree, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 
-const libreBaskerville = Libre_Baskerville({
+const montaguSlab = Montagu_Slab({
   subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-libre",
+  variable: "--font-montagu",
   display: "swap",
 });
 
-const montserrat = Montserrat({
+const baiJamjuree = Bai_Jamjuree({
+  weight: ["200", "300", "400", "500", "600", "700"],
   subsets: ["latin"],
-  variable: "--font-montserrat",
+  variable: "--font-bai",
   display: "swap",
 });
 
@@ -40,7 +40,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${libreBaskerville.variable} ${montserrat.variable} ${bebasNeue.variable} font-sans antialiased`}>
+      <body className={`${montaguSlab.variable} ${baiJamjuree.variable} ${bebasNeue.variable} font-sans antialiased`}>
 
         <ClientLayout>{children}</ClientLayout>
       </body>

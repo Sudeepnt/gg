@@ -1,11 +1,11 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import ParticleText from "../animations/ParticleText";
-
+import { getCMSData } from "../actions/cmsActions";
 
 const games = [
   {
@@ -32,6 +32,55 @@ const games = [
 
 export default function AboutPage() {
   const rootRef = useRef<HTMLElement | null>(null);
+  const [content, setContent] = useState({
+    particleText: "GG PRODUCTIONS",
+    brief: [
+      "At GG Productions, we know what it’s like to build games with tight budgets and big ambitions. Every decision is about momentum, what to ship now, what to defer, and where the right support can unblock your next milestone.",
+      "We stay lean so you can move fast, plugging in exactly the talent you need, when you need it, across art, tech, design, and production.",
+      "With clear milestones and transparent delivery, we integrate as an extension of your team, whether for full production or focused co-development, so you keep creative control while scaling execution globally."
+    ],
+    servicesTitle: "Our Services",
+    services: [
+      {
+        title: "Development",
+        description: "From early concepts to shippable builds, our team designs core systems, builds robust gameplay foundations, and executes with production-grade engineering. We handle mechanics, level design, rapid prototyping, and full-cycle development across Unity, Unreal, and Roblox, with scalability in mind for long-term updates and live operations."
+      },
+      {
+        title: "Art",
+        description: "Our art direction and production bring clarity and identity to your game, from visual style discovery to complete world-building. We deliver cohesive 2D and 3D art, animation, and UI that give characters and environments a distinct voice, always grounded in gameplay and audience experience."
+      },
+      {
+        title: "Strategy & Pre-Production",
+        description: "We help you make the right game before you make the whole game. From IP ideation and concept validation to MVP planning for fundraising, we craft clear design documentation and production roadmaps. Our approach blends creative vision with market and production reality, helping you de-risk development across entertainment titles, branded experiences, and applied games."
+      }
+    ],
+    clientsTitle: "Our Clients",
+    clients: [
+      "Nexon Games MapleStory Worlds",
+      "Singular Scheme",
+      "BattleBucks",
+      "Magadha Studios",
+      "Qila Games",
+      "Studio Cupcakes"
+    ],
+    footerTitle: "Looking for a game development partner?",
+    footerCta: "Let's make magic",
+    copyright: "Gattabara Games"
+  });
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const cmsData = await getCMSData();
+        if (cmsData && cmsData.ggProductions) {
+          setContent(cmsData.ggProductions);
+        }
+      } catch (error) {
+        console.error("Failed to fetch CMS data:", error);
+      }
+    };
+    fetchContent();
+  }, []);
 
   // Removed scroll-based opacity effect - now using viewport gradient shadows instead
 
@@ -52,26 +101,35 @@ export default function AboutPage() {
 
         <section className="about-brief pt-[100px]">
           <div className="w-full h-[30vh] flex items-center justify-center px-[6vw] md:px-[12vw] mt-[100px] mb-[100px]">
-            <ParticleText text="GG PRODUCTIONS" mobileScale={0.7} />
+            <ParticleText text={content.particleText.toUpperCase()} mobileScale={0.7} />
           </div>
 
           <figure className="about-brief-reel">
-            <video src="https://r2.studiolumio.com/lumio-reel.mp4" autoPlay muted loop playsInline />
+            <video
+              ref={(el) => {
+                if (el) {
+                  el.play().catch(err => {
+                    console.warn("Autoplay failed:", err);
+                    // Add a click-to-play fallback if needed, or just let it be
+                  });
+                }
+              }}
+              src="https://r2.studiolumio.com/lumio-reel.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              className="w-full h-full object-cover"
+            />
           </figure>
 
           <div className="about-brief-text">
-            <p>
-              At GG Productions, we know what it’s like to build games with tight budgets and big ambitions. Every decision is about momentum, what to ship now, what to defer, and where the right support can unblock your next milestone.
-            </p>
-
-            <p>
-              We stay lean so you can move fast, plugging in exactly the talent you need, when you need it, across art, tech, design, and production.
-            </p>
-
-            <p>
-              With clear milestones and transparent delivery, we integrate as an extension of your team, whether for full production or focused co-development, so you keep creative control while scaling execution globally.
-            </p>
-
+            {content.brief.map((p, i) => (
+              <p key={i}>
+                {p}
+              </p>
+            ))}
           </div>
 
 
@@ -102,49 +160,35 @@ export default function AboutPage() {
         </section>
 
         <section className="about-services">
-          <h2 className="about-services-h2">Our Services</h2>
+          <h2 className="about-services-h2">{content.servicesTitle}</h2>
 
           <div className="about-services-list">
-
-            <ul className="about-services-dl">
-              <li className="about-services-dt">Game Design & Systems Design</li>
-              <li className="about-services-dt">Gameplay Prototyping</li>
-              <li className="about-services-dt">Level Design</li>
-              <li className="about-services-dt">Combat & Mechanics Design</li>
-              <li className="about-services-dt">Narrative & Worldbuilding</li>
-            </ul>
-
-            <ul className="about-services-dl">
-              <li className="about-services-dt">Technical Game Development (Unity / Unreal)</li>
-              <li className="about-services-dt">Multiplayer & Backend Systems</li>
-              <li className="about-services-dt">Game UI / UX Design</li>
-              <li className="about-services-dt">Art Direction & Visual Development</li>
-              <li className="about-services-dt">Full Production & Co-Development</li>
-            </ul>
-
+            {(content as any).services?.map((service: any, i: number) => (
+              <div key={i} className="about-services-item">
+                <h3 className="about-services-dt">{service.title}</h3>
+                <p className="about-services-dd">{service.description}</p>
+              </div>
+            ))}
           </div>
         </section>
 
 
         <section className="about-shouts-wrap">
-          <h2>Our Clients</h2>
+          <h2>{content.clientsTitle}</h2>
           <ul className="about-shouts-list">
-            <li className="about-shouts-item"><p>Nexon Games MapleStory Worlds</p></li>
-            <li className="about-shouts-item"><p>Singular Scheme</p></li>
-            <li className="about-shouts-item"><p>BattleBucks</p></li>
-            <li className="about-shouts-item"><p>Magadha Studios</p></li>
-            <li className="about-shouts-item"><p>Qila Games</p></li>
-            <li className="about-shouts-item"><p>Studio Cupcakes</p></li>
+            {content.clients.map((c, i) => (
+              <li key={i} className="about-shouts-item"><p>{c}</p></li>
+            ))}
           </ul>
         </section>
 
         <section className="about-footer">
-          <h2>Looking for a game development partner?</h2>
-          <a className="footer-cta-text" href="/contact">Let&apos;s make magic</a>
+          <h2>{content.footerTitle}</h2>
+          <Link className="footer-cta-text" href="/contact">{content.footerCta}</Link>
         </section>
 
         <footer className="copyright">
-          <p className="copyright-p">&copy; {new Date().getFullYear()} Gattabara Games</p>
+          <p className="copyright-p">&copy; {new Date().getFullYear()} {content.copyright}</p>
         </footer>
 
         <style jsx global>{`
@@ -294,19 +338,26 @@ export default function AboutPage() {
           will-change: opacity;
         }
         .about-services-list {
-          display: grid;
-          gap: 2rem;
+          display: flex;
+          flex-direction: column;
+          gap: 4rem;
         }
-        .about-services-dl {
-          margin: 0;
+        .about-services-item {
           will-change: opacity;
         }
         .about-services-dt {
-          margin: 0 0 0.5rem;
+          margin: 0 0 0.8rem;
           font-size: clamp(1.15rem, 2.2vw, 2rem);
           line-height: 1.2;
           letter-spacing: -0.03em;
           font-weight: 600;
+        }
+        .about-services-dd {
+          font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+          line-height: 1.65;
+          color: rgba(255, 255, 255, 0.6);
+          font-weight: 500;
+          max-width: 60ch;
         }
         .about-shouts-wrap {
           margin-top: clamp(8rem, 20vw, 16rem);
@@ -363,7 +414,7 @@ export default function AboutPage() {
           text-align: center;
           display: grid;
           justify-items: center;
-          gap: 0.8rem;
+          gap: 0.4rem;
           position: relative;
           z-index: 100001;
         }
@@ -376,16 +427,18 @@ export default function AboutPage() {
           font-weight: 700;
           will-change: opacity;
         }
-        .footer-cta-text {
-          color: #ffffff;
-          text-decoration: none;
-          font-size: clamp(1.5rem, 4.2vw, 4.5rem);
+        :global(.footer-cta-text) {
+          color: #ffffff !important;
+          text-decoration: none !important;
+          font-size: clamp(1.5rem, 4.2vw, 4.5rem) !important;
           letter-spacing: -0.05em;
           font-weight: 700;
           position: relative;
+          display: inline-block;
           will-change: opacity;
+
         }
-        .footer-cta-text::after {
+        :global(.footer-cta-text::after) {
           content: "";
           position: absolute;
           left: 0;
@@ -393,10 +446,11 @@ export default function AboutPage() {
           bottom: -0.3rem;
           height: 0.2rem;
           background: currentColor;
+          transform: scaleX(1);
           transform-origin: left center;
           transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
         }
-        .footer-cta-text:hover::after {
+        :global(.footer-cta-text:hover::after) {
           transform: scaleX(0);
           transform-origin: right center;
         }

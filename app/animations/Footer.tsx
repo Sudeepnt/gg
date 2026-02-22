@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Play, ArrowUpRight, Instagram, Twitter, Linkedin, Mail, X, Volume2, Pause, VolumeX } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import ClientCarousel from './ClientCarousel';
+import { getCMSData } from "../actions/cmsActions";
 
 export default function Footer() {
     const pathname = usePathname();
@@ -15,7 +16,20 @@ export default function Footer() {
     const [isPlaying, setIsPlaying] = useState(true);
     const [isMuted, setIsMuted] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [hasProjects, setHasProjects] = useState(true);
     const videoRef = useRef<HTMLVideoElement>(null);
+
+    useEffect(() => {
+        const checkProjects = async () => {
+            try {
+                const data = await getCMSData();
+                setHasProjects(data.projects && data.projects.length > 0);
+            } catch (e) {
+                console.error(e);
+            }
+        };
+        checkProjects();
+    }, []);
 
     const togglePlay = (e?: React.MouseEvent) => {
         if (e) e.stopPropagation();
@@ -78,37 +92,55 @@ export default function Footer() {
                         <div className="grid grid-cols-4 lg:grid-cols-5 gap-1 md:gap-0">
                             {/* Card 1: Client Carousel - Half width on mobile */}
                             <div className="col-span-2 lg:col-span-1 border border-white/10 h-[122px] md:h-auto w-full lg:w-[85%] rounded-[1px] flex flex-col justify-between relative overflow-hidden order-1 group">
-                                <ClientCarousel />
-                                <div className="absolute bottom-2 right-3 z-20">
-                                    <Link href="/games" className="relative overflow-hidden transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-black text-white hover:text-black bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%] px-3 py-1.5 flex items-center gap-2">
-                                        <span className="relative z-10 text-[9px] md:text-[11px] font-bold tracking-widest leading-none">Games</span>
-                                    </Link>
-                                </div>
+                                {hasProjects ? (
+                                    <>
+                                        <ClientCarousel />
+                                        <div className="absolute bottom-2 right-3 z-20">
+                                            <Link href="/games" className="relative overflow-hidden transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-black text-white hover:text-black bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%] px-3 py-1.5 flex items-center gap-2">
+                                                <span className="relative z-10 text-[9px] md:text-[11px] font-bold tracking-widest leading-none">Games</span>
+                                            </Link>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="flex items-center justify-center h-full w-full bg-black/80">
+                                        <span className="text-[10px] font-bold tracking-widest text-white/40 uppercase">Coming Soon...</span>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Card 2: Play Reel - Half width on mobile */}
                             <div
                                 onClick={() => {
-                                    setShowVideo(true);
-                                    setIsPlaying(true);
+                                    if (hasProjects) {
+                                        setShowVideo(true);
+                                        setIsPlaying(true);
+                                    }
                                 }}
-                                className="col-span-2 lg:col-span-1 bg-[#13343e] h-[122px] md:h-auto w-full lg:w-[85%] rounded-[1px] flex flex-col justify-between relative overflow-hidden order-2 cursor-pointer"
+                                className={`col-span-2 lg:col-span-1 ${hasProjects ? 'bg-[#13343e] cursor-pointer' : 'bg-black'} h-[122px] md:h-auto w-full lg:w-[85%] rounded-[1px] flex flex-col justify-between relative overflow-hidden order-2`}
                             >
-                                <video
-                                    autoPlay
-                                    loop
-                                    muted
-                                    playsInline
-                                    className="absolute inset-0 w-full h-full object-cover opacity-60"
-                                >
-                                    <source src="/reel/26619-359604050_tiny.mp4" type="video/mp4" />
-                                </video>
-                                <div className="absolute bottom-2 right-3">
-                                    <div className="relative overflow-hidden border border-white/10 transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-black text-white hover:text-black bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%] px-3 py-1.5 flex items-center gap-2">
-                                        <span className="relative z-10 text-[9px] md:text-[11px] font-bold tracking-widest leading-none">Play Reel</span>
-                                        <Play size={10} fill="currentColor" className="relative z-10" />
+                                {hasProjects ? (
+                                    <>
+                                        <video
+                                            autoPlay
+                                            loop
+                                            muted
+                                            playsInline
+                                            className="absolute inset-0 w-full h-full object-cover opacity-60"
+                                        >
+                                            <source src="/reel/26619-359604050_tiny.mp4" type="video/mp4" />
+                                        </video>
+                                        <div className="absolute bottom-2 right-3">
+                                            <div className="relative overflow-hidden border border-white/10 transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-black text-white hover:text-black bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%] px-3 py-1.5 flex items-center gap-2">
+                                                <span className="relative z-10 text-[9px] md:text-[11px] font-bold tracking-widest leading-none">Play Reel</span>
+                                                <Play size={10} fill="currentColor" className="relative z-10" />
+                                            </div>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="flex items-center justify-center h-full w-full">
+                                        <span className="text-[10px] font-bold tracking-widest text-white/40 uppercase">Coming Soon...</span>
                                     </div>
-                                </div>
+                                )}
                             </div>
 
                             <SocialLinks className="col-span-4 lg:col-span-1 order-3 lg:justify-center self-end" />
@@ -116,10 +148,9 @@ export default function Footer() {
                             {/* Card 4: Description - Full width on mobile */}
                             <div className="col-span-4 lg:col-span-2 border border-white/10 p-1.5 md:px-2 md:py-3 md:ml-6 flex flex-col gap-2 relative order-4">
                                 <div className="z-10">
-                                    <h3 className="text-[13px] md:text-[13.5px] font-bold text-white max-w-full tracking-tight leading-relaxed">
+                                    <p className="text-[13px] md:text-[13.5px] font-bold text-white max-w-full tracking-tight leading-relaxed font-sans">
                                         Gattabara Games is a video game company and creative studio based in Bengaluru, India, developing original titles and partnering with bold creators. We combine experimental design with distinctive art direction, backed by disciplined production and shared governance.
-
-                                    </h3>
+                                    </p>
                                 </div>
                                 <div className="self-end mt-0 z-10">
                                     <Link href="/contact" className="relative overflow-hidden border border-white/10 transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-white text-black hover:text-white bg-gradient-to-r from-black to-black bg-[length:0%_100%] hover:bg-[length:100%_100%] px-3 py-1.5 text-[9px] md:text-[11px] font-bold tracking-widest whitespace-nowrap leading-none flex items-center gap-2">

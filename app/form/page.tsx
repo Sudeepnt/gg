@@ -1,11 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
-import { Upload, ChevronDown, Check, X } from "lucide-react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { Upload, ChevronDown, Check, X, Loader2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { getCMSData, saveInquiry } from "../actions/cmsActions";
 
 export default function ApplicationForm() {
+  const [content, setContent] = useState({
+    title: "Gattabara Games Application Form",
+    intro: "Use this form to introduce your project or studio to Gattabara Games. We collaborate with solo creators and independent studios to co-create original games, aligning on vision, authorship, and long-term ownership."
+  });
+
   const [formData, setFormData] = useState({
     studioName: "",
     studioWebsite: "",
@@ -31,10 +37,43 @@ export default function ApplicationForm() {
     howHeard: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const cmsData = await getCMSData();
+        if (cmsData && cmsData.form) {
+          setContent(cmsData.form);
+        }
+      } catch (error) {
+        console.error("Failed to fetch CMS data:", error);
+      }
+    };
+    fetchContent();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    alert("Application submitted successfully!");
+    setStatus('loading');
+
+    try {
+      const result = await saveInquiry({
+        name: formData.yourName,
+        email: formData.email,
+        message: `Studio: ${formData.studioName}\nProject: ${formData.gameTitle}\nDescription: ${formData.description}`,
+        fullData: formData // Save all fields
+      });
+
+      if (result.success) {
+        setStatus('success');
+        setTimeout(() => setStatus('idle'), 3000);
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      setStatus('error');
+    }
   };
 
   const togglePlatform = (platform: string) => {
@@ -61,9 +100,9 @@ export default function ApplicationForm() {
           <div className="header-top">
             <div className="brand-dot-blue"></div>
           </div>
-          <h1>Gattabara Games Application Form</h1>
+          <h1>{content.title}</h1>
           <p className="intro-text">
-            Use this form to introduce your project or studio to Gattabara Games. We collaborate with solo creators and independent studios to co-create original games, aligning on vision, authorship, and long-term ownership.
+            {content.intro}
           </p>
         </div>
 
@@ -324,9 +363,53 @@ export default function ApplicationForm() {
           </div>
 
           <div className="form-footer">
-            <button type="submit" className="submit-button">Submit</button>
+            <button
+              type="submit"
+              className={`submit-button ${status === 'success' ? 'bg-green-600 hover:bg-green-700' : ''}`}
+              disabled={status === 'loading'}
+            >
+              {status === 'loading' ? (
+                <span className="flex items-center gap-2">
+                  <Loader2 className="animate-spin" size={18} /> Submitting...
+                </span>
+              ) : status === 'success' ? (
+                <span className="flex items-center gap-2">
+                  <Check size={18} /> Submitted!
+                </span>
+              ) : status === 'error' ? (
+                "Try Again"
+              ) : (
+                "Submit"
+              )}
+            </button>
           </div>
         </form>
+
+        <AnimatePresence>
+          {status === 'success' && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="absolute inset-0 bg-white/95 z-50 flex flex-col items-center justify-center p-12 text-center"
+            >
+              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                <Check className="text-green-600" size={40} />
+              </div>
+              <h2 className="text-3xl font-bold mb-4">Application Received!</h2>
+              <p className="text-gray-600 mb-8 max-w-md">
+                Thank you for introducing your project. Our team will review your application and get back to you soon.
+              </p>
+              <Link
+                href="/pitch"
+                className="bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors"
+                onClick={() => setStatus('idle')}
+              >
+                Return to Pitch Page
+              </Link>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
 
       <style jsx>{`
@@ -337,7 +420,7 @@ export default function ApplicationForm() {
           justify-content: center;
           padding: 80px 150px;
           color: #333;
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+          font-family: var(--font-bai), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
           position: relative;
         }
 

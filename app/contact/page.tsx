@@ -2,18 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-// import { getCMSData } from "../actions/cmsActions";
-// import { submitContactForm } from "../actions/contact";
+import { getCMSData, saveInquiry } from "../actions/cmsActions";
 import { Loader2, Check, AlertCircle } from "lucide-react";
-
-// Mock actions since they are missing in the project
-const submitContactForm = async (data: any) => {
-    return new Promise<{ success: boolean; error?: string }>((resolve) => {
-        setTimeout(() => {
-            resolve({ success: true });
-        }, 1500);
-    });
-};
 
 const defaultContent = {
     formLine1Start: "Hi, my name is",
@@ -34,10 +24,25 @@ const defaultContent = {
 
 export default function ContactPage({ initialContent }: { initialContent?: any }) {
     const [content, setContent] = useState<any>(initialContent || defaultContent);
+
+    useEffect(() => {
+        const fetchContent = async () => {
+            try {
+                const cmsData = await getCMSData();
+                if (cmsData && cmsData.contact) {
+                    setContent(cmsData.contact);
+                }
+            } catch (error) {
+                console.error("Failed to fetch CMS data:", error);
+            }
+        };
+        fetchContent();
+    }, []);
     const [formData, setFormData] = useState({
         name: "",
         project: "",
         email: "",
+        team: "",
         consent: false,
     });
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -60,22 +65,24 @@ export default function ContactPage({ initialContent }: { initialContent?: any }
         setErrorMessage("");
 
         try {
-            const result = await submitContactForm({
+            const result = await saveInquiry({
                 name: formData.name,
                 email: formData.email,
-                message: `Project: ${formData.project}`, // Map project input to message for now
+                message: `Project: ${formData.project}\nTeam: ${formData.team}`,
+                project: formData.project,
+                team: formData.team
             });
 
             if (result.success) {
                 setStatus('success');
                 // Reset form after a delay to allow re-submission
                 setTimeout(() => {
-                    setFormData({ ...formData, name: "", project: "", email: "", consent: false });
+                    setFormData({ ...formData, name: "", project: "", email: "", team: "", consent: false });
                     setStatus('idle');
                 }, 3000);
             } else {
                 setStatus('error');
-                setErrorMessage(result.error || "Something went wrong.");
+                setErrorMessage("Something went wrong.");
             }
         } catch (error) {
             setStatus('error');
