@@ -117,9 +117,15 @@ export async function saveCMSData(newData: any) {
         // Update local cache
         cmsCache = newData;
 
-        // Backup to local file
-        const filePath = path.join(process.cwd(), "app/cms-data.json");
-        await fs.writeFile(filePath, JSON.stringify(newData, null, 2), "utf-8");
+        // Backup to local file only in development (Vercel is read-only)
+        if (process.env.NODE_ENV !== 'production') {
+            try {
+                const filePath = path.join(process.cwd(), "app/cms-data.json");
+                await fs.writeFile(filePath, JSON.stringify(newData, null, 2), "utf-8");
+            } catch (backupError) {
+                console.error("Local backup failed (skipping):", backupError);
+            }
+        }
 
         return { success: true };
     } catch (e: any) {
