@@ -29,6 +29,128 @@ import {
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 
+const InquiryTable = ({ title, list, onDelete }: { title: string, list: any[], onDelete: (id: any) => void }) => {
+    const [expandedId, setExpandedId] = React.useState<any>(null);
+
+    return (
+        <div className="bg-white border border-gray-100 rounded-[24px] overflow-hidden shadow-sm">
+            <div className="p-8 pb-4">
+                <h3 className="text-xl font-bold text-gray-900">{title} ({list.length})</h3>
+            </div>
+
+            {list.length === 0 ? (
+                <div className="p-20 text-center border-t border-gray-50">
+                    <Mail size={48} className="mx-auto text-gray-200 mb-4" />
+                    <p className="text-gray-400 font-medium">No submissions yet.</p>
+                </div>
+            ) : (
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="bg-gray-50/50 border-t border-b border-gray-100">
+                                <th className="px-8 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest whitespace-nowrap">Date & Time</th>
+                                <th className="px-8 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest whitespace-nowrap">Name</th>
+                                <th className="px-8 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest whitespace-nowrap">Email</th>
+                                <th className="px-8 py-4 text-right"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {list.map((iq) => (
+                                <React.Fragment key={iq.id}>
+                                    <tr
+                                        className="border-b border-gray-50 last:border-0 hover:bg-gray-50/30 transition-colors cursor-pointer"
+                                        onClick={() => setExpandedId(expandedId === iq.id ? null : iq.id)}
+                                    >
+                                        <td className="px-8 py-6 text-[13px] text-gray-400 font-mono whitespace-nowrap">
+                                            {new Date(iq.created_at || iq.date).toLocaleString('en-GB', {
+                                                day: '2-digit', month: '2-digit', year: 'numeric',
+                                                hour: '2-digit', minute: '2-digit', second: '2-digit'
+                                            })}
+                                        </td>
+                                        <td className="px-8 py-6 text-[15px] font-bold text-gray-900 font-sans">
+                                            {iq.name}
+                                        </td>
+                                        <td className="px-8 py-6 text-[14px] text-[#2C3E50] font-sans">
+                                            {iq.email}
+                                        </td>
+                                        <td className="px-8 py-6 text-right">
+                                            <div className="flex items-center justify-end gap-3">
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        onDelete(iq.id);
+                                                    }}
+                                                    className="p-2 text-gray-300 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50"
+                                                    title="Delete"
+                                                >
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {expandedId === iq.id && (
+                                        <tr>
+                                            <td colSpan={4} className="px-8 pb-8 pt-2 bg-gray-50/30 border-b border-gray-100 transition-all">
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: -10 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    className="space-y-6"
+                                                >
+                                                    {iq.message && iq.message.trim() !== "" && iq.message.replace(/\s/g, '') !== "Project:Team:" && (
+                                                        <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
+                                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Message Body</p>
+                                                            <div className="text-gray-700 text-[15px] leading-relaxed whitespace-pre-wrap">
+                                                                {iq.message}
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    {iq.data && iq.data.fullData && (
+                                                        <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm mt-4">
+                                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Submission Details</p>
+                                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6">
+                                                                {Object.entries(iq.data.fullData).map(([key, value]: [string, any]) => {
+                                                                    if (value === null || value === undefined || (Array.isArray(value) && value.length === 0) || key === "isCaptchaVerified") return null;
+
+                                                                    const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+
+                                                                    return (
+                                                                        <div key={key} className="flex flex-col gap-1">
+                                                                            <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">{label}</span>
+                                                                            <span className="text-[14px] text-gray-900 font-medium break-words">
+                                                                                {key === "attachedFiles" && Array.isArray(value) ? (
+                                                                                    <div className="flex flex-col gap-2 mt-2">
+                                                                                        {value.map((f: any, i: number) => (
+                                                                                            <a key={i} href={f.url} target="_blank" rel="noopener noreferrer" className="text-[#1A2E35] hover:underline flex items-center gap-2 bg-gray-50 p-2 rounded-lg border border-gray-100 w-fit">
+                                                                                                <Upload size={14} className="text-gray-400" />
+                                                                                                <span className="max-w-[200px] truncate">{f.name}</span>
+                                                                                            </a>
+                                                                                        ))}
+                                                                                    </div>
+                                                                                ) : typeof value === 'boolean' ? (
+                                                                                    value ? "Yes" : "No"
+                                                                                ) : String(value)}
+                                                                            </span>
+                                                                        </div>
+                                                                    );
+                                                                })}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </motion.div>
+                                            </td>
+                                        </tr>
+                                    )}
+                                </React.Fragment>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+        </div>
+    );
+};
+
 export default function AdminDashboard() {
     const [data, setData] = useState<any>(null);
     const [inquiries, setInquiries] = useState<any[]>([]);
@@ -389,130 +511,6 @@ export default function AdminDashboard() {
                         onChange={(e) => updateValue(e.target.value)}
                         className="w-full bg-gray-50 border border-gray-100 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#1A2E35] focus:border-transparent transition-all font-sans text-[15px] select-text cursor-text"
                     />
-                )}
-            </div>
-        );
-    };
-
-    const renderInquirySection = (title: string, list: any[]) => {
-        const [expandedId, setExpandedId] = useState<string | null>(null);
-
-        return (
-            <div className="bg-white border border-gray-100 rounded-[24px] overflow-hidden shadow-sm">
-                <div className="p-8 pb-4">
-                    <h3 className="text-xl font-bold text-gray-900">{title} ({list.length})</h3>
-                </div>
-
-                {list.length === 0 ? (
-                    <div className="p-20 text-center border-t border-gray-50">
-                        <Mail size={48} className="mx-auto text-gray-200 mb-4" />
-                        <p className="text-gray-400 font-medium">No submissions yet.</p>
-                    </div>
-                ) : (
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
-                            <thead>
-                                <tr className="bg-gray-50/50 border-t border-b border-gray-100">
-                                    <th className="px-8 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest whitespace-nowrap">Date & Time</th>
-                                    <th className="px-8 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest whitespace-nowrap">Name</th>
-                                    <th className="px-8 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest whitespace-nowrap">Email</th>
-                                    <th className="px-8 py-4 text-right"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {list.map((iq) => (
-                                    <React.Fragment key={iq.id}>
-                                        <tr
-                                            className="border-b border-gray-50 last:border-0 hover:bg-gray-50/30 transition-colors cursor-pointer"
-                                            onClick={() => setExpandedId(expandedId === iq.id ? null : iq.id)}
-                                        >
-                                            <td className="px-8 py-6 text-[13px] text-gray-400 font-mono whitespace-nowrap">
-                                                {new Date(iq.created_at || iq.date).toLocaleString('en-GB', {
-                                                    day: '2-digit', month: '2-digit', year: 'numeric',
-                                                    hour: '2-digit', minute: '2-digit', second: '2-digit'
-                                                })}
-                                            </td>
-                                            <td className="px-8 py-6 text-[15px] font-bold text-gray-900 font-sans">
-                                                {iq.name}
-                                            </td>
-                                            <td className="px-8 py-6 text-[14px] text-[#2C3E50] font-sans">
-                                                {iq.email}
-                                            </td>
-                                            <td className="px-8 py-6 text-right">
-                                                <div className="flex items-center justify-end gap-3">
-                                                    <button
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            handleDeleteInquiry(iq.id);
-                                                        }}
-                                                        className="p-2 text-gray-300 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50"
-                                                        title="Delete"
-                                                    >
-                                                        <Trash2 size={16} />
-                                                    </button>
-                                                    <ChevronDown
-                                                        size={18}
-                                                        className={`text-gray-300 transition-transform duration-300 ${expandedId === iq.id ? 'rotate-180 text-[#1A2E35]' : ''}`}
-                                                    />
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        {expandedId === iq.id && (
-                                            <tr>
-                                                <td colSpan={4} className="px-8 pb-8 pt-2 bg-gray-50/30 border-b border-gray-100 transition-all">
-                                                    <motion.div
-                                                        initial={{ opacity: 0, y: -10 }}
-                                                        animate={{ opacity: 1, y: 0 }}
-                                                        className="space-y-6"
-                                                    >
-                                                        <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
-                                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Message Body</p>
-                                                            <div className="text-gray-700 text-[15px] leading-relaxed whitespace-pre-wrap">
-                                                                {iq.message || "No message provided."}
-                                                            </div>
-                                                        </div>
-
-                                                        {iq.data && iq.data.fullData && (
-                                                            <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm mt-4">
-                                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Submission Details</p>
-                                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6">
-                                                                    {Object.entries(iq.data.fullData).map(([key, value]: [string, any]) => {
-                                                                        if (value === null || value === undefined || (Array.isArray(value) && value.length === 0) || key === "isCaptchaVerified") return null;
-
-                                                                        const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
-
-                                                                        return (
-                                                                            <div key={key} className="flex flex-col gap-1">
-                                                                                <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">{label}</span>
-                                                                                <span className="text-[14px] text-gray-900 font-medium break-words">
-                                                                                    {key === "attachedFiles" && Array.isArray(value) ? (
-                                                                                        <div className="flex flex-col gap-2 mt-2">
-                                                                                            {value.map((f: any, i: number) => (
-                                                                                                <a key={i} href={f.url} target="_blank" rel="noopener noreferrer" className="text-[#1A2E35] hover:underline flex items-center gap-2 bg-gray-50 p-2 rounded-lg border border-gray-100 w-fit">
-                                                                                                    <Upload size={14} className="text-gray-400" />
-                                                                                                    <span className="max-w-[200px] truncate">{f.name}</span>
-                                                                                                </a>
-                                                                                            ))}
-                                                                                        </div>
-                                                                                    ) : typeof value === 'boolean' ? (
-                                                                                        value ? "Yes" : "No"
-                                                                                    ) : String(value)}
-                                                                                </span>
-                                                                            </div>
-                                                                        );
-                                                                    })}
-                                                                </div>
-                                                            </div>
-                                                        )}
-                                                    </motion.div>
-                                                </td>
-                                            </tr>
-                                        )}
-                                    </React.Fragment>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
                 )}
             </div>
         );
@@ -1026,8 +1024,8 @@ export default function AdminDashboard() {
                         transition={{ duration: 0.2 }}
                         className="space-y-8"
                     >
-                        {activeTab === "inquiries" && renderInquirySection("General Contact Inquiries", inquiries.filter(iq => !iq.data?.fullData))}
-                        {activeTab === "applications" && renderInquirySection("Studio Application Submissions", inquiries.filter(iq => iq.data?.fullData))}
+                        {activeTab === "inquiries" && <InquiryTable title="General Contact Inquiries" list={inquiries.filter(iq => !iq.data?.fullData)} onDelete={handleDeleteInquiry} />}
+                        {activeTab === "applications" && <InquiryTable title="Studio Application Submissions" list={inquiries.filter(iq => iq.data?.fullData)} onDelete={handleDeleteInquiry} />}
 
                         {activeTab === "home" && (
                             <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-10 w-full relative">
