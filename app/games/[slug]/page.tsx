@@ -7,114 +7,66 @@ import Header from "../../animations/Header";
 import Link from "next/link";
 
 
-interface GameData {
-    title: string;
-    image?: string;
-    description: string;
-    developedBy?: string;
-    followOn?: Array<{ label: string; url: string }>;
-    wishlistOn?: Array<{ label: string; url: string }>;
-    availableOn?: Array<{ label: string; url: string }>;
-    screenshots?: string[];
-    video?: string;
-    sub?: string;
-}
-
-// Temporary data store since we don't have the json file yet
-// This mirrors the structure in games/page.tsx but adds extra fields for the detail view
-const gamesData: GameData[] = [
-    {
-        title: "ORBITALS",
-        sub: "ORBITALS",
-        image: "/clients/Orbitals Environment 2.png",
-        description: "Step into a lovingly crafted retro anime world as explorers Maki and Omura brave the deadly Storm Wall and the perils beyond, all to save their home. In this 2-player co-op puzzle adventure, only brains, heart and unyielding resolve will open the path forward.",
-        developedBy: "Gattabara Games",
-        wishlistOn: [{ label: "Steam", url: "#" }],
-        followOn: [{ label: "Twitter", url: "#" }],
-        screenshots: ["/clients/Orbitals Environment 2.png"]
-    },
-    {
-        title: "ONTOS",
-        sub: "ONTOS",
-        image: "/clients/Machine.png",
-        description: "A sci-fi mystery set on the repurposed moon hotel Samsara. Uncover cryptic experiments, face unsettling encounters, and piece together a mind-bending narrative. The deeper you go, the more the truth unravels as you confront the ultimate question: What is reality?",
-        developedBy: "Gattabara Games",
-        wishlistOn: [{ label: "Steam", url: "#" }],
-        followOn: [{ label: "Twitter", url: "#" }],
-        screenshots: ["/clients/Machine.png"]
-    },
-    {
-        title: "TANKRAT",
-        sub: "TANKRAT",
-        image: "/clients/TankHead 2025-11-16 21-26-46_666.png",
-        description: "A dying world, flesh given way to steel. Swarms of corrupted mech-monsters roam a desolate land. Search and destroy, scavenge and dismantle, rebuild yourself from the wreckage. What you take becomes what you are. Survive the wasteland. Make it to Highpoint.",
-        developedBy: "Gattabara Games",
-        wishlistOn: [{ label: "Steam", url: "#" }],
-        followOn: [{ label: "Twitter", url: "#" }],
-        screenshots: ["/clients/TankHead 2025-11-16 21-26-46_666.png"]
-    },
-    {
-        title: "CLAIR OBSCUR",
-        sub: "CLAIR OBSCUR",
-        image: "/clients/expedition33-screenshots-01.jpg",
-        description: "Lead the members of Expedition 33 on their quest to destroy the Paintress so that she can never paint death again. Explore a world of wonders inspired by Belle Époque France and battle unique enemies in this turn-based RPG with real-time mechanics.",
-        developedBy: "Sandfall Interactive",
-        wishlistOn: [{ label: "Steam", url: "#" }],
-        followOn: [{ label: "Twitter", url: "#" }],
-        screenshots: ["/clients/expedition33-screenshots-01.jpg"]
-    }
-];
+import { getCMSDataClient } from "../../lib/cmsClient";
 
 export default function GameDetailPage() {
     const params = useParams();
-    const router = useRouter();
     const slug = params.slug as string;
 
-    const [game, setGame] = useState<GameData | null>(null);
-    const [allGames, setAllGames] = useState<GameData[]>([]);
+    const [game, setGame] = useState<any | null>(null);
+    const [allGames, setAllGames] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Simulating fetch from local data
-        const loadGame = () => {
-            setAllGames(gamesData);
+        const loadGame = async () => {
+            try {
+                const data = await getCMSDataClient();
+                const ipProjects = data.projects || [];
+                const ggProjects = data.ggProductions?.projects || [];
 
-            // Find the item by converting title to slug format
-            const foundItem = gamesData.find((g: GameData) =>
-                g.title.toLowerCase().replace(/\s+/g, '-') === slug
-            );
+                // Combine both lists for searching and for "Other Games"
+                const combinedProjects = [...ipProjects, ...ggProjects];
 
-            if (foundItem) {
-                setGame(foundItem);
+                setAllGames(combinedProjects);
+
+                const foundItem = combinedProjects.find((g: any) => {
+                    if (!g.title) return false;
+                    const gameSlug = g.title.toLowerCase().trim().replace(/\s+/g, '-');
+                    return gameSlug === slug;
+                });
+
+                if (foundItem) {
+                    setGame(foundItem);
+                }
+            } catch (error) {
+                console.error("Failed to load game details:", error);
+            } finally {
+                setLoading(false);
             }
-            setLoading(false);
         };
 
         loadGame();
     }, [slug]);
 
-    if (loading) {
-        return (
-            <div className="relative w-full min-h-screen bg-black text-white">
+    // No explicit loading screen - we want navigation to feel instant
+
+    if (!game) {
+        if (loading) return (
+            <div className="relative w-full min-h-screen bg-black">
                 <div className="fixed top-0 left-0 w-full z-50">
                     <Header />
                 </div>
-                <div className="flex items-center justify-center min-h-screen">
-                    <p className="text-white">Loading...</p>
-                </div>
             </div>
         );
-    }
 
-    if (!game) {
         return (
             <div className="relative w-full min-h-screen bg-black text-white">
                 <div className="fixed top-0 left-0 w-full z-50">
                     <Header />
                 </div>
                 <div className="flex flex-col items-center justify-center min-h-screen gap-4">
-                    <p className="text-white text-xl">Game not found</p>
-                    <Link href="/games" className="text-white underline">Back to Games</Link>
+                    <p className="text-white text-xl">Project not found</p>
+                    <Link href="/games" className="text-white underline">Back to Portfolio</Link>
                 </div>
             </div>
         );
@@ -131,39 +83,43 @@ export default function GameDetailPage() {
             <main className="pt-32 pb-20">
                 {/* Hero Video/Image Section - 80vh with 12vw margins like gg-productions */}
                 <section className="relative w-full px-[6vw] md:px-[12vw]">
-                    <div className="relative h-[60vh] md:h-[80vh] overflow-hidden border border-white/10 rounded-sm">
-                        {game.video ? (
-                            <video
-                                autoPlay
-                                muted
-                                loop
-                                playsInline
-                                className="absolute inset-0 w-full h-full object-cover opacity-60"
-                            >
-                                <source src={game.video} type="video/mp4" />
-                            </video>
-                        ) : game.image ? (
-                            <img
-                                src={game.image}
-                                alt={game.title}
-                                className="absolute inset-0 w-full h-full object-cover opacity-60"
-                            />
-                        ) : null}
+                    <div className="relative aspect-video w-full overflow-hidden border border-white/10 rounded-sm shadow-2xl bg-black">
+                        {/* Centered Video/Image Container to ensure 16:9 content fit */}
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            {game.video ? (
+                                <video
+                                    autoPlay
+                                    muted
+                                    loop
+                                    playsInline
+                                    className="w-full h-full object-cover opacity-80"
+                                >
+                                    <source src={game.video} type="video/mp4" />
+                                </video>
+                            ) : game.image ? (
+                                <img
+                                    src={game.image}
+                                    alt={game.title}
+                                    className="w-full h-full object-cover opacity-80"
+                                />
+                            ) : null}
+                        </div>
 
                         {/* Gradient Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+                    </div>
 
-                        {/* Game Title - Centered */}
-                        <div className="absolute inset-0 flex items-center justify-center p-8 z-10">
-                            <motion.h1
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                className="text-4xl md:text-8xl font-black uppercase tracking-tighter text-center"
-                                style={{ fontFamily: "var(--font-bebas)" }}
-                            >
-                                {game.title}
-                            </motion.h1>
-                        </div>
+                    {/* Game Title - Outside under video */}
+                    <div className="mt-8 md:mt-12">
+                        <motion.h1
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.3 }}
+                            className="text-xl md:text-4xl font-bold uppercase tracking-tight text-left leading-[0.9]"
+                            style={{ fontFamily: "var(--font-bai)" }}
+                        >
+                            {game.title}
+                        </motion.h1>
                     </div>
                 </section>
 
@@ -197,7 +153,7 @@ export default function GameDetailPage() {
                                 <div>
                                     <h3 className="text-sm font-bold text-gray-500 uppercase mb-3 text-[10px] tracking-[0.2em]">Follow On</h3>
                                     <div className="flex flex-col gap-2">
-                                        {game.followOn.map((link, idx) => (
+                                        {game.followOn?.filter((l: any) => l.url).map((link: any, idx: number) => (
                                             <a
                                                 key={idx}
                                                 href={link.url}
@@ -217,7 +173,7 @@ export default function GameDetailPage() {
                                 <div>
                                     <h3 className="text-sm font-bold text-gray-500 uppercase mb-3 text-[10px] tracking-[0.2em]">Wishlist On</h3>
                                     <div className="flex flex-col gap-2">
-                                        {game.wishlistOn.map((link, idx) => (
+                                        {game.wishlistOn?.filter((l: any) => l.url).map((link: any, idx: number) => (
                                             <a
                                                 key={idx}
                                                 href={link.url}
@@ -237,7 +193,7 @@ export default function GameDetailPage() {
                                 <div>
                                     <h3 className="text-sm font-bold text-gray-500 uppercase mb-3 text-[10px] tracking-[0.2em]">Available On</h3>
                                     <div className="flex flex-col gap-2">
-                                        {game.availableOn.map((link, idx) => (
+                                        {game.availableOn?.filter((l: any) => l.url).map((link: any, idx: number) => (
                                             <a
                                                 key={idx}
                                                 href={link.url}
@@ -262,7 +218,7 @@ export default function GameDetailPage() {
                             </div>
                             <div className="overflow-x-auto scrollbar-hide">
                                 <div className="flex gap-6 px-[6vw] md:px-[12vw] pb-8 w-max">
-                                    {game.screenshots.map((screenshot, idx) => (
+                                    {game.screenshots?.filter((s: any) => s).map((screenshot: any, idx: number) => (
                                         <div
                                             key={idx}
                                             className="flex-shrink-0 w-[80vw] md:w-[600px] aspect-video overflow-hidden border border-white/10 bg-white/5"

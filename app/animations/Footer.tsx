@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import ClientCarousel from './ClientCarousel';
-import { getCMSData } from "../actions/cmsActions";
+import { getCMSDataClient } from "../lib/cmsClient";
 
 export default function Footer() {
     const pathname = usePathname();
@@ -16,19 +16,27 @@ export default function Footer() {
     const [isPlaying, setIsPlaying] = useState(true);
     const [isMuted, setIsMuted] = useState(false);
     const [progress, setProgress] = useState(0);
-    const [hasProjects, setHasProjects] = useState(true);
+    const [content, setContent] = useState<any>(null);
+    const [projects, setProjects] = useState<any[]>([]);
+    const [hasProjects, setHasProjects] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
 
     useEffect(() => {
-        const checkProjects = async () => {
+        const fetchContent = async () => {
             try {
-                const data = await getCMSData();
-                setHasProjects(data.projects && data.projects.length > 0);
+                const data = await getCMSDataClient();
+                if (data) {
+                    setProjects(data.projects || []);
+                    setHasProjects(data.projects && data.projects.length > 0);
+                    if (data.home) {
+                        setContent(data.home);
+                    }
+                }
             } catch (e) {
                 console.error(e);
             }
         };
-        checkProjects();
+        fetchContent();
     }, []);
 
     const togglePlay = (e?: React.MouseEvent) => {
@@ -62,21 +70,28 @@ export default function Footer() {
     };
 
     const SocialLinks = ({ className = "" }: { className?: string }) => {
+        const socials = content?.socials || {
+            instagram: "#",
+            twitter: "#",
+            linkedin: "#",
+            email: "mailto:info@gattabaragames.com"
+        };
+
         return (
             <div className={`flex gap-2 md:gap-6 ${className}`}>
-                <a href="#" className={`flex-1 lg:flex-none aspect-square w-10 h-10 border flex items-center justify-center relative overflow-hidden transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left 
+                <a href={socials.instagram} target="_blank" rel="noopener noreferrer" className={`flex-1 lg:flex-none aspect-square w-10 h-10 border flex items-center justify-center relative overflow-hidden transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left 
                     border-white/10 text-white hover:text-black bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%]`}>
                     <Instagram size={16} strokeWidth={1.5} className="relative z-10" />
                 </a>
-                <a href="#" className={`flex-1 lg:flex-none aspect-square w-10 h-10 border flex items-center justify-center relative overflow-hidden transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left 
+                <a href={socials.twitter} target="_blank" rel="noopener noreferrer" className={`flex-1 lg:flex-none aspect-square w-10 h-10 border flex items-center justify-center relative overflow-hidden transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left 
                     border-white/10 text-white hover:text-black bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%]`}>
                     <Twitter size={16} strokeWidth={1.5} className="relative z-10" />
                 </a>
-                <a href="#" className={`flex-1 lg:flex-none aspect-square w-10 h-10 border flex items-center justify-center relative overflow-hidden transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left 
+                <a href={socials.linkedin} target="_blank" rel="noopener noreferrer" className={`flex-1 lg:flex-none aspect-square w-10 h-10 border flex items-center justify-center relative overflow-hidden transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left 
                     border-white/10 text-white hover:text-black bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%]`}>
                     <Linkedin size={16} strokeWidth={1.5} className="relative z-10" />
                 </a>
-                <a href="#" className={`flex-1 lg:flex-none aspect-square w-10 h-10 border flex items-center justify-center relative overflow-hidden transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left 
+                <a href={socials.email.startsWith('mailto:') ? socials.email : `mailto:${socials.email}`} className={`flex-1 lg:flex-none aspect-square w-10 h-10 border flex items-center justify-center relative overflow-hidden transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left 
                     border-white/10 text-white hover:text-black bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%]`}>
                     <Mail size={16} strokeWidth={1.5} className="relative z-10" />
                 </a>
@@ -94,7 +109,7 @@ export default function Footer() {
                             <div className="col-span-2 lg:col-span-1 border border-white/10 h-[122px] md:h-auto w-full lg:w-[85%] rounded-[1px] flex flex-col justify-between relative overflow-hidden order-1 group">
                                 {hasProjects ? (
                                     <>
-                                        <ClientCarousel />
+                                        <ClientCarousel projects={projects} />
                                         <div className="absolute bottom-2 right-3 z-20">
                                             <Link href="/games" className="relative overflow-hidden transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-black text-white hover:text-black bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%] px-3 py-1.5 flex items-center gap-2">
                                                 <span className="relative z-10 text-[9px] md:text-[11px] font-bold tracking-widest leading-none">Games</span>
@@ -111,14 +126,14 @@ export default function Footer() {
                             {/* Card 2: Play Reel - Half width on mobile */}
                             <div
                                 onClick={() => {
-                                    if (hasProjects) {
+                                    if (content?.playReelVideo) {
                                         setShowVideo(true);
                                         setIsPlaying(true);
                                     }
                                 }}
-                                className={`col-span-2 lg:col-span-1 ${hasProjects ? 'bg-[#13343e] cursor-pointer' : 'bg-black'} h-[122px] md:h-auto w-full lg:w-[85%] rounded-[1px] flex flex-col justify-between relative overflow-hidden order-2`}
+                                className={`col-span-2 lg:col-span-1 ${content?.playReelVideo ? 'bg-[#13343e] cursor-pointer' : 'bg-black'} h-[122px] md:h-auto w-full lg:w-[85%] rounded-[1px] flex flex-col justify-between relative overflow-hidden order-2`}
                             >
-                                {hasProjects ? (
+                                {content?.playReelVideo ? (
                                     <>
                                         <video
                                             autoPlay
@@ -127,7 +142,7 @@ export default function Footer() {
                                             playsInline
                                             className="absolute inset-0 w-full h-full object-cover opacity-60"
                                         >
-                                            <source src="/reel/26619-359604050_tiny.mp4" type="video/mp4" />
+                                            <source src={content.playReelVideo} type="video/mp4" />
                                         </video>
                                         <div className="absolute bottom-2 right-3">
                                             <div className="relative overflow-hidden border border-white/10 transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-black text-white hover:text-black bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%] px-3 py-1.5 flex items-center gap-2">
@@ -149,12 +164,12 @@ export default function Footer() {
                             <div className="col-span-4 lg:col-span-2 border border-white/10 p-1.5 md:px-2 md:py-3 md:ml-6 flex flex-col gap-2 relative order-4">
                                 <div className="z-10">
                                     <p className="text-[13px] md:text-[13.5px] font-bold text-white max-w-full tracking-tight leading-relaxed font-sans">
-                                        Gattabara Games is a video game company and creative studio based in Bengaluru, India, developing original titles and partnering with bold creators. We combine experimental design with distinctive art direction, backed by disciplined production and shared governance.
+                                        {content?.description || "Gattabara Games is a video game company and creative studio based in Bengaluru, India, developing original titles and partnering with bold creators. We combine experimental design with distinctive art direction, backed by disciplined production and shared governance."}
                                     </p>
                                 </div>
                                 <div className="self-end mt-0 z-10">
                                     <Link href="/contact" className="relative overflow-hidden border border-white/10 transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-white text-black hover:text-white bg-gradient-to-r from-black to-black bg-[length:0%_100%] hover:bg-[length:100%_100%] px-3 py-1.5 text-[9px] md:text-[11px] font-bold tracking-widest whitespace-nowrap leading-none flex items-center gap-2">
-                                        <span className="relative z-10">Contact Us</span>
+                                        <span className="relative z-10">{content?.ctaText || "Contact Us"}</span>
                                     </Link>
                                 </div>
                             </div>

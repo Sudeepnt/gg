@@ -14,11 +14,14 @@ export default function ComingSoonLiquid() {
                 .liquid-container {
                     display: flex;
                     background: transparent;
-                    min-height: 80vh;
+                    min-height: 100vh;
                     align-items: center;
                     justify-content: center;
                     overflow: hidden;
                     width: 100%;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
                 }
 
                 .liquid-content {
@@ -27,7 +30,9 @@ export default function ComingSoonLiquid() {
 
                 .liquid-content h2 {
                     color: #fff;
-                    font-size: 3.2vw;
+                    font-family: 'NT Brick Sans', sans-serif;
+                    font-size: 2.4vw;
+                    letter-spacing: 0.15em;
                     position: absolute;
                     transform: translate(-50%, -50%);
                     margin: 0;
@@ -40,14 +45,13 @@ export default function ComingSoonLiquid() {
                 /* The Outlined Text (Background) */
                 .liquid-content h2:nth-child(1) {
                     color: transparent;
-                    -webkit-text-stroke: 1px #fff;
+                    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4);
                 }
 
                 /* The Animated Liquid Text (Foreground) */
                 .liquid-content h2:nth-child(2) {
                     color: #fff;
                     animation: animate 4s ease-in-out infinite;
-                    opacity: 0.8;
                 }
 
                 @keyframes animate {
@@ -80,7 +84,8 @@ export default function ComingSoonLiquid() {
                 /* Mobile fine-tuning */
                 @media (max-width: 600px) {
                     .liquid-content h2 {
-                        font-size: 4.8vw;
+                        font-size: 4vw;
+                        -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.3);
                     }
                 }
             `}</style>

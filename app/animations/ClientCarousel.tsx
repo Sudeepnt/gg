@@ -4,29 +4,30 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
-interface ClientProject {
-    name: string;
+interface Project {
+    title: string;
     image: string;
 }
 
-const CLIENTS: ClientProject[] = [
-    { name: "The Machine", image: "/clients/Machine.png" },
-    { name: "Orbitals Environment", image: "/clients/Orbitals Environment 2.png" },
-    { name: "TankHead", image: "/clients/TankHead 2025-11-16 21-26-46_666.png" },
-    { name: "Kitchen Concept", image: "/clients/copie-de-kitchen_1920x1080.png" },
-    { name: "Expedition 33", image: "/clients/expedition33-screenshots-01.jpg" },
-    { name: "Flintlock", image: "/clients/flintlock_gamescom22-screenshot_select_028.png" }
-];
-
-export default function ClientCarousel() {
+export default function ClientCarousel({ projects = [] }: { projects?: Project[] }) {
     const [index, setIndex] = useState(0);
 
+    const items = projects.length > 0 ? projects.map(p => ({
+        name: p.title,
+        image: p.image
+    })) : [
+        { name: "The Machine", image: "/clients/Machine.png" },
+        { name: "Orbitals Environment", image: "/clients/Orbitals Environment 2.png" },
+        { name: "TankHead", image: "/clients/TankHead 2025-11-16 21-26-46_666.png" }
+    ];
+
     useEffect(() => {
+        if (items.length <= 1) return;
         const timer = setInterval(() => {
-            setIndex((prev) => (prev + 1) % CLIENTS.length);
+            setIndex((prev) => (prev + 1) % items.length);
         }, 3000); // Change every 3 seconds
         return () => clearInterval(timer);
-    }, []);
+    }, [items.length]);
 
     return (
         <div className="w-full h-full relative overflow-hidden text-white">
@@ -44,11 +45,17 @@ export default function ClientCarousel() {
                     >
                         {/* Client Image */}
                         <div className="absolute inset-0">
-                            <img
-                                src={CLIENTS[index].image}
-                                alt={CLIENTS[index].name}
-                                className="w-full h-full object-cover opacity-80"
-                            />
+                            {items[index].image ? (
+                                <img
+                                    src={items[index].image}
+                                    alt={items[index].name}
+                                    className="w-full h-full object-cover opacity-80"
+                                />
+                            ) : (
+                                <div className="w-full h-full bg-gray-900 flex items-center justify-center">
+                                    <span className="text-[10px] text-white/20 uppercase tracking-widest">No Image</span>
+                                </div>
+                            )}
                             {/* Dark overlay for text readability */}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
                         </div>
@@ -56,7 +63,7 @@ export default function ClientCarousel() {
                         {/* Client Name */}
                         <div className="relative z-10 text-center px-4">
                             <h3 className="text-xs font-bold tracking-wide text-white uppercase">
-                                {CLIENTS[index].name}
+                                {items[index].name}
                             </h3>
                         </div>
                     </div>

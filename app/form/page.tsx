@@ -4,13 +4,12 @@ import React, { useState, useEffect } from "react";
 import { Upload, ChevronDown, Check, X, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { getCMSData, saveInquiry } from "../actions/cmsActions";
+import { supabase } from "../lib/supabase";
 
 export default function ApplicationForm() {
-  const [content, setContent] = useState({
-    title: "Gattabara Games Application Form",
-    intro: "Use this form to introduce your project or studio to Gattabara Games. We collaborate with solo creators and independent studios to co-create original games, aligning on vision, authorship, and long-term ownership."
-  });
+  const [content, setContent] = useState<any>(null);
 
   const [formData, setFormData] = useState({
     studioName: "",
@@ -35,8 +34,13 @@ export default function ApplicationForm() {
     teamSize: "",
     additionalNotes: "",
     howHeard: "",
+    isCaptchaVerified: false,
   });
 
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   useEffect(() => {
@@ -53,26 +57,102 @@ export default function ApplicationForm() {
     fetchContent();
   }, []);
 
+  if (!content) return (
+    <div className="min-h-screen bg-white flex items-center justify-center">
+      <Loader2 className="animate-spin text-blue-600" size={40} />
+    </div>
+  );
+
+  const labels = content.labels || {};
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      const totalCount = selectedFiles.length + newFiles.length;
+
+      if (totalCount > 5) {
+        alert("You can only upload up to 5 files.");
+        return;
+      }
+
+      const currentTotalSize = selectedFiles.reduce((sum, f) => sum + f.size, 0);
+      const newTotalSize = newFiles.reduce((sum, f) => sum + f.size, 0);
+
+      if ((currentTotalSize + newTotalSize) > 50 * 1024 * 1024) {
+        alert("Total file size must be under 50MB.");
+        return;
+      }
+
+      setSelectedFiles([...selectedFiles, ...newFiles]);
+    }
+  };
+
+  const removeFile = (index: number) => {
+    setSelectedFiles(selectedFiles.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.isCaptchaVerified) {
+      alert("Please verify that you are not a robot.");
+      return;
+    }
+
     setStatus('loading');
+    setIsUploading(true);
+    setErrorMessage("");
 
     try {
+      // 1. Upload files to Supabase
+      const uploadedUrls = [];
+      let count = 0;
+      for (const file of selectedFiles) {
+        count++;
+        setUploadProgress(`Uploading ${file.name} (${count}/${selectedFiles.length})...`);
+
+        const fileName = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
+        const filePath = `applications/${fileName}`;
+
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('gg-content')
+          .upload(filePath, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('gg-content')
+          .getPublicUrl(filePath);
+
+        uploadedUrls.push({ name: file.name, url: publicUrl });
+      }
+
+      setUploadProgress("Finalizing submission...");
+
+      // 2. Save inquiry with file URLs
       const result = await saveInquiry({
         name: formData.yourName,
         email: formData.email,
         message: `Studio: ${formData.studioName}\nProject: ${formData.gameTitle}\nDescription: ${formData.description}`,
-        fullData: formData // Save all fields
+        fullData: {
+          ...formData,
+          attachedFiles: uploadedUrls
+        }
       });
 
       if (result.success) {
         setStatus('success');
-        setTimeout(() => setStatus('idle'), 3000);
+        setSelectedFiles([]);
       } else {
-        setStatus('error');
+        throw new Error(result.error || "Failed to save inquiry data.");
       }
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Submission error:", error);
+      setErrorMessage(error.message || "An unexpected error occurred. Please check your connection and try again.");
       setStatus('error');
+    } finally {
+      setIsUploading(false);
+      setUploadProgress("");
     }
   };
 
@@ -98,7 +178,7 @@ export default function ApplicationForm() {
       >
         <div className="form-header">
           <div className="header-top">
-            <div className="brand-dot-blue"></div>
+            <Image src="/logos/logo1black.png" alt="Logo" width={80} height={80} className="header-logo" />
           </div>
           <h1>{content.title}</h1>
           <p className="intro-text">
@@ -109,118 +189,131 @@ export default function ApplicationForm() {
         <form onSubmit={handleSubmit} className="application-form">
           {/* Studio Info Section */}
           <div className="form-group">
-            <label>Studio / Creator Name</label>
+            <label>{labels.studioName || "Studio / Creator Name"}</label>
             <input
               type="text"
               required
+              value={formData.studioName || ""}
               onChange={(e) => setFormData({ ...formData, studioName: e.target.value })}
             />
           </div>
 
           <div className="form-group">
-            <label>Studio or Portfolio Website</label>
-            <p className="field-hint">(If solo creator, link to portfolio or previous work)</p>
+            <label>{labels.studioWebsite || "Studio or Portfolio Website"}</label>
+            <p className="field-hint">{labels.studioWebsiteHint || "(If solo creator, link to portfolio or previous work)"}</p>
             <input
               type="url"
+              value={formData.studioWebsite || ""}
               onChange={(e) => setFormData({ ...formData, studioWebsite: e.target.value })}
             />
           </div>
 
           <div className="form-group">
-            <label>Your Name</label>
+            <label>{labels.yourName || "Your Name"}</label>
             <input
               type="text"
               required
+              value={formData.yourName || ""}
               onChange={(e) => setFormData({ ...formData, yourName: e.target.value })}
             />
           </div>
 
           <div className="form-group">
-            <label>Your Email Address</label>
+            <label>{labels.email || "Your Email Address"}</label>
             <input
               type="email"
               required
+              value={formData.email || ""}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             />
           </div>
 
           <div className="form-group">
-            <label>Country</label>
+            <label>{labels.country || "Country"}</label>
             <input
               type="text"
               required
+              value={formData.country || ""}
               onChange={(e) => setFormData({ ...formData, country: e.target.value })}
             />
           </div>
 
           {/* Project Info Section */}
           <div className="form-group">
-            <label>Game / Project Title</label>
-            <p className="field-hint">(This can be a working title or internal project codename.)</p>
+            <label>{labels.gameTitle || "Game / Project Title"}</label>
+            <p className="field-hint">{labels.gameTitleHint || "(This can be a working title or internal project codename.)"}</p>
             <input
               type="text"
               required
+              value={formData.gameTitle || ""}
               onChange={(e) => setFormData({ ...formData, gameTitle: e.target.value })}
             />
           </div>
 
           <div className="form-group">
-            <label>What kind of collaboration are you seeking?</label>
-            <p className="field-hint">(Select all that apply)</p>
+            <label>{labels.collaboration || "What kind of collaboration are you seeking?"}</label>
+            <p className="field-hint">{labels.collaborationHint || "(Select all that apply)"}</p>
             <div className="support-info">
-              <p><strong>Co-Development Partnership:</strong> Hands-on creative and production collaboration with Gattabara to build the game together.</p>
-              <p><strong>Project Co-Funding:</strong> Financial support to help bring your game to life, including development, localisation, marketing, porting, etc.</p>
-              <p><strong>Go-To-Market & Publishing Support:</strong> Gattabara supports release, distribution, marketing, and launch strategy while you retain creative authorship.</p>
+              <p><strong>{labels.collabCoDev || "Co-Development Partnership"}:</strong> {labels.collabCoDevDesc || "Hands-on creative and production collaboration with Gattabara to build the game together."}</p>
+              <p><strong>{labels.collabCoFunding || "Project Co-Funding"}:</strong> {labels.collabCoFundingDesc || "Financial support to help bring your game to life, including development, localisation, marketing, porting, etc."}</p>
+              <p><strong>{labels.collabPublishing || "Go-To-Market & Publishing Support"}:</strong> {labels.collabPublishingDesc || "Gattabara supports release, distribution, marketing, and launch strategy while you retain creative authorship."}</p>
             </div>
             <div className="select-wrapper">
-              <select required onChange={(e) => setFormData({ ...formData, collaborationTypes: [e.target.value] as any })}>
+              <select
+                required
+                value={formData.collaborationTypes[0] || ""}
+                onChange={(e) => setFormData({ ...formData, collaborationTypes: [e.target.value] as any })}
+              >
                 <option value="">Select an option</option>
-                <option value="co-dev">Co-Development Partnership</option>
-                <option value="co-funding">Project Co-Funding</option>
-                <option value="publishing">Go-To-Market & Publishing Support</option>
+                <option value="co-dev">{labels.collabCoDev || "Co-Development Partnership"}</option>
+                <option value="co-funding">{labels.collabCoFunding || "Project Co-Funding"}</option>
+                <option value="publishing">{labels.collabPublishing || "Go-To-Market & Publishing Support"}</option>
               </select>
               <ChevronDown className="select-arrow" size={18} />
             </div>
           </div>
 
           <div className="form-group">
-            <label>Short Project Description</label>
-            <p className="field-hint">(Tell us what you’re building, why it matters, and what makes it distinct.)</p>
+            <label>{labels.description || "Short Project Description"}</label>
+            <p className="field-hint">{labels.descriptionHint || "(Tell us what you’re building, why it matters, and what makes it distinct.)"}</p>
             <textarea
               required
               maxLength={2000}
+              value={formData.description || ""}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             ></textarea>
             <span className="char-count">{formData.description.length}/2000</span>
           </div>
 
           <div className="form-group">
-            <label>Total Project Budget (USD)</label>
-            <p className="field-hint">(The estimated total cost to ship the project, including any spend to date.)</p>
+            <label>{labels.totalBudget || "Total Project Budget (USD)"}</label>
+            <p className="field-hint">{labels.totalBudgetHint || "(The estimated total cost to ship the project, including any spend to date.)"}</p>
             <input
               type="text"
+              value={formData.totalBudget || ""}
               onChange={(e) => setFormData({ ...formData, totalBudget: e.target.value })}
             />
           </div>
 
           <div className="form-group">
-            <label>Collaboration Budget Ask (USD)</label>
-            <p className="field-hint">(How much support are you seeking from Gattabara Games?)</p>
+            <label>{labels.budgetAsk || "Collaboration Budget Ask (USD)"}</label>
+            <p className="field-hint">{labels.budgetAskHint || "(How much support are you seeking from Gattabara Games?)"}</p>
             <input
               type="number"
               required
+              value={formData.budgetAsk || ""}
               onChange={(e) => setFormData({ ...formData, budgetAsk: e.target.value })}
             />
           </div>
 
           <div className="form-group">
-            <label>Target Platform(s)</label>
-            <p className="field-hint">(Select all that apply.)</p>
+            <label>{labels.platforms || "Target Platform(s)"}</label>
+            <p className="field-hint">{labels.platformsHint || "(Select all that apply.)"}</p>
             <div className="platforms-grid">
               {['Console', 'Mobile', 'PC', 'VR'].map((platform) => (
                 <div key={platform} className="checkbox-row" onClick={() => togglePlatform(platform)}>
                   <div className={`custom-checkbox ${formData.platforms.includes(platform as never) ? 'checked' : ''}`}>
-                    <Check className="check-icon" size={14} />
+                    {formData.platforms.includes(platform as never) && <Check className="check-icon" size={14} />}
                   </div>
                   <span>{platform}</span>
                 </div>
@@ -229,54 +322,88 @@ export default function ApplicationForm() {
           </div>
 
           <div className="form-group">
-            <label>Genre</label>
+            <label>{labels.genre || "Genre"}</label>
             <input
               type="text"
               required
+              value={formData.genre || ""}
               onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
             />
           </div>
 
           {/* Comparable Titles Section */}
           <div className="form-group">
-            <label>Comparable Title 1</label>
-            <p className="field-hint">(Based on gameplay, tone, and scope. Preferably released in the last 10 years.)</p>
+            <label>{labels.compTitle || "Comparable Title"} 1</label>
+            <p className="field-hint">{labels.compTitleHint || "(Based on gameplay, tone, and scope. Preferably released in the last 10 years.)"}</p>
             <input
               type="text"
+              value={formData.compTitle1 || ""}
               onChange={(e) => setFormData({ ...formData, compTitle1: e.target.value })}
             />
           </div>
 
           <div className="form-group">
-            <label>Comparable Title 2</label>
+            <label>{labels.compTitle || "Comparable Title"} 2</label>
             <input
               type="text"
+              value={formData.compTitle2 || ""}
               onChange={(e) => setFormData({ ...formData, compTitle2: e.target.value })}
             />
           </div>
 
           <div className="form-group">
-            <label>Comparable Title 3</label>
+            <label>{labels.compTitle || "Comparable Title"} 3</label>
             <input
               type="text"
+              value={formData.compTitle3 || ""}
               onChange={(e) => setFormData({ ...formData, compTitle3: e.target.value })}
             />
           </div>
 
           {/* Materials Section */}
           <div className="form-group">
-            <label>Playable / Materials</label>
-            <p className="field-hint">We prioritize projects with something tangible to experience (playable builds, prototypes, vertical slices, or strong proof of concept. If available, include gameplay footage alongside your build.)</p>
-            <div className="upload-area">
+            <label>{labels.materials || "Playable / Materials"}</label>
+            <p className="field-hint">{labels.materialsHint || "We prioritize projects with something tangible to experience (playable builds, prototypes, vertical slices, or strong proof of concept. If available, include gameplay footage alongside your build.)"}</p>
+
+            <div
+              className={`upload-area ${selectedFiles.length > 0 ? 'has-files' : ''}`}
+              onClick={() => document.getElementById('file-upload')?.click()}
+            >
               <Upload className="upload-icon" />
-              <p><span>Choose a file to upload</span> or drag and drop here</p>
+              <p><span>{labels.chooseFile || "Choose a file to upload"}</span> {labels.dragDrop || "or drag and drop here"}</p>
+              <input
+                id="file-upload"
+                type="file"
+                multiple
+                hidden
+                onChange={handleFileSelect}
+                accept=".pdf,.doc,.docx,.zip,.rar,.txt,.jpg,.png,.mp4,.mov"
+              />
             </div>
+
+            {selectedFiles.length > 0 && (
+              <div className="selected-files-list">
+                {selectedFiles.map((file, index) => (
+                  <div key={index} className="file-item">
+                    <span className="file-name">{file.name}</span>
+                    <span className="file-size">({(file.size / (1024 * 1024)).toFixed(2)} MB)</span>
+                    <button type="button" onClick={(e) => { e.stopPropagation(); removeFile(index); }} className="remove-file">
+                      <X size={14} />
+                    </button>
+                  </div>
+                ))}
+                <div className="total-size-indicator">
+                  Total: {(selectedFiles.reduce((sum, f) => sum + f.size, 0) / (1024 * 1024)).toFixed(2)} MB / 50 MB
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="form-group">
-            <label>Materials (Links) and/or Access Details</label>
-            <p className="field-hint">(Builds may fail to upload. Please include links to playable builds, pitch decks, gameplay videos, and access details here. If sharing Steam keys, please include at least 5 keys.)</p>
+            <label>{labels.materialsLinks || "Materials (Links) and/or Access Details"}</label>
+            <p className="field-hint">{labels.materialsLinksHint || "(Builds may fail to upload. Please include links to playable builds, pitch decks, gameplay videos, and access details here. If sharing Steam keys, please include at least 5 keys.)"}</p>
             <textarea
+              value={formData.materialsLink || ""}
               onChange={(e) => setFormData({ ...formData, materialsLink: e.target.value })}
               maxLength={2000}
             ></textarea>
@@ -288,52 +415,57 @@ export default function ApplicationForm() {
               <input
                 type="checkbox"
                 id="multiplayer"
+                checked={!!formData.isMultiplayer}
                 onChange={(e) => setFormData({ ...formData, isMultiplayer: e.target.checked })}
               />
-              <div className="custom-checkbox">
-                <Check className="check-icon" size={14} />
+              <div className={`custom-checkbox ${formData.isMultiplayer ? 'checked' : ''}`}>
+                {formData.isMultiplayer && <Check className="check-icon" size={14} />}
               </div>
             </div>
             <div className="checkbox-text">
-              <label htmlFor="multiplayer">Is this a Multiplayer Build?</label>
-              <p className="field-hint">(Check the box if the build requires local/online multiplayer.)</p>
+              <label htmlFor="multiplayer">{labels.multiplayer || "Is this a Multiplayer Build?"}</label>
+              <p className="field-hint">{labels.multiplayerHint || "(Check the box if the build requires local/online multiplayer.)"}</p>
             </div>
           </div>
 
           <div className="form-group">
-            <label>Target Launch Window (Quarter / Year)</label>
-            <p className="field-hint">(Format: Q1 2026)</p>
+            <label>{labels.launchWindow || "Target Launch Window (Quarter / Year)"}</label>
+            <p className="field-hint">{labels.launchWindowHint || "(Format: Q1 2026)"}</p>
             <input
               type="text"
               required
-              placeholder="Q1 2026"
+              placeholder={labels.launchWindowHint || "Q1 2026"}
+              value={formData.launchWindow || ""}
               onChange={(e) => setFormData({ ...formData, launchWindow: e.target.value })}
             />
           </div>
 
           <div className="form-group">
-            <label>Estimated Launch Price (USD)</label>
-            <p className="field-hint">(Your current target price at launch. This can evolve.)</p>
+            <label>{labels.estimatedPrice || "Estimated Launch Price (USD)"}</label>
+            <p className="field-hint">{labels.estimatedPriceHint || "(Your current target price at launch. This can evolve.)"}</p>
             <input
               type="text"
               required
+              value={formData.estimatedPrice || ""}
               onChange={(e) => setFormData({ ...formData, estimatedPrice: e.target.value })}
             />
           </div>
 
           <div className="form-group">
-            <label>Current Team Size</label>
-            <p className="field-hint">(Number of people actively working on the project.)</p>
+            <label>{labels.teamSize || "Current Team Size"}</label>
+            <p className="field-hint">{labels.teamSizeHint || "(Number of people actively working on the project.)"}</p>
             <input
               type="text"
+              value={formData.teamSize || ""}
               onChange={(e) => setFormData({ ...formData, teamSize: e.target.value })}
             />
           </div>
 
           <div className="form-group">
-            <label>Additional Notes</label>
-            <p className="field-hint">(Anything else we should know about the project, team, or vision.)</p>
+            <label>{labels.additionalNotes || "Additional Notes"}</label>
+            <p className="field-hint">{labels.additionalNotesHint || "(Anything else we should know about the project, team, or vision.)"}</p>
             <textarea
+              value={formData.additionalNotes || ""}
               onChange={(e) => setFormData({ ...formData, additionalNotes: e.target.value })}
               maxLength={2000}
             ></textarea>
@@ -341,24 +473,44 @@ export default function ApplicationForm() {
           </div>
 
           <div className="form-group">
-            <label>How did you hear about Gattabara Games?</label>
-            <p className="field-hint">(Referral, person, event, community, etc. Helps us route your submission internally.)</p>
+            <label>{labels.howHeard || "How did you hear about Gattabara Games?"}</label>
+            <p className="field-hint">{labels.howHeardHint || "(Referral, person, event, community, etc. Helps us route your submission internally.)"}</p>
             <input
               type="text"
+              value={formData.howHeard || ""}
               onChange={(e) => setFormData({ ...formData, howHeard: e.target.value })}
             />
           </div>
 
-          <div className="captcha-placeholder">
-            <div className="checkbox-row">
-              <div className="custom-checkbox"></div>
-              <span>I'm not a robot</span>
+          <div className="recaptcha-box">
+            <div className="recaptcha-left">
+              <div
+                className={`captcha-checkbox-wrapper ${formData.isCaptchaVerified ? 'verified' : ''}`}
+                onClick={() => setFormData(prev => ({ ...prev, isCaptchaVerified: !prev.isCaptchaVerified }))}
+              >
+                <div className="captcha-checkbox">
+                  {formData.isCaptchaVerified && <Check size={20} className="text-[#00ad00] stroke-[4px]" />}
+                </div>
+                <span className="captcha-label">{labels.notRobot || "I'm not a robot"}</span>
+              </div>
+              <p className="recaptcha-msg">
+                reCAPTCHA is changing its terms of service.<br />
+                <a href="#">Take action.</a>
+              </p>
             </div>
-            <div className="recaptcha-logo">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="#CCCCCC" />
-                <path d="M12 6V12L16 14" stroke="#CCCCCC" strokeWidth="2" strokeLinecap="round" />
-              </svg>
+
+            <div className="recaptcha-right">
+              <div className="recaptcha-branding">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2v4c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l3.46 2c.79-1.43 1.24-3.07 1.24-4.8 0-5.52-4.48-10-10-10z" fill="#4285F4" />
+                  <path d="M6 12c0-1.01.25-1.97.7-2.8L3.24 7.2C2.45 8.63 2 10.27 2 12c0 5.52 4.48 10 10 10v-4c-3.31 0-6-2.69-6-6z" fill="#9BA2A6" />
+                  <path d="M12 18l-3.46 2C9.33 21.43 10.63 22 12 22s2.67-.57 3.46-2L12 18z" fill="#9BA2A6" />
+                </svg>
+                <span className="branding-text">reCAPTCHA</span>
+                <div className="branding-links">
+                  <a href="#">Privacy</a> - <a href="#">Terms</a>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -370,43 +522,78 @@ export default function ApplicationForm() {
             >
               {status === 'loading' ? (
                 <span className="flex items-center gap-2">
-                  <Loader2 className="animate-spin" size={18} /> Submitting...
+                  <Loader2 className="animate-spin" size={18} /> {labels.submitting || "Submitting..."}
                 </span>
               ) : status === 'success' ? (
                 <span className="flex items-center gap-2">
-                  <Check size={18} /> Submitted!
+                  <Check size={18} /> {labels.submitted || "Submitted!"}
                 </span>
               ) : status === 'error' ? (
-                "Try Again"
+                labels.tryAgain || "Try Again"
               ) : (
-                "Submit"
+                labels.submit || "Submit"
               )}
             </button>
           </div>
         </form>
 
         <AnimatePresence>
+          {status === 'loading' && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-white z-[100] flex flex-col items-center justify-center p-12 text-center"
+            >
+              <Loader2 className="animate-spin text-blue-600 mb-6" size={50} />
+              <h2 className="text-2xl font-bold mb-2">Sending Application</h2>
+              <p className="text-gray-500 font-medium">{uploadProgress}</p>
+            </motion.div>
+          )}
+
           {status === 'success' && (
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="absolute inset-0 bg-white/95 z-50 flex flex-col items-center justify-center p-12 text-center"
+              className="absolute inset-0 bg-white z-[100] flex flex-col items-center justify-center p-12 text-center"
             >
               <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
                 <Check className="text-green-600" size={40} />
               </div>
-              <h2 className="text-3xl font-bold mb-4">Application Received!</h2>
+              <h2 className="text-3xl font-bold mb-4">{labels.successTitle || "Application Received!"}</h2>
               <p className="text-gray-600 mb-8 max-w-md">
-                Thank you for introducing your project. Our team will review your application and get back to you soon.
+                {labels.successMessage || "Thank you for introducing your project. Our team will review your application and get back to you soon."}
               </p>
               <Link
                 href="/pitch"
-                className="bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors"
-                onClick={() => setStatus('idle')}
+                className="bg-[#111] text-white px-8 py-3 rounded-lg font-bold hover:bg-gray-800 transition-colors"
               >
-                Return to Pitch Page
+                {labels.successButton || "Return to Pitch Page"}
               </Link>
+            </motion.div>
+          )}
+
+          {status === 'error' && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="absolute inset-0 bg-white z-[100] flex flex-col items-center justify-center p-12 text-center"
+            >
+              <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mb-6">
+                <X className="text-red-600" size={40} />
+              </div>
+              <h2 className="text-3xl font-bold mb-4">Submission Failed</h2>
+              <p className="text-red-600 bg-red-50 p-4 rounded-lg mb-8 max-w-md text-sm border border-red-100">
+                {errorMessage}
+              </p>
+              <button
+                onClick={() => setStatus('idle')}
+                className="bg-[#111] text-white px-8 py-3 rounded-lg font-bold hover:bg-gray-800 transition-colors"
+              >
+                {labels.tryAgain || "Try Again"}
+              </button>
             </motion.div>
           )}
         </AnimatePresence>
@@ -456,6 +643,8 @@ export default function ApplicationForm() {
           border: 1px solid rgba(0, 0, 0, 0.05);
           padding: 80px;
           margin-top: 20px;
+          position: relative;
+          overflow: hidden;
         }
 
         .form-header {
@@ -469,12 +658,8 @@ export default function ApplicationForm() {
           margin-bottom: 24px;
         }
 
-        .brand-dot-blue {
-          width: 40px;
-          height: 40px;
-          background: #4A6CF7;
-          border-radius: 50%;
-          background-image: radial-gradient(circle at 30% 30%, #7e98ff, #4A6CF7);
+        .header-logo {
+          object-fit: contain;
         }
 
         h1 {
@@ -630,12 +815,6 @@ export default function ApplicationForm() {
 
         .check-icon {
           color: #fff;
-          opacity: 0;
-          transition: opacity 0.2s;
-        }
-
-        .custom-checkbox.checked .check-icon {
-          opacity: 1;
         }
 
         .upload-area {
@@ -651,9 +830,66 @@ export default function ApplicationForm() {
           gap: 12px;
         }
 
-        .upload-area:hover {
+        .upload-area.has-files {
           border-color: #3b82f6;
           background-color: #f9faff;
+          padding: 24px;
+        }
+
+        .selected-files-list {
+          margin-top: 12px;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .file-item {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          background: #f8f9fa;
+          padding: 10px 14px;
+          border-radius: 6px;
+          border: 1px solid #eee;
+        }
+
+        .file-name {
+          flex: 1;
+          font-size: 0.875rem;
+          color: #333;
+          font-weight: 500;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .file-size {
+          font-size: 0.75rem;
+          color: #888;
+        }
+
+        .remove-file {
+          color: #ff4d4f;
+          cursor: pointer;
+          background: none;
+          border: none;
+          padding: 4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 4px;
+        }
+
+        .remove-file:hover {
+          background: #fff0f0;
+        }
+
+        .total-size-indicator {
+          font-size: 0.75rem;
+          text-align: right;
+          color: #888;
+          font-weight: 500;
+          margin-top: 4px;
         }
 
         .upload-icon {
@@ -699,20 +935,106 @@ export default function ApplicationForm() {
           display: block;
         }
 
-        .captcha-placeholder {
-          background-color: #fafafa;
-          border: 1px solid #e0e0e0;
-          padding: 16px;
-          border-radius: 4px;
-          width: 300px;
+        .recaptcha-box {
+          background-color: #f9f9f9;
+          border: 1px solid #d3d3d3;
+          padding: 12px 14px 10px 12px;
+          border-radius: 3px;
+          width: 320px;
           display: flex;
           justify-content: space-between;
-          align-items: center;
+          align-items: flex-start;
           margin-top: 10px;
+          box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.08);
+          user-select: none;
         }
 
-        .recaptcha-logo {
-          opacity: 0.5;
+        .recaptcha-left {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+
+        .captcha-checkbox-wrapper {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          cursor: pointer;
+        }
+
+        .captcha-checkbox {
+          width: 28px;
+          height: 28px;
+          background-color: #fff;
+          border: 2px solid #c1c1c1;
+          border-radius: 2px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: border-color 0.2s;
+        }
+
+        .captcha-checkbox-wrapper:hover .captcha-checkbox {
+          border-color: #b2b2b2;
+        }
+
+        .captcha-label {
+          font-family: Roboto, Arial, sans-serif;
+          font-size: 14px;
+          color: #000;
+          font-weight: 400;
+        }
+
+        .recaptcha-msg {
+          font-size: 8px;
+          color: #555;
+          margin: 0;
+          line-height: 1.2;
+          padding-left: 2px;
+        }
+
+        .recaptcha-msg a {
+          color: #4a90e2;
+          text-decoration: none;
+        }
+
+        .recaptcha-msg a:hover {
+          text-decoration: underline;
+        }
+
+        .recaptcha-right {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding-top: 2px;
+        }
+
+        .recaptcha-branding {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 2px;
+        }
+
+        .branding-text {
+          font-size: 10px;
+          color: #555;
+          font-weight: 500;
+          letter-spacing: 0.5px;
+        }
+
+        .branding-links {
+          font-size: 8px;
+          color: #555;
+        }
+
+        .branding-links a {
+          color: #555;
+          text-decoration: none;
+        }
+
+        .branding-links a:hover {
+          text-decoration: underline;
         }
 
         .form-footer {
@@ -738,17 +1060,64 @@ export default function ApplicationForm() {
           background-color: #0056b3;
         }
 
-        @media (max-width: 640px) {
-          .form-card {
-            padding: 30px;
+        @media (max-width: 768px) {
+          .form-page-container {
+            padding: 50px 10px 40px !important;
+            display: block !important;
           }
           
+          .form-card {
+            margin-top: 0 !important;
+            padding: 30px 15px !important;
+            border-radius: 0 !important;
+            max-width: 100vw !important;
+            width: 100% !important;
+            box-shadow: none !important;
+            border: none !important;
+          }
+
+          .close-button {
+            position: absolute !important;
+            top: 15px !important;
+            left: 15px !important;
+            right: auto !important;
+            width: 40px !important;
+            height: 40px !important;
+            background-color: transparent !important;
+            color: #000 !important;
+            z-index: 999 !important;
+          }
+
+          .close-button:hover {
+            background-color: rgba(0,0,0,0.2);
+          }
+
           h1 {
             font-size: 1.75rem;
+            margin-top: 20px;
           }
           
           .platforms-grid {
             grid-template-columns: 1fr;
+          }
+
+          .recaptcha-box {
+            flex-direction: column;
+            gap: 20px;
+            align-items: flex-start;
+          }
+
+          .recaptcha-right {
+            align-items: flex-start;
+            padding-left: 10px;
+          }
+          
+          .form-footer {
+            justify-content: center;
+          }
+
+          .submit-button {
+            width: 100%;
           }
         }
       `}</style>

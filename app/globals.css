@@ -53,6 +53,12 @@ h6 {
   color: #000000;
 }
 
+/* Override for Admin Portal to ensure visibility on light background */
+.admin-portal ::selection {
+  background-color: #1A2E35;
+  color: #ffffff;
+}
+
 @keyframes spin-slow {
   from {
     transform: rotate(0deg);

@@ -7,7 +7,13 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'krqlnwbfiqlfhslwxssg.supabase.co',
         port: '',
-        pathname: '/**', // Allow all paths from this supabase instance
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ldvdieoeccelcsaesajq.supabase.co',
+        port: '',
+        pathname: '/**',
       },
     ],
   },

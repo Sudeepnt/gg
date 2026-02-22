@@ -1,98 +1,203 @@
 {
-    "home": {
-        "particleText": "Gattabara Games",
-        "cookieText": "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies. For more information, please visit our",
-        "cookieButton": "Accept"
+  "home": {
+    "particleText": "Gattabara Games",
+    "playReelVideo": "https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/hero-reels/1771752371285-26619-359604050_tiny.mp4",
+    "socials": {
+      "instagram": "https://instagram.com/gattabaragames",
+      "twitter": "https://twitter.com/gattabaragames",
+      "linkedin": "https://linkedin.com/company/gattabaragames",
+      "email": "info@gattabaragames.com"
     },
-    "about": {
-        "quote": "At Gattabara Games, craft is not decoration, it is the foundation. We prototype fast, test honestly, and refine relentlessly until the experience feels inevitable. We don’t separate dreamers from builders because authorship creates accountability. Every mechanic must justify itself. Every frame must carry weight. We build original games with distinctive design and disciplined production, games remembered not for noise, but for depth.",
-        "signature": "Gattabara Games"
-    },
-    "ggProductions": {
-        "particleText": "GG Productions",
-        "brief": [
-            "At GG Productions, we know what it’s like to build games with tight budgets and big ambitions. Every decision is about momentum, what to ship now, what to defer, and where the right support can unblock your next milestone.",
-            "We stay lean so you can move fast, plugging in exactly the talent you need, when you need it, across art, tech, design, and production.",
-            "With clear milestones and transparent delivery, we integrate as an extension of your team, whether for full production or focused co-development, so you keep creative control while scaling execution globally."
-        ],
-        "servicesTitle": "Our Services",
-        "services": [
-            {
-                "title": "Development",
-                "description": "From early concepts to shippable builds, our team designs core systems, builds robust gameplay foundations, and executes with production-grade engineering. We handle mechanics, level design, rapid prototyping, and full-cycle development across Unity, Unreal, and Roblox, with scalability in mind for long-term updates and live operations."
-            },
-            {
-                "title": "Art",
-                "description": "Our art direction and production bring clarity and identity to your game, from visual style discovery to complete world-building. We deliver cohesive 2D and 3D art, animation, and UI that give characters and environments a distinct voice, always grounded in gameplay and audience experience."
-            },
-            {
-                "title": "Strategy & Pre-Production",
-                "description": "We help you make the right game before you make the whole game. From IP ideation and concept validation to MVP planning for fundraising, we craft clear design documentation and production roadmaps. Our approach blends creative vision with market and production reality, helping you de-risk development across entertainment titles, branded experiences, and applied games."
-            }
-        ],
-        "clientsTitle": "Our Clients",
-        "clients": [
-            "Nexon Games MapleStory Worlds",
-            "Singular Scheme",
-            "BattleBucks",
-            "Magadha Studios",
-            "Qila Games",
-            "Studio Cupcakes"
-        ],
-        "footerTitle": "Looking for a game development partner?",
-        "footerCta": "Let's make magic",
-        "copyright": "Gattabara Games"
-    },
-    "pitch": {
-        "title": "Inbound Form",
-        "paragraphs": [
-            "Pitch with clarity and conviction. We want to see what you are building, why it matters, and how you plan to ship it end to end.",
-            "Keep your deck focused and easy to scan. Deep dives on systems or mechanics can live in a separate GDD or design doc.",
-            "Show us something real. A playable build beats a video. A video beats concept art. We generally do not review pitches without a build or proof of concept.",
-            "GG collaborates on PC, Console, and mobile titles. AR/VR and mobile-first projects are welcome."
-        ],
-        "buttonText": "Click Here to Start"
-    },
-    "contact": {
-        "formLine1Start": "Hi, my name is",
-        "namePlaceholder": "your name",
-        "formLine1End": "and I'm exploring a potential partnership or opportunity with Gattabara Games.",
-        "formLine2Start": "Get in touch with me at",
-        "emailPlaceholder": "your e-mail",
-        "formLine2End": ".",
-        "consentText": "Hereby I authorise Gattabara Games, to process the given personal information in connection with my the inquiry. I am aware that submitting personal data is voluntary and that I have a right to view, edit and delete all the data concerning myself.",
-        "buttonText": "Send",
-        "companyName": "Gattabara Games",
-        "email": "info@gattabaragames.com",
-        "phone": "+91 9900114038",
-        "address1": "No. 55, 1st Floor, 10th Cross, 2nd Stage, Mahalakshmipuram,",
-        "address2": "WOC Road, Bengaluru, Karnataka,",
-        "address3": "India - 560086"
-    },
-    "form": {
-        "title": "Gattabara Games Application Form",
-        "intro": "Use this form to introduce your project or studio to Gattabara Games. We collaborate with solo creators and independent studios to co-create original games, aligning on vision, authorship, and long-term ownership."
-    },
+    "description": "Gattabara Games is a video game company and creative studio based in Bengaluru, India, developing original titles and partnering with bold creators. We combine experimental design with distinctive art direction, backed by disciplined production and shared governance.",
+    "ctaText": "Contact Us",
+    "cookieText": "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies. For more information, please visit our",
+    "cookieButton": "Accept"
+  },
+  "about": {
+    "quote": "At Gattabara Games, craft is not decoration, it is the foundation. We prototype fast, test honestly, and refine relentlessly until the experience feels inevitable. We don’t separate dreamers from builders because authorship creates accountability. Every mechanic must justify itself. Every frame must carry weight. We build original games with distinctive design and disciplined production, games remembered not for noise, but for depth.",
+    "signature": "Gattabara Games"
+  },
+  "ggProductions": {
+    "particleText": "GG Productions",
+    "brief": [
+      "At GG Productions, we know what it’s like to build games with tight budgets and big ambitions. Every decision is about momentum, what to ship now, what to defer, and where the right support can unblock your next milestone.",
+      "We stay lean so you can move fast, plugging in exactly the talent you need, when you need it, across art, tech, design, and production.",
+      "With clear milestones and transparent delivery, we integrate as an extension of your team, whether for full production or focused co-development, so you keep creative control while scaling execution globally."
+    ],
+    "servicesTitle": "Our Services",
+    "services": [
+      {
+        "title": "Development",
+        "description": "From early concepts to shippable builds, our team designs core systems, builds robust gameplay foundations, and executes with production-grade engineering. We handle mechanics, level design, rapid prototyping, and full-cycle development across Unity, Unreal, and Roblox, with scalability in mind for long-term updates and live operations."
+      },
+      {
+        "title": "Art",
+        "description": "Our art direction and production bring clarity and identity to your game, from visual style discovery to complete world-building. We deliver cohesive 2D and 3D art, animation, and UI that give characters and environments a distinct voice, always grounded in gameplay and audience experience."
+      },
+      {
+        "title": "Strategy & Pre-Production",
+        "description": "We help you make the right game before you make the whole game. From IP ideation and concept validation to MVP planning for fundraising, we craft clear design documentation and production roadmaps. Our approach blends creative vision with market and production reality, helping you de-risk development across entertainment titles, branded experiences, and applied games."
+      }
+    ],
+    "clientsTitle": "Our Clients",
+    "clients": [
+      "Nexon Games MapleStory Worlds",
+      "Singular Scheme",
+      "BattleBucks",
+      "Magadha Studios",
+      "Qila Games",
+      "Studio Cupcakes"
+    ],
+    "footerTitle": "Looking for a game development partner?",
+    "footerCta": "Let's make magic",
+    "copyright": "Gattabara Games",
     "projects": [
-        {
-            "title": "ORBITALS",
-            "image": "/clients/Orbitals Environment 2.png",
-            "description": "Step into a lovingly crafted retro anime world as explorers Maki and Omura brave the deadly Storm Wall and the perils beyond, all to save their home. In this 2-player co-op puzzle adventure, only brains, heart and unyielding resolve will open the path forward."
-        },
-        {
-            "title": "ONTOS",
-            "image": "/clients/Machine.png",
-            "description": "A sci-fi mystery set on the repurposed moon hotel Samsara. Uncover cryptic experiments, face unsettling encounters, and piece together a mind-bending narrative. The deeper you go, the more the truth unravels as you confront the ultimate question: What is reality?"
-        },
-        {
-            "title": "TANKRAT",
-            "image": "/clients/TankHead 2025-11-16 21-26-46_666.png",
-            "description": "A dying world, flesh given way to steel. Swarms of corrupted mech-monsters roam a desolate land. Search and destroy, scavenge and dismantle, rebuild yourself from the wreckage. What you take becomes what you are. Survive the wasteland. Make it to Highpoint."
-        },
-        {
-            "title": "CLAIR OBSCUR",
-            "image": "/clients/expedition33-screenshots-01.jpg",
-            "description": "Lead the members of Expedition 33 on their quest to destroy the Paintress so that she can never paint death again. Explore a world of wonders inspired by Belle Époque France and battle unique enemies in this turn-based RPG with real-time mechanics."
-        }
+      {
+        "title": "NEasdfWfasdfd PasROJECTasdfasd",
+        "image": "https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/projects/1771751411399-Screenshot-2026-02-18-at-10.00.08-PM.png",
+        "description": "Describe your project here...sdf",
+        "screenshots": [
+          "https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/screenshots/1771751422654-Screenshot-2026-02-18-at-8.38.21-PM.png"
+        ],
+        "wishlistOn": [
+          {
+            "label": "Steam",
+            "url": "asdf"
+          }
+        ],
+        "followOn": [],
+        "availableOn": [],
+        "sub": "fasdf",
+        "developedBy": "fasdf"
+      }
     ]
+  },
+  "pitch": {
+    "title": "Inbound Form",
+    "paragraphs": [
+      "Pitch with clarity and conviction. We want to see what you are building, why it matters, and how you plan to ship it end to end.",
+      "Keep your deck focused and easy to scan. Deep dives on systems or mechanics can live in a separate GDD or design doc.",
+      "Show us something real. A playable build beats a video. A video beats concept art. We generally do not review pitches without a build or proof of concept.",
+      "GG collaborates on PC, Console, and mobile titles. AR/VR and mobile-first projects are welcome."
+    ],
+    "buttonText": "Click Here to Start"
+  },
+  "contact": {
+    "formLine1Start": "Hi, my name is",
+    "namePlaceholder": "your name",
+    "formLine1End": "and I'm exploring a potential partnership or opportunity with Gattabara Games.",
+    "formLine2Start": "Get in touch with me at",
+    "emailPlaceholder": "your e-mail",
+    "formLine2End": ".",
+    "consentText": "Hereby I authorise Gattabara Games, to process the given personal information in connection with my the inquiry. I am aware that submitting personal data is voluntary and that I have a right to view, edit and delete all the data concerning myself.",
+    "buttonText": "Send",
+    "companyName": "Gattabara Games",
+    "email": "info@gattabaragames.com",
+    "phone": "+91 9900114038",
+    "address1": "No. 55, 1st Floor, 10th Cross, 2nd Stage, Mahalakshmipuram,",
+    "address2": "WOC Road, Bengaluru, Karnataka,",
+    "address3": "India - 560086"
+  },
+  "form": {
+    "title": "Gattabara Games Application Form",
+    "intro": "Use this form to introduce your project or studio to Gattabara Games. We collaborate with solo creators and independent studios to co-create original games, aligning on vision, authorship, and long-term ownership.",
+    "labels": {
+      "studioName": "Studio / Creator Name",
+      "studioWebsite": "Studio or Portfolio Website",
+      "studioWebsiteHint": "(If solo creator, link to portfolio or previous work)",
+      "yourName": "Your Name",
+      "email": "Your Email Address",
+      "country": "Country",
+      "gameTitle": "Game / Project Title",
+      "gameTitleHint": "(This can be a working title or internal project codename.)",
+      "collaboration": "What kind of collaboration are you seeking?",
+      "collaborationHint": "(Select all that apply)",
+      "collabCoDev": "Co-Development Partnership",
+      "collabCoDevDesc": "Hands-on creative and production collaboration with Gattabara to build the game together.",
+      "collabCoFunding": "Project Co-Funding",
+      "collabCoFundingDesc": "Financial support to help bring your game to life, including development, localisation, marketing, porting, etc.",
+      "collabPublishing": "Go-To-Market & Publishing Support",
+      "collabPublishingDesc": "Gattabara supports release, distribution, marketing, and launch strategy while you retain creative authorship.",
+      "description": "Short Project Description",
+      "descriptionHint": "(Tell us what you’re building, why it matters, and what makes it distinct.)",
+      "totalBudget": "Total Project Budget (USD)",
+      "totalBudgetHint": "(The estimated total cost to ship the project, including any spend to date.)",
+      "budgetAsk": "Collaboration Budget Ask (USD)",
+      "budgetAskHint": "(How much support are you seeking from Gattabara Games?)",
+      "platforms": "Target Platform(s)",
+      "platformsHint": "(Select all that apply.)",
+      "genre": "Genre",
+      "compTitle": "Comparable Title",
+      "compTitleHint": "(Based on gameplay, tone, and scope. Preferably released in the last 10 years.)",
+      "materials": "Playable / Materials",
+      "materialsHint": "We prioritize projects with something tangible to experience (playable builds, prototypes, vertical slices, or strong proof of concept. If available, include gameplay footage alongside your build.)",
+      "materialsLinks": "Materials (Links) and/or Access Details",
+      "materialsLinksHint": "(Builds may fail to upload. Please include links to playable builds, pitch decks, gameplay videos, and access details here. If sharing Steam keys, please include at least 5 keys.)",
+      "multiplayer": "Is this a Multiplayer Build?",
+      "multiplayerHint": "(Check the box if the build requires local/online multiplayer.)",
+      "launchWindow": "Target Launch Window (Quarter / Year)",
+      "launchWindowHint": "(Format: Q1 2026)",
+      "estimatedPrice": "Estimated Launch Price (USD)",
+      "estimatedPriceHint": "(Your current target price at launch. This can evolve.)",
+      "teamSize": "Current Team Size",
+      "teamSizeHint": "(Number of people actively working on the project.)",
+      "additionalNotes": "Additional Notes",
+      "additionalNotesHint": "(Anything else we should know about the project, team, or vision.)",
+      "howHeard": "How did you hear about Gattabara Games?",
+      "howHeardHint": "(Referral, person, event, community, etc. Helps us route your submission internally.)",
+      "notRobot": "I'm not a robot",
+      "chooseFile": "Choose a file to upload",
+      "dragDrop": "or drag and drop here",
+      "submit": "Submit",
+      "submitting": "Submitting...",
+      "submitted": "Submitted!",
+      "tryAgain": "Try Again",
+      "successTitle": "Application Received!",
+      "successMessage": "Thank you for introducing your project. Our team will review your application and get back to you soon.",
+      "successButton": "Return to Pitch Page"
+    }
+  },
+  "projects": [
+    {
+      "sub": "Describe your project here...sdfsdfasdfasdf",
+      "image": "https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/projects/1771748632570-Screenshot-2026-02-19-at-3.19.53-PM.png",
+      "title": "xxxxDescribe your project here...sdfsdfasdfasdf",
+      "video": "https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/project-videos/1771750612201-26619-359604050_tiny.mp4",
+      "followOn": [
+        {
+          "url": "Describe your project here...sdfsdfasdfasdf",
+          "label": "YouTube"
+        },
+        {
+          "url": "Describe your project here...sdfsdfasdfasdf",
+          "label": "Twitter"
+        },
+        {
+          "url": "Describe your project here...sdfsdfasdfasdf",
+          "label": "Discord"
+        }
+      ],
+      "wishlistOn": [
+        {
+          "url": "https://www.ringg.ai/ads/ai-customer-support?utm_source=google&utm_medium=search&utm_campaign=ai_customer_support&ad_device=c&keyword=conversational%20ai%20in%20customer%20service&gad_source=1&gad_campaignid=23387129019&gbraid=0AAAAA_zsJUQjFGGOnATgSZdw3UM6gAO1G",
+          "label": "Steam"
+        },
+        {
+          "url": "Describe your project here...sdfsdfasdfasdf",
+          "label": "Epic"
+        }
+      ],
+      "availableOn": [
+        {
+          "url": "Describe your project here...sdfsdfasdfasdf",
+          "label": "Console"
+        }
+      ],
+      "description": "Describe your project here...sdfsdfasdfasdfDescribe your project here...sdfsdfasdfasdfDescribe your project here...sdfsdfasdfasdfDescribe your project here...sdfsdfasdfasdfDescribe your project here...sdfsdfasdfasdfDescribe your project here...sdfsdfasdfasdf",
+      "developedBy": "Describe your project here...sdfsdfasdfasdf",
+      "screenshots": [
+        "https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/screenshots/1771750621154-Screenshot-2026-02-16-at-11.56.34-AM.png"
+      ]
+    }
+  ]
 }

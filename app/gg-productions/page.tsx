@@ -7,29 +7,6 @@ import Link from "next/link";
 import ParticleText from "../animations/ParticleText";
 import { getCMSData } from "../actions/cmsActions";
 
-const games = [
-  {
-    title: "ORBITALS",
-    image: "/clients/Orbitals Environment 2.png",
-    description: "Step into a lovingly crafted retro anime world as explorers Maki and Omura brave the deadly Storm Wall and the perils beyond, all to save their home. In this 2-player co-op puzzle adventure, only brains, heart and unyielding resolve will open the path forward."
-  },
-  {
-    title: "ONTOS",
-    image: "/clients/Machine.png",
-    description: "A sci-fi mystery set on the repurposed moon hotel Samsara. Uncover cryptic experiments, face unsettling encounters, and piece together a mind-bending narrative. The deeper you go, the more the truth unravels as you confront the ultimate question: What is reality?"
-  },
-  {
-    title: "TANKRAT",
-    image: "/clients/TankHead 2025-11-16 21-26-46_666.png",
-    description: "A dying world, flesh given way to steel. Swarms of corrupted mech-monsters roam a desolate land. Search and destroy, scavenge and dismantle, rebuild yourself from the wreckage. What you take becomes what you are. Survive the wasteland. Make it to Highpoint."
-  },
-  {
-    title: "CLAIR OBSCUR",
-    image: "/clients/expedition33-screenshots-01.jpg",
-    description: "Lead the members of Expedition 33 on their quest to destroy the Paintress so that she can never paint death again. Explore a world of wonders inspired by Belle Époque France and battle unique enemies in this turn-based RPG with real-time mechanics."
-  }
-];
-
 export default function AboutPage() {
   const rootRef = useRef<HTMLElement | null>(null);
   const [content, setContent] = useState({
@@ -65,15 +42,31 @@ export default function AboutPage() {
     ],
     footerTitle: "Looking for a game development partner?",
     footerCta: "Let's make magic",
-    copyright: "Gattabara Games"
+    copyright: "Gattabara Games",
+    playReelVideo: "",
+    projects: [] as any[]
   });
 
   useEffect(() => {
     const fetchContent = async () => {
       try {
         const cmsData = await getCMSData();
-        if (cmsData && cmsData.ggProductions) {
-          setContent(cmsData.ggProductions);
+        if (cmsData) {
+          const ggData = cmsData.ggProductions || {};
+          setContent({
+            ...ggData,
+            particleText: ggData.particleText || "GG PRODUCTIONS",
+            brief: ggData.brief || [],
+            servicesTitle: ggData.servicesTitle || "Our Services",
+            services: ggData.services || [],
+            clientsTitle: ggData.clientsTitle || "Our Clients",
+            clients: ggData.clients || [],
+            footerTitle: ggData.footerTitle || "Looking for a game development partner?",
+            footerCta: ggData.footerCta || "Let's make magic",
+            copyright: ggData.copyright || "Gattabara Games",
+            playReelVideo: cmsData.home?.playReelVideo || "",
+            projects: ggData.projects || []
+          });
         }
       } catch (error) {
         console.error("Failed to fetch CMS data:", error);
@@ -104,25 +97,26 @@ export default function AboutPage() {
             <ParticleText text={content.particleText.toUpperCase()} mobileScale={0.7} />
           </div>
 
-          <figure className="about-brief-reel">
-            <video
-              ref={(el) => {
-                if (el) {
-                  el.play().catch(err => {
-                    console.warn("Autoplay failed:", err);
-                    // Add a click-to-play fallback if needed, or just let it be
-                  });
-                }
-              }}
-              src="https://r2.studiolumio.com/lumio-reel.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
-              className="w-full h-full object-cover"
-            />
-          </figure>
+          {(content as any).playReelVideo && (
+            <figure className="about-brief-reel">
+              <video
+                ref={(el) => {
+                  if (el) {
+                    el.play().catch(err => {
+                      console.warn("Autoplay failed:", err);
+                    });
+                  }
+                }}
+                src={(content as any).playReelVideo}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+                className="w-full h-full object-cover"
+              />
+            </figure>
+          )}
 
           <div className="about-brief-text">
             {content.brief.map((p, i) => (
@@ -135,7 +129,7 @@ export default function AboutPage() {
 
           {/* Games Section */}
           <div className="games-grid">
-            {games.map((game, index) => (
+            {content.projects.map((game, index) => (
               <div key={index} className="game-item">
                 <Link href={`/games/${game.title.toLowerCase().replace(/\s+/g, '-')}`} className="block group cursor-pointer text-decoration-none">
                   <h2 className="game-title">

@@ -20,10 +20,11 @@ export default function ClientLayout({
     const [hasPlayed, setHasPlayed] = useState(false);
 
     const isFormPage = pathname === '/form';
+    const isAdminPage = pathname?.startsWith('/admingg');
 
     useEffect(() => {
         // If we are on form page, mark as played immediately
-        if (isFormPage) {
+        if (isFormPage || isAdminPage) {
             sessionStorage.setItem('splashPlayed', 'true');
             setHasPlayed(true);
             setIsSplashVisible(false);
@@ -35,15 +36,15 @@ export default function ClientLayout({
             setIsSplashVisible(false);
             setHasPlayed(true);
         }
-    }, []);
+    }, [isFormPage, isAdminPage]);
 
     useEffect(() => {
-        if (isSplashVisible && !isFormPage) {
+        if (isSplashVisible && !isFormPage && !isAdminPage) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = '';
         }
-    }, [isSplashVisible, isFormPage]);
+    }, [isSplashVisible, isFormPage, isAdminPage]);
 
     const handleSplashComplete = () => {
         setIsSplashVisible(false);
@@ -53,16 +54,16 @@ export default function ClientLayout({
 
     return (
         <SmoothScrollProvider>
-            {!hasPlayed && !isFormPage && (
+            {!hasPlayed && !isFormPage && !isAdminPage && (
                 <SplashScreen onComplete={handleSplashComplete} />
             )}
-            {!isFormPage && <CustomCursor />}
-            {!isFormPage && <Starfield />}
-            {!isFormPage && <Header />}
+            {!isFormPage && !isAdminPage && <CustomCursor />}
+            {!isFormPage && !isAdminPage && <Starfield />}
+            {!isAdminPage && !isFormPage && <Header />}
             <div className={`relative z-10 w-full min-h-screen ${isFormPage ? 'bg-white' : ''}`}>
                 {children}
             </div>
-            {!isFormPage && <Footer />}
+            {!isAdminPage && !isFormPage && <Footer />}
         </SmoothScrollProvider>
     );
 }

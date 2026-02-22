@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { getCMSData } from "../actions/cmsActions";
+import { getCMSDataClient } from "../lib/cmsClient";
 import ComingSoonLiquid from '../animations/ComingSoonLiquid';
 
 export default function GamesPage() {
@@ -14,7 +14,7 @@ export default function GamesPage() {
     useEffect(() => {
         const fetchContent = async () => {
             try {
-                const cmsData = await getCMSData();
+                const cmsData = await getCMSDataClient();
                 if (cmsData && cmsData.projects) {
                     setGames(cmsData.projects);
                 }
