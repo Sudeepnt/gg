@@ -73,25 +73,10 @@ export default function PrivacyStatement() {
                                 <li>Request deletion of your personal data</li>
                                 <li>Withdraw consent at any time</li>
                             </ul>
-                            <p className="mt-4">
-                                Requests can be sent to <a href="mailto:contact@gattabaragames.com" className="text-white underline hover:text-white/80">contact@gattabaragames.com</a>.
-                            </p>
+
                         </div>
 
-                        <div>
-                            <h2 className="text-white text-lg font-bold mb-4">Contact Information</h2>
-                            <div className="space-y-1 text-white/80">
-                                <p className="font-bold text-white">Gattabara Games LLP</p>
-                                <p>Email: <a href="mailto:contact@gattabaragames.com" className="text-white underline hover:text-white/80">contact@gattabaragames.com</a></p>
-                                <p>Phone: +91 9900114038</p>
-                                <div className="mt-4">
-                                    <p className="font-bold text-white">Address:</p>
-                                    <p>No. 55, 1st Floor, 10th Cross, 2nd Stage, Mahalakshmipuram,</p>
-                                    <p>WOC Road, Bengaluru, Karnataka,</p>
-                                    <p>India – 560086</p>
-                                </div>
-                            </div>
-                        </div>
+
 
                         <p className="mt-20 text-center text-white/50 text-xs leading-relaxed">
                             “Gattabara Games”, ”GG”, “GG Productions” and the Gattabara Games logo are all brands of Gattabara Games LLP. All rights reserved.
