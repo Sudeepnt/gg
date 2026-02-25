@@ -136,6 +136,7 @@ export default function Footer() {
                                 {content?.playReelVideo ? (
                                     <>
                                         <video
+                                            key={content.playReelVideo || 'video-bg'}
                                             autoPlay
                                             loop
                                             muted
@@ -202,13 +203,14 @@ export default function Footer() {
                                 onClick={togglePlay}
                             >
                                 <video
+                                    key={content?.playReelVideo || 'video-modal'}
                                     ref={videoRef}
                                     autoPlay
                                     loop
                                     onTimeUpdate={handleTimeUpdate}
                                     className="w-full h-full object-cover"
                                 >
-                                    <source src="/reel/26619-359604050_tiny.mp4" type="video/mp4" />
+                                    <source src={content?.playReelVideo} type="video/mp4" />
                                 </video>
 
 
