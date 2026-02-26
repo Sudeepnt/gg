@@ -24,7 +24,7 @@ const bebasNeue = Bebas_Neue({
 
 export const metadata: Metadata = {
   title: "Gattabara Games",
-  description: "Gattabara Games Layout",
+  description: "Gattabara Games is a video game company and creative studio based in Bengaluru, India",
   icons: {
     icon: "/logos/logo1white.png",
     apple: "/logos/logo1white.png",
