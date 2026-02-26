@@ -46,7 +46,7 @@ export default function AboutPage() {
                 >
                     <Quote className="text-white w-6 h-6 md:w-9 h-9 mb-8 md:mb-12 opacity-60" fill="currentColor" />
 
-                    <p className="text-white text-[26px] md:text-[35px] font-bold leading-[1.6] tracking-tight max-w-5xl mb-6 md:mb-8">
+                    <p className="text-white text-xl md:text-[35px] font-bold leading-[1.6] tracking-tight max-w-5xl mb-6 md:mb-8">
                         {content.quote}
                     </p>
 
