@@ -23,8 +23,42 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata: Metadata = {
-  title: "Gattabara Games",
-  description: "Gattabara Games is a video game company and creative studio based in Bengaluru, India",
+  title: {
+    default: "Gattabara Games",
+    template: "%s | Gattabara Games",
+  },
+  description: "Gattabara Games is a video game company and creative studio based in Bengaluru, India. We create immersive and visually stunning gaming experiences.",
+  keywords: ["video games", "game studio", "creative studio", "Bengaluru", "India", "Gattabara Games", "indie games"],
+  authors: [{ name: "Gattabara Games" }],
+  creator: "Gattabara Games",
+  publisher: "Gattabara Games",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: "https://www.gattabaragames.com",
+    siteName: "Gattabara Games",
+    title: "Gattabara Games | Creative Video Game Studio",
+    description: "Gattabara Games is a video game company and creative studio based in Bengaluru, India. Discover our projects and creative vision.",
+    images: [
+      {
+        url: "/logos/logo1white.png",
+        width: 1200,
+        height: 630,
+        alt: "Gattabara Games Logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Gattabara Games | Creative Video Game Studio",
+    description: "Gattabara Games is a video game company and creative studio based in Bengaluru, India.",
+    images: ["/logos/logo1white.png"],
+  },
   icons: {
     icon: "/logos/logo1white.png",
     apple: "/logos/logo1white.png",
