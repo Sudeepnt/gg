@@ -44,6 +44,7 @@ export default function ApplicationForm() {
   const [uploadProgress, setUploadProgress] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [isDragActive, setIsDragActive] = useState(false);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -67,25 +68,47 @@ export default function ApplicationForm() {
 
   const labels = content.labels || {};
 
+  const handleFiles = (files: FileList | File[]) => {
+    const newFiles = Array.from(files);
+    const totalCount = selectedFiles.length + newFiles.length;
+
+    if (totalCount > 5) {
+      alert("You can only upload up to 5 files.");
+      return;
+    }
+
+    const currentTotalSize = selectedFiles.reduce((sum, f) => sum + f.size, 0);
+    const newTotalSize = newFiles.reduce((sum, f) => sum + f.size, 0);
+
+    if ((currentTotalSize + newTotalSize) > 50 * 1024 * 1024) {
+      alert("Total file size must be under 50MB.");
+      return;
+    }
+
+    setSelectedFiles([...selectedFiles, ...newFiles]);
+  };
+
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const newFiles = Array.from(e.target.files);
-      const totalCount = selectedFiles.length + newFiles.length;
+      handleFiles(e.target.files);
+    }
+  };
 
-      if (totalCount > 5) {
-        alert("You can only upload up to 5 files.");
-        return;
-      }
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragActive(true);
+  };
 
-      const currentTotalSize = selectedFiles.reduce((sum, f) => sum + f.size, 0);
-      const newTotalSize = newFiles.reduce((sum, f) => sum + f.size, 0);
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragActive(false);
+  };
 
-      if ((currentTotalSize + newTotalSize) > 50 * 1024 * 1024) {
-        alert("Total file size must be under 50MB.");
-        return;
-      }
-
-      setSelectedFiles([...selectedFiles, ...newFiles]);
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragActive(false);
+    if (e.dataTransfer.files) {
+      handleFiles(e.dataTransfer.files);
     }
   };
 
@@ -368,8 +391,11 @@ export default function ApplicationForm() {
             <p className="field-hint">{labels.materialsHint || "We prioritize projects with something tangible to experience (playable builds, prototypes, vertical slices, or strong proof of concept. If available, include gameplay footage alongside your build.)"}</p>
 
             <div
-              className={`upload-area ${selectedFiles.length > 0 ? 'has-files' : ''}`}
+              className={`upload-area ${selectedFiles.length > 0 ? 'has-files' : ''} ${isDragActive ? 'drag-active' : ''}`}
               onClick={() => document.getElementById('file-upload')?.click()}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
             >
               <Upload className="upload-icon" />
               <p><span>{labels.chooseFile || "Choose a file to upload"}</span> {labels.dragDrop || "or drag and drop here"}</p>
@@ -836,6 +862,12 @@ export default function ApplicationForm() {
           border-color: #3b82f6;
           background-color: #f9faff;
           padding: 24px;
+        }
+
+        .upload-area.drag-active {
+          border-color: #3b82f6;
+          background-color: #eff6ff;
+          border-width: 2px;
         }
 
         .selected-files-list {
