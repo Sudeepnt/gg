@@ -692,7 +692,7 @@ export default function ApplicationForm() {
 
         h1 {
           font-family: "NT Brick Sans", sans-serif;
-          font-size: 2.25rem;
+          font-size: 1.68rem;
           font-weight: 400;
           color: #111;
           margin-bottom: 16px;
@@ -1128,7 +1128,7 @@ export default function ApplicationForm() {
           }
 
           h1 {
-            font-size: 1.75rem;
+            font-size: 1.05rem;
             margin-top: 20px;
           }
           
