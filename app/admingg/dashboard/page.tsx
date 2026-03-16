@@ -29,6 +29,9 @@ import {
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 
+const MAX_REEL_VIDEO_SIZE_MB = 200;
+const MAX_REEL_VIDEO_SIZE_BYTES = MAX_REEL_VIDEO_SIZE_MB * 1024 * 1024;
+
 const InquiryTable = ({ title, list, onDelete }: { title: string, list: any[], onDelete: (id: any) => void }) => {
     const [expandedId, setExpandedId] = React.useState<any>(null);
 
@@ -172,6 +175,11 @@ export default function AdminDashboard() {
                 return;
             }
 
+            if (file.size > MAX_REEL_VIDEO_SIZE_BYTES) {
+                alert(`Video file size must be ${MAX_REEL_VIDEO_SIZE_MB}MB or smaller.`);
+                return;
+            }
+
             setIsUploading(true);
             setUploadProgress(0);
 
@@ -250,6 +258,9 @@ export default function AdminDashboard() {
                         </p>
                         <p className="text-[10px] text-gray-400 uppercase tracking-wider">
                             Supabase Storage (gg-content bucket)
+                        </p>
+                        <p className="text-[10px] text-gray-400 uppercase tracking-wider">
+                            Max file size: {MAX_REEL_VIDEO_SIZE_MB}MB
                         </p>
                     </div>
 

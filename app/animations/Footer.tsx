@@ -69,6 +69,36 @@ export default function Footer() {
         }
     };
 
+    const seekToClientX = (clientX: number, seekBar: HTMLDivElement) => {
+        if (!videoRef.current || videoRef.current.duration <= 0) return;
+
+        const rect = seekBar.getBoundingClientRect();
+        if (rect.width <= 0) return;
+
+        const clampedX = Math.min(Math.max(clientX - rect.left, 0), rect.width);
+        const nextProgress = (clampedX / rect.width) * 100;
+        setProgress(nextProgress);
+        videoRef.current.currentTime = (nextProgress / 100) * videoRef.current.duration;
+    };
+
+    const handleSeekPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+        e.preventDefault();
+        e.currentTarget.setPointerCapture(e.pointerId);
+        seekToClientX(e.clientX, e.currentTarget);
+    };
+
+    const handleSeekPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+        if (!e.currentTarget.hasPointerCapture(e.pointerId)) return;
+        seekToClientX(e.clientX, e.currentTarget);
+    };
+
+    const handleSeekPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+        if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+            e.currentTarget.releasePointerCapture(e.pointerId);
+        }
+    };
+
     const SocialLinks = ({ className = "" }: { className?: string }) => {
         const socials = content?.socials || {
             instagram: "#",
@@ -250,7 +280,14 @@ export default function Footer() {
                                 </div>
 
                                 {/* Progress Bar */}
-                                <div className="w-1/4 h-[2px] bg-white/20 relative">
+                                <div
+                                    className="w-1/4 h-[2px] bg-white/20 relative"
+                                    onPointerDown={handleSeekPointerDown}
+                                    onPointerMove={handleSeekPointerMove}
+                                    onPointerUp={handleSeekPointerUp}
+                                    onPointerCancel={handleSeekPointerUp}
+                                    style={{ touchAction: 'none' }}
+                                >
                                     <motion.div
                                         style={{ width: `${progress}%` }}
                                         className="absolute top-0 left-0 h-full bg-white flex items-center justify-end"
