@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     description: "Gattabara Games is a video game company and creative studio based in Bengaluru, India.",
     images: [
       {
-        url: "/logos/logo1white.png",
+        url: "/logos/logo1black.png",
         width: 1200,
         height: 630,
         alt: "Gattabara Games Logo",
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Gattabara Games",
     description: "Gattabara Games is a video game company and creative studio based in Bengaluru, India.",
-    images: ["/logos/logo1white.png"],
+    images: ["/logos/logo1black.png"],
   },
   icons: {
     icon: "/logos/logo1white.png",
