@@ -171,7 +171,7 @@ export default function Footer() {
                                             loop
                                             muted
                                             playsInline
-                                            poster="https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/ReelfirstImage/secondimage.png"
+                                            poster="https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/ReelfirstImage/Heroimage.png"
                                             className="absolute inset-0 w-full h-full object-cover opacity-60"
                                         >
                                             <source src={content.playReelVideo} type="video/mp4" />
@@ -185,7 +185,7 @@ export default function Footer() {
                                     </>
                                 ) : (
                                     <img
-                                        src="https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/ReelfirstImage/secondimage.png"
+                                        src="https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/ReelfirstImage/Heroimage.png"
                                         alt="Reel preview"
                                         className="absolute inset-0 w-full h-full object-cover"
                                     />
