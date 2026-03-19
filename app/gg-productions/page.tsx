@@ -9,6 +9,7 @@ import { getCMSData } from "../actions/cmsActions";
 
 export default function AboutPage() {
   const rootRef = useRef<HTMLElement | null>(null);
+  const [isReelLoaded, setIsReelLoaded] = useState(false);
   const [content, setContent] = useState({
     particleText: "GG PRODUCTIONS",
     brief: [
@@ -99,6 +100,13 @@ export default function AboutPage() {
 
           {(content as any).playReelVideo && (
             <figure className="about-brief-reel">
+              {!isReelLoaded && (
+                <img
+                  src="https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/ReelfirstImage/Heroimage.png"
+                  alt="GG Productions reel preview"
+                  className="about-brief-reel-preview"
+                />
+              )}
               <video
                 ref={(el) => {
                   if (el) {
@@ -113,6 +121,9 @@ export default function AboutPage() {
                 loop
                 playsInline
                 preload="auto"
+                poster="https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/ReelfirstImage/Heroimage.png"
+                onLoadStart={() => setIsReelLoaded(false)}
+                onLoadedData={() => setIsReelLoaded(true)}
                 className="w-full h-full object-cover"
               />
             </figure>
@@ -241,6 +252,14 @@ export default function AboutPage() {
         .about-brief-reel video {
           width: 100%;
           aspect-ratio: 910 / 460;
+          object-fit: cover;
+          display: block;
+        }
+        .about-brief-reel-preview {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
           object-fit: cover;
           display: block;
         }
