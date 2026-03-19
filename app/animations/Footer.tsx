@@ -184,9 +184,11 @@ export default function Footer() {
                                         </div>
                                     </>
                                 ) : (
-                                    <div className="flex items-center justify-center h-full w-full">
-                                        <span className="text-[10px] font-bold tracking-widest text-white/40 uppercase">Coming Soon...</span>
-                                    </div>
+                                    <img
+                                        src="https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/ReelfirstImage/secondimage.png"
+                                        alt="Reel preview"
+                                        className="absolute inset-0 w-full h-full object-cover"
+                                    />
                                 )}
                             </div>
 
