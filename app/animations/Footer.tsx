@@ -172,7 +172,7 @@ export default function Footer() {
                                             muted
                                             playsInline
                                             poster="https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/ReelfirstImage/Heroimage.png"
-                                            className="absolute inset-0 w-full h-full object-cover opacity-60"
+                                            className="absolute inset-0 w-full h-full object-cover"
                                         >
                                             <source src={content.playReelVideo} type="video/mp4" />
                                         </video>
