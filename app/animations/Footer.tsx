@@ -161,7 +161,7 @@ export default function Footer() {
                                         setIsPlaying(true);
                                     }
                                 }}
-                                className={`col-span-2 lg:col-span-1 ${content?.playReelVideo ? 'bg-[#13343e] cursor-pointer' : 'bg-black'} h-[122px] md:h-auto w-full lg:w-[85%] rounded-[1px] flex flex-col justify-between relative overflow-hidden order-2`}
+                                className={`col-span-2 lg:col-span-1 ${content?.playReelVideo ? 'bg-black cursor-pointer' : 'bg-black'} h-[122px] md:h-auto w-full lg:w-[85%] rounded-[1px] flex flex-col justify-between relative overflow-hidden order-2`}
                             >
                                 {content?.playReelVideo ? (
                                     <>
