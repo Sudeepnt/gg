@@ -2,14 +2,20 @@
 
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { Play, Pause, Volume2, VolumeX, X } from "lucide-react";
 import Link from "next/link";
 import ParticleText from "../animations/ParticleText";
 import { getCMSData } from "../actions/cmsActions";
 
 export default function AboutPage() {
   const rootRef = useRef<HTMLElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [isReelLoaded, setIsReelLoaded] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [content, setContent] = useState({
     particleText: "GG PRODUCTIONS",
     brief: [
@@ -76,7 +82,65 @@ export default function AboutPage() {
     fetchContent();
   }, []);
 
-  // Removed scroll-based opacity effect - now using viewport gradient shadows instead
+  const togglePlay = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const toggleMute = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    if (videoRef.current) {
+      const current = videoRef.current.currentTime;
+      const total = videoRef.current.duration;
+      if (total > 0) {
+        setProgress((current / total) * 100);
+      }
+    }
+  };
+
+  const seekToClientX = (clientX: number, seekBar: HTMLDivElement) => {
+    if (!videoRef.current || videoRef.current.duration <= 0) return;
+
+    const rect = seekBar.getBoundingClientRect();
+    if (rect.width <= 0) return;
+
+    const clampedX = Math.min(Math.max(clientX - rect.left, 0), rect.width);
+    const nextProgress = (clampedX / rect.width) * 100;
+    setProgress(nextProgress);
+    videoRef.current.currentTime = (nextProgress / 100) * videoRef.current.duration;
+  };
+
+  const handleSeekPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    e.currentTarget.setPointerCapture(e.pointerId);
+    seekToClientX(e.clientX, e.currentTarget);
+  };
+
+  const handleSeekPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!e.currentTarget.hasPointerCapture(e.pointerId)) return;
+    seekToClientX(e.clientX, e.currentTarget);
+  };
+
+  const handleSeekPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+  };
 
   return (
     <>
@@ -98,7 +162,15 @@ export default function AboutPage() {
             <ParticleText text={content.particleText.toUpperCase()} mobileScale={0.7} />
           </div>
 
-          <figure className="about-brief-reel">
+          <figure
+            className={`about-brief-reel ${(content as any).playReelVideo ? "about-brief-reel-clickable" : ""}`}
+            onClick={() => {
+              if ((content as any).playReelVideo) {
+                setShowVideo(true);
+                setIsPlaying(true);
+              }
+            }}
+          >
             {!isReelLoaded && (
               <img
                 src="https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/ReelfirstImage/Heroimage.png"
@@ -196,6 +268,87 @@ export default function AboutPage() {
           <p className="copyright-p">&copy; {new Date().getFullYear()} {content.copyright}</p>
         </footer>
 
+        <AnimatePresence>
+          {showVideo && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100000] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 md:p-12 overflow-hidden"
+            >
+              <div className="absolute inset-0 opacity-30 pointer-events-none bg-[radial-gradient(circle_at_center,_transparent_0%,_#000_100%)]" />
+
+              <div className="flex flex-col items-center gap-6 w-full max-w-5xl">
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.1 }}
+                  className="w-full aspect-video bg-black shadow-2xl relative overflow-hidden flex items-center justify-center group border border-white/10 cursor-pointer"
+                  onClick={togglePlay}
+                >
+                  <video
+                    key={(content as any).playReelVideo || "video-modal"}
+                    ref={videoRef}
+                    autoPlay
+                    loop
+                    onTimeUpdate={handleTimeUpdate}
+                    className="w-full h-full object-cover"
+                  >
+                    <source src={(content as any).playReelVideo} type="video/mp4" />
+                  </video>
+
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_20%,_rgba(0,0,0,0.6)_100%)] pointer-events-none" />
+                </motion.div>
+
+                <div
+                  className="flex flex-col items-center gap-[7px] z-20 w-full -mt-[50px]"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={togglePlay}
+                      className="w-12 h-12 border border-white/20 rounded-full flex items-center justify-center text-white backdrop-blur-md hover:bg-white hover:text-black transition-all"
+                    >
+                      {isPlaying ? <Pause size={18} /> : <Play size={20} fill="currentColor" className="ml-0.5" />}
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowVideo(false);
+                      }}
+                      className="w-12 h-12 border border-white/20 rounded-full flex items-center justify-center text-white backdrop-blur-md hover:bg-white hover:text-black transition-all"
+                    >
+                      <X size={20} />
+                    </button>
+                    <button
+                      onClick={toggleMute}
+                      className="w-12 h-12 border border-white/20 rounded-full flex items-center justify-center text-white backdrop-blur-md hover:bg-white hover:text-black transition-all"
+                    >
+                      {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+                    </button>
+                  </div>
+
+                  <div
+                    className="w-1/4 h-[2px] bg-white/20 relative"
+                    onPointerDown={handleSeekPointerDown}
+                    onPointerMove={handleSeekPointerMove}
+                    onPointerUp={handleSeekPointerUp}
+                    onPointerCancel={handleSeekPointerUp}
+                    style={{ touchAction: "none" }}
+                  >
+                    <motion.div
+                      style={{ width: `${progress}%` }}
+                      className="absolute top-0 left-0 h-full bg-white flex items-center justify-end"
+                    >
+                      <div className="w-1.5 h-1.5 bg-white rounded-full translate-x-1" />
+                    </motion.div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <style jsx global>{`
         body {
           margin: 0;
@@ -249,6 +402,9 @@ export default function AboutPage() {
           will-change: opacity;
           position: relative;
           aspect-ratio: 910 / 460;
+        }
+        .about-brief-reel-clickable {
+          cursor: pointer;
         }
         .about-brief-reel video,
         .about-brief-reel-preview {
