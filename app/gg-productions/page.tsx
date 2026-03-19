@@ -98,15 +98,15 @@ export default function AboutPage() {
             <ParticleText text={content.particleText.toUpperCase()} mobileScale={0.7} />
           </div>
 
-          {(content as any).playReelVideo && (
-            <figure className="about-brief-reel">
-              {!isReelLoaded && (
-                <img
-                  src="https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/ReelfirstImage/Heroimage.png"
-                  alt="GG Productions reel preview"
-                  className="about-brief-reel-preview"
-                />
-              )}
+          <figure className="about-brief-reel">
+            {!isReelLoaded && (
+              <img
+                src="https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/ReelfirstImage/Heroimage.png"
+                alt="GG Productions reel preview"
+                className="about-brief-reel-preview"
+              />
+            )}
+            {(content as any).playReelVideo && (
               <video
                 ref={(el) => {
                   if (el) {
@@ -124,10 +124,10 @@ export default function AboutPage() {
                 poster="https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/ReelfirstImage/Heroimage.png"
                 onLoadStart={() => setIsReelLoaded(false)}
                 onLoadedData={() => setIsReelLoaded(true)}
-                className="w-full h-full object-cover"
+                className="about-brief-reel-video"
               />
-            </figure>
-          )}
+            )}
+          </figure>
 
           <div className="about-brief-text">
             {content.brief.map((p, i) => (
@@ -248,13 +248,9 @@ export default function AboutPage() {
           overflow: hidden;
           will-change: opacity;
           position: relative;
-        }
-        .about-brief-reel video {
-          width: 100%;
           aspect-ratio: 910 / 460;
-          object-fit: cover;
-          display: block;
         }
+        .about-brief-reel video,
         .about-brief-reel-preview {
           position: absolute;
           inset: 0;
@@ -262,6 +258,9 @@ export default function AboutPage() {
           height: 100%;
           object-fit: cover;
           display: block;
+        }
+        .about-brief-reel-video {
+          z-index: 1;
         }
         .about-brief-text {
           margin: clamp(4rem, 10vw, 8rem) 6vw 0 6vw;
