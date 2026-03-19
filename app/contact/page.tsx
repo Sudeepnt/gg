@@ -16,7 +16,7 @@ const defaultContent = {
     buttonText: "Send",
     companyName: "Gattabara Games",
     email: "info@gattabaragames.com",
-    phone: "+91 9900114038",
+    phone: "",
     address1: "No. 55, 1st Floor, 10th Cross, 2nd Stage, Mahalakshmipuram,",
     address2: "WOC Road, Bengaluru, Karnataka,",
     address3: "India - 560086"
