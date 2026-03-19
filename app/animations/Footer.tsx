@@ -176,12 +176,6 @@ export default function Footer() {
                                         >
                                             <source src={content.playReelVideo} type="video/mp4" />
                                         </video>
-                                        <div className="absolute bottom-2 right-3">
-                                            <div className="relative overflow-hidden border border-white/10 transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-black text-white hover:text-black bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%] px-3 py-1.5 flex items-center gap-2">
-                                                <span className="relative z-10 text-[9px] md:text-[11px] font-bold tracking-widest leading-none">Play Reel</span>
-                                                <Play size={10} fill="currentColor" className="relative z-10" />
-                                            </div>
-                                        </div>
                                     </>
                                 ) : (
                                     <img
@@ -190,6 +184,12 @@ export default function Footer() {
                                         className="absolute inset-0 w-full h-full object-cover"
                                     />
                                 )}
+                                <div className="absolute bottom-2 right-3">
+                                    <div className="relative overflow-hidden border border-white/10 transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-black text-white hover:text-black bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%] px-3 py-1.5 flex items-center gap-2">
+                                        <span className="relative z-10 text-[9px] md:text-[11px] font-bold tracking-widest leading-none">Play Reel</span>
+                                        <Play size={10} fill="currentColor" className="relative z-10" />
+                                    </div>
+                                </div>
                             </div>
 
                             <SocialLinks className="col-span-4 lg:col-span-1 order-3 lg:justify-center self-end" />
