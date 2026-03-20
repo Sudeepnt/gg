@@ -163,27 +163,11 @@ export default function Footer() {
                                 }}
                                 className={`col-span-2 lg:col-span-1 ${content?.playReelVideo ? 'bg-black cursor-pointer' : 'bg-black'} h-[122px] md:h-auto w-full lg:w-[85%] rounded-[1px] flex flex-col justify-between relative overflow-hidden order-2`}
                             >
-                                {content?.playReelVideo ? (
-                                    <>
-                                        <video
-                                            key={content.playReelVideo || 'video-bg'}
-                                            autoPlay
-                                            loop
-                                            muted
-                                            playsInline
-                                            poster="https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/ReelfirstImage/Heroimage.png"
-                                            className="absolute inset-0 w-full h-full object-cover"
-                                        >
-                                            <source src={content.playReelVideo} type="video/mp4" />
-                                        </video>
-                                    </>
-                                ) : (
-                                    <img
-                                        src="https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/ReelfirstImage/Heroimage.png"
-                                        alt="Reel preview"
-                                        className="absolute inset-0 w-full h-full object-cover"
-                                    />
-                                )}
+                                <img
+                                    src="https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/ReelfirstImage/Heroimage.png"
+                                    alt="Reel preview"
+                                    className="absolute inset-0 w-full h-full object-cover"
+                                />
                                 <div className="absolute bottom-2 right-3">
                                     <div className="relative overflow-hidden border border-white/10 transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-black text-white hover:text-black bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%] px-3 py-1.5 flex items-center gap-2">
                                         <span className="relative z-10 text-[9px] md:text-[11px] font-bold tracking-widest leading-none">Play Reel</span>

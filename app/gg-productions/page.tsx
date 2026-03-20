@@ -11,7 +11,6 @@ import { getCMSData } from "../actions/cmsActions";
 export default function AboutPage() {
   const rootRef = useRef<HTMLElement | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isReelLoaded, setIsReelLoaded] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
@@ -182,34 +181,11 @@ export default function AboutPage() {
               }
             }}
           >
-            {!isReelLoaded && (
-              <img
-                src="https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/ReelfirstImage/Heroimage.png"
-                alt="GG Productions reel preview"
-                className="about-brief-reel-preview"
-              />
-            )}
-            {(content as any).playReelVideo && (
-              <video
-                ref={(el) => {
-                  if (el) {
-                    el.play().catch(err => {
-                      console.warn("Autoplay failed:", err);
-                    });
-                  }
-                }}
-                src={(content as any).playReelVideo}
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="auto"
-                poster="https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/ReelfirstImage/Heroimage.png"
-                onLoadStart={() => setIsReelLoaded(false)}
-                onLoadedData={() => setIsReelLoaded(true)}
-                className="about-brief-reel-video"
-              />
-            )}
+            <img
+              src="https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/ReelfirstImage/Heroimage.png"
+              alt="GG Productions reel preview"
+              className="about-brief-reel-preview"
+            />
           </figure>
 
           <div className="about-brief-text">
