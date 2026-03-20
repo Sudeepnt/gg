@@ -580,6 +580,7 @@ export default function AboutPage() {
         @media (max-width: 640px) {
           .about-shouts-list {
             grid-template-columns: 1fr;
+            width: calc(100% - 12vw);
           }
         }
         .about-shouts-item {
