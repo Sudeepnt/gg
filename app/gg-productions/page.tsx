@@ -142,6 +142,17 @@ export default function AboutPage() {
     }
   };
 
+  const clients = (content.clients || []).map((client: any) => {
+    if (typeof client === "string") {
+      return { name: client, image: "" };
+    }
+
+    return {
+      name: client?.name || client?.title || client?.label || "",
+      image: client?.image || client?.logo || client?.brandImage || ""
+    };
+  });
+
   return (
     <>
       <div className="gg-viewport-shadow-top" />
@@ -253,8 +264,21 @@ export default function AboutPage() {
         <section className="about-shouts-wrap">
           <h2>{content.clientsTitle}</h2>
           <ul className="about-shouts-list">
-            {content.clients.map((c, i) => (
-              <li key={i} className="about-shouts-item"><p>{c}</p></li>
+            {clients.map((client: any, i: number) => (
+              <li key={i} className="about-shouts-item">
+                <div className="about-shouts-brand-wrap">
+                  {client.image ? (
+                    <img
+                      src={client.image}
+                      alt={`${client.name} brand`}
+                      className="about-shouts-brand-image"
+                    />
+                  ) : (
+                    <div className="about-shouts-brand-placeholder" aria-hidden="true" />
+                  )}
+                </div>
+                <p>{client.name}</p>
+              </li>
             ))}
           </ul>
         </section>
@@ -532,7 +556,7 @@ export default function AboutPage() {
           text-align: center;
           display: grid;
           justify-items: center;
-          gap: 0.8rem;
+          gap: 1.5rem;
         }
         .about-shouts-wrap h2 {
           margin: 0;
@@ -544,27 +568,60 @@ export default function AboutPage() {
           padding: 0;
           list-style: none;
           display: grid;
-          gap: 0.4rem;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 1rem;
+          width: min(100%, 1200px);
+        }
+        @media (max-width: 900px) {
+          .about-shouts-list {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+        @media (max-width: 640px) {
+          .about-shouts-list {
+            grid-template-columns: 1fr;
+          }
         }
         .about-shouts-item {
-            will-change: opacity;
+          will-change: opacity;
+          min-height: 220px;
+          padding: 2.6rem 1.2rem 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 1rem;
+          border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .about-shouts-item p {
           margin: 0;
-          font-size: clamp(1.15rem, 2.2vw, 2rem);
+          font-size: clamp(1rem, 1.6vw, 1.5rem);
           font-weight: 600;
           line-height: 1.2;
           letter-spacing: -0.03em;
           display: inline-flex;
           align-items: center;
-          gap: 0.6rem;
+          justify-content: center;
+          text-align: center;
         }
-        .about-shouts-item sup {
-          font-size: 0.72em;
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 3px;
-          padding: 0.2em 0.45em;
-          text-transform: uppercase;
+        .about-shouts-brand-wrap {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .about-shouts-brand-image {
+          max-width: min(180px, 80%);
+          max-height: 64px;
+          width: auto;
+          height: auto;
+          object-fit: contain;
+          display: block;
+        }
+        .about-shouts-brand-placeholder {
+          width: 64px;
+          aspect-ratio: 1;
+          border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .about-shouts-p {
