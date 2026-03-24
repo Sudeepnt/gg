@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { getCMSData, saveCMSData, getInquiries, resetPageToDefault, dbHeartbeat, deleteInquiry, uploadCMSReelToR2 } from "../../actions/cmsActions";
+import { getCMSData, saveCMSData, getInquiries, resetPageToDefault, dbHeartbeat, deleteInquiry, uploadCMSReelToR2, uploadCMSImageToR2 } from "../../actions/cmsActions";
 import {
     LayoutDashboard,
     Home,
@@ -183,18 +183,16 @@ export default function AdminDashboard() {
 
         setIsUploading(true);
         try {
-            const fileName = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
-            const filePath = `applications/client-logos/${fileName}`;
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("keyPrefix", "applications/client-logos");
 
-            const { error: uploadError } = await supabase.storage
-                .from('gg-content')
-                .upload(filePath, file);
+            const uploadResult = await uploadCMSImageToR2(formData);
+            if (!uploadResult.success) {
+                throw new Error(uploadResult.error);
+            }
 
-            if (uploadError) throw uploadError;
-
-            const { data: { publicUrl } } = supabase.storage
-                .from('gg-content')
-                .getPublicUrl(filePath);
+            const publicUrl = uploadResult.publicUrl;
 
             const newData = { ...data };
             const normalizedClient = normalizeGGClient(newData.ggProductions.clients[index]);

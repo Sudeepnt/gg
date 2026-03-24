@@ -318,3 +318,42 @@ export async function uploadCMSReelToR2(formData: FormData) {
         };
     }
 }
+
+export async function uploadCMSImageToR2(formData: FormData) {
+    try {
+        const file = formData.get("file");
+        const keyPrefix = String(formData.get("keyPrefix") || "applications/client-logos");
+        const bucket = process.env.CLOUDFLARE_R2_BUCKET_NAME || "gg-content";
+
+        if (!(file instanceof File)) {
+            throw new Error("No file provided.");
+        }
+
+        if (!file.type.startsWith("image/")) {
+            throw new Error("Please upload an image file.");
+        }
+
+        const fileName = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
+        const objectKey = `${keyPrefix}/${fileName}`;
+        const arrayBuffer = await file.arrayBuffer();
+
+        await getR2Client().send(new PutObjectCommand({
+            Bucket: bucket,
+            Key: objectKey,
+            Body: Buffer.from(arrayBuffer),
+            ContentType: file.type,
+            CacheControl: "public, max-age=31536000, immutable"
+        }));
+
+        return {
+            success: true,
+            publicUrl: `${getR2PublicBaseUrl()}/${objectKey}`
+        };
+    } catch (e: any) {
+        console.error("R2 image upload failed:", e);
+        return {
+            success: false,
+            error: e.message || "Unknown R2 upload error"
+        };
+    }
+}
