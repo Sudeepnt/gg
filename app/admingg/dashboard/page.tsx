@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { getCMSData, saveCMSData, getInquiries, resetPageToDefault, dbHeartbeat, deleteInquiry } from "../../actions/cmsActions";
+import { getCMSData, saveCMSData, getInquiries, resetPageToDefault, dbHeartbeat, deleteInquiry, uploadCMSReelToR2 } from "../../actions/cmsActions";
 import {
     LayoutDashboard,
     Home,
@@ -231,19 +231,16 @@ export default function AdminDashboard() {
             setUploadProgress(0);
 
             try {
-                const fileName = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
-                const filePath = `applications/hero-reels/${fileName}`;
+                const formData = new FormData();
+                formData.append("file", file);
+                formData.append("keyPrefix", "applications/hero-reels");
 
-                const { data: uploadData, error: uploadError } = await supabase.storage
-                    .from('gg-content')
-                    .upload(filePath, file);
+                const uploadResult = await uploadCMSReelToR2(formData);
+                if (!uploadResult.success) {
+                    throw new Error(uploadResult.error);
+                }
 
-                if (uploadError) throw uploadError;
-
-                // Get public URL
-                const { data: { publicUrl } } = supabase.storage
-                    .from('gg-content')
-                    .getPublicUrl(filePath);
+                const publicUrl = uploadResult.publicUrl;
 
                 // Update CMS data state
                 const newData = { ...data };

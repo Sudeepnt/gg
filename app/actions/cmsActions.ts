@@ -2,6 +2,7 @@
 
 import fs from "fs/promises";
 import path from "path";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { supabase } from "../lib/supabase";
 
 // Helper to get local factory defaults
@@ -249,5 +250,71 @@ export async function dbHeartbeat() {
     } catch (e) {
         console.error("Heartbeat failed:", e);
         return { success: false };
+    }
+}
+
+function getR2Client() {
+    const endpoint = process.env.CLOUDFLARE_R2_ENDPOINT;
+    const accessKeyId = process.env.CLOUDFLARE_R2_ACCESS_KEY_ID;
+    const secretAccessKey = process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY;
+
+    if (!endpoint || !accessKeyId || !secretAccessKey) {
+        throw new Error("Cloudflare R2 configuration is missing.");
+    }
+
+    return new S3Client({
+        region: "auto",
+        endpoint,
+        credentials: {
+            accessKeyId,
+            secretAccessKey
+        }
+    });
+}
+
+function getR2PublicBaseUrl() {
+    const publicBaseUrl = process.env.CLOUDFLARE_R2_PUBLIC_BASE_URL;
+    if (!publicBaseUrl) {
+        throw new Error("Cloudflare R2 public base URL is missing.");
+    }
+    return publicBaseUrl.replace(/\/$/, "");
+}
+
+export async function uploadCMSReelToR2(formData: FormData) {
+    try {
+        const file = formData.get("file");
+        const keyPrefix = String(formData.get("keyPrefix") || "applications/hero-reels");
+        const bucket = process.env.CLOUDFLARE_R2_BUCKET_NAME || "gg-content";
+
+        if (!(file instanceof File)) {
+            throw new Error("No file provided.");
+        }
+
+        if (!file.type.startsWith("video/")) {
+            throw new Error("Please upload a video file.");
+        }
+
+        const fileName = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
+        const objectKey = `${keyPrefix}/${fileName}`;
+        const arrayBuffer = await file.arrayBuffer();
+
+        await getR2Client().send(new PutObjectCommand({
+            Bucket: bucket,
+            Key: objectKey,
+            Body: Buffer.from(arrayBuffer),
+            ContentType: file.type,
+            CacheControl: "public, max-age=31536000, immutable"
+        }));
+
+        return {
+            success: true,
+            publicUrl: `${getR2PublicBaseUrl()}/${objectKey}`
+        };
+    } catch (e: any) {
+        console.error("R2 reel upload failed:", e);
+        return {
+            success: false,
+            error: e.message || "Unknown R2 upload error"
+        };
     }
 }
