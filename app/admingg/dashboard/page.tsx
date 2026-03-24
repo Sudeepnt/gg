@@ -164,6 +164,53 @@ export default function AdminDashboard() {
     const [saveSuccess, setSaveSuccess] = useState(false);
     const router = useRouter();
 
+    const normalizeGGClient = (client: any) => {
+        if (typeof client === "string") {
+            return { name: client, image: "" };
+        }
+
+        return {
+            name: client?.name || client?.title || client?.label || "",
+            image: client?.image || client?.logo || client?.brandImage || ""
+        };
+    };
+
+    const handleGGClientLogoUpload = async (file: File, index: number) => {
+        if (!file.type.startsWith('image/')) {
+            alert('Please upload an image file.');
+            return;
+        }
+
+        setIsUploading(true);
+        try {
+            const fileName = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
+            const filePath = `applications/client-logos/${fileName}`;
+
+            const { error: uploadError } = await supabase.storage
+                .from('gg-content')
+                .upload(filePath, file);
+
+            if (uploadError) throw uploadError;
+
+            const { data: { publicUrl } } = supabase.storage
+                .from('gg-content')
+                .getPublicUrl(filePath);
+
+            const newData = { ...data };
+            const normalizedClient = normalizeGGClient(newData.ggProductions.clients[index]);
+            newData.ggProductions.clients[index] = {
+                ...normalizedClient,
+                image: publicUrl
+            };
+            setData(newData);
+        } catch (error: any) {
+            console.error("Upload error:", error);
+            alert(`Upload failed: ${error.message}. Make sure the "gg-content" bucket exists and has public policies.`);
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
     const renderVideoUpload = (label: string, value: string, path: string[]) => {
         const onUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
             const file = e.target.files?.[0];
@@ -1141,7 +1188,7 @@ export default function AdminDashboard() {
                                         <button
                                             onClick={() => {
                                                 const newData = { ...data };
-                                                newData.ggProductions.clients.push("");
+                                                newData.ggProductions.clients.push({ name: "", image: "" });
                                                 setData(newData);
                                             }}
                                             className="flex items-center gap-1.5 px-3 py-1.5 bg-[#1A2E35] text-white rounded-lg font-bold text-[10px] hover:bg-opacity-90 transition-all uppercase tracking-wider"
@@ -1150,18 +1197,77 @@ export default function AdminDashboard() {
                                         </button>
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                                        {data.ggProductions.clients.map((v: string, i: number) => (
-                                            <div key={i} className="relative group">
-                                                <input
-                                                    type="text"
-                                                    value={v}
-                                                    onChange={(e) => {
-                                                        const newData = { ...data };
-                                                        newData.ggProductions.clients[i] = e.target.value;
-                                                        setData(newData);
-                                                    }}
-                                                    className="w-full bg-gray-50 border border-gray-100 rounded-lg px-4 py-2.5 text-sm select-text cursor-text focus:outline-none focus:ring-1 focus:ring-[#1A2E35] pr-10"
-                                                />
+                                        {data.ggProductions.clients.map((client: any, i: number) => {
+                                            const normalizedClient = normalizeGGClient(client);
+
+                                            return (
+                                            <div key={i} className="relative group bg-gray-50 border border-gray-100 rounded-xl p-4 space-y-3">
+                                                <div>
+                                                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Client Name</label>
+                                                    <input
+                                                        type="text"
+                                                        value={normalizedClient.name}
+                                                        onChange={(e) => {
+                                                            const newData = { ...data };
+                                                            newData.ggProductions.clients[i] = {
+                                                                ...normalizedClient,
+                                                                name: e.target.value
+                                                            };
+                                                            setData(newData);
+                                                        }}
+                                                        className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-sm select-text cursor-text focus:outline-none focus:ring-1 focus:ring-[#1A2E35] pr-10"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Client Image / Logo</label>
+                                                    <div
+                                                        className={`p-4 bg-white border-2 border-dashed rounded-xl transition-all ${isUploading ? 'border-gray-200 opacity-60' : 'border-gray-200 hover:border-[#1A2E35]/30 hover:bg-gray-50'} cursor-pointer`}
+                                                        onClick={() => document.getElementById(`gg-client-logo-${i}`)?.click()}
+                                                        onDragOver={(e) => {
+                                                            e.preventDefault();
+                                                        }}
+                                                        onDrop={(e) => {
+                                                            e.preventDefault();
+                                                            const file = e.dataTransfer.files?.[0];
+                                                            if (file) {
+                                                                void handleGGClientLogoUpload(file, i);
+                                                            }
+                                                        }}
+                                                    >
+                                                        <div className="flex flex-col items-center justify-center gap-3 text-center">
+                                                            {normalizedClient.image ? (
+                                                                <img
+                                                                    src={normalizedClient.image}
+                                                                    alt={normalizedClient.name || `Client ${i + 1}`}
+                                                                    className="w-16 h-16 object-contain border border-gray-200 rounded-lg bg-gray-50 p-2"
+                                                                />
+                                                            ) : (
+                                                                <div className="w-16 h-16 border border-gray-200 rounded-lg bg-gray-50" />
+                                                            )}
+                                                            <div>
+                                                                <p className="text-[11px] font-bold text-gray-600">
+                                                                    {normalizedClient.image ? 'Change client logo' : 'Upload client logo'}
+                                                                </p>
+                                                                <p className="text-[10px] text-gray-400 uppercase tracking-wider">
+                                                                    Drag image here or click to browse
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <input
+                                                            id={`gg-client-logo-${i}`}
+                                                            type="file"
+                                                            className="hidden"
+                                                            accept="image/*"
+                                                            onChange={(e) => {
+                                                                const file = e.target.files?.[0];
+                                                                if (file) {
+                                                                    void handleGGClientLogoUpload(file, i);
+                                                                }
+                                                            }}
+                                                            disabled={isUploading}
+                                                        />
+                                                    </div>
+                                                </div>
                                                 <button
                                                     onClick={() => {
                                                         const newData = { ...data };
@@ -1174,7 +1280,7 @@ export default function AdminDashboard() {
                                                     <Trash2 size={14} />
                                                 </button>
                                             </div>
-                                        ))}
+                                        )})}
                                     </div>
                                     <div className="pt-8 border-t border-gray-100 space-y-6">
                                         {renderInput("Footer Banner Title", data.ggProductions.footerTitle, ["ggProductions", "footerTitle"])}
