@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Play, Pause, Volume2, VolumeX, X } from "lucide-react";
 import Link from "next/link";
 import ParticleText from "../animations/ParticleText";
-import { getCMSData } from "../actions/cmsActions";
+import { getCMSDataClient } from "../lib/cmsClient";
 
 export default function AboutPage() {
   const rootRef = useRef<HTMLElement | null>(null);
@@ -15,6 +15,8 @@ export default function AboutPage() {
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [isInlineReelReady, setIsInlineReelReady] = useState(false);
+  const inlineReelRef = useRef<HTMLVideoElement>(null);
   const [content, setContent] = useState({
     particleText: "GG PRODUCTIONS",
     brief: [
@@ -56,7 +58,7 @@ export default function AboutPage() {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const cmsData = await getCMSData();
+        const cmsData = await getCMSDataClient();
         if (cmsData) {
           const ggData = cmsData.ggProductions || {};
           setContent({
@@ -80,6 +82,18 @@ export default function AboutPage() {
     };
     fetchContent();
   }, []);
+
+  useEffect(() => {
+    setIsInlineReelReady(false);
+    if (!(content as any).playReelVideo || !inlineReelRef.current) return;
+
+    const inlineVideo = inlineReelRef.current;
+    inlineVideo.muted = true;
+    const playPromise = inlineVideo.play();
+    if (playPromise && typeof playPromise.catch === "function") {
+      playPromise.catch(() => {});
+    }
+  }, [(content as any).playReelVideo]);
 
   const togglePlay = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
@@ -182,10 +196,32 @@ export default function AboutPage() {
             }}
           >
             <img
-              src="https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/ReelfirstImage/Heroimage.png"
+              src="https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/Reel%20Preview.png"
               alt="GG Productions reel preview"
               className="about-brief-reel-preview"
             />
+            {(content as any).playReelVideo && (
+              <video
+                ref={inlineReelRef}
+                key={(content as any).playReelVideo}
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="auto"
+                onCanPlay={() => {
+                  setIsInlineReelReady(true);
+                  const playPromise = inlineReelRef.current?.play();
+                  if (playPromise && typeof playPromise.catch === "function") {
+                    playPromise.catch(() => {});
+                  }
+                }}
+                onError={() => setIsInlineReelReady(false)}
+                className={`about-brief-reel-video transition-opacity duration-300 ${isInlineReelReady ? "opacity-100" : "opacity-0"}`}
+              >
+                <source src={(content as any).playReelVideo} type="video/mp4" />
+              </video>
+            )}
           </figure>
 
           <div className="about-brief-text">

@@ -17,9 +17,12 @@ export default function Footer() {
     const [isMuted, setIsMuted] = useState(false);
     const [progress, setProgress] = useState(0);
     const [content, setContent] = useState<any>(null);
+    const [isContentLoaded, setIsContentLoaded] = useState(false);
     const [projects, setProjects] = useState<any[]>([]);
     const [hasProjects, setHasProjects] = useState(false);
+    const [isInlineReelReady, setIsInlineReelReady] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
+    const inlineReelRef = useRef<HTMLVideoElement>(null);
 
     useEffect(() => {
         const fetchContent = async () => {
@@ -34,10 +37,24 @@ export default function Footer() {
                 }
             } catch (e) {
                 console.error(e);
+            } finally {
+                setIsContentLoaded(true);
             }
         };
         fetchContent();
     }, []);
+
+    useEffect(() => {
+        setIsInlineReelReady(false);
+        if (!content?.playReelVideo || !inlineReelRef.current) return;
+
+        const inlineVideo = inlineReelRef.current;
+        inlineVideo.muted = true;
+        const playPromise = inlineVideo.play();
+        if (playPromise && typeof playPromise.catch === 'function') {
+            playPromise.catch(() => {});
+        }
+    }, [content?.playReelVideo]);
 
     const togglePlay = (e?: React.MouseEvent) => {
         if (e) e.stopPropagation();
@@ -164,10 +181,32 @@ export default function Footer() {
                                 className={`col-span-2 lg:col-span-1 ${content?.playReelVideo ? 'bg-black cursor-pointer' : 'bg-black'} h-[122px] md:h-auto w-full lg:w-[85%] rounded-[1px] flex flex-col justify-between relative overflow-hidden order-2`}
                             >
                                 <img
-                                    src="https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/ReelfirstImage/Heroimage.png"
+                                    src="https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/Reel%20Preview.png"
                                     alt="Reel preview"
                                     className="absolute inset-0 w-full h-full object-cover"
                                 />
+                                {content?.playReelVideo && (
+                                    <video
+                                        ref={inlineReelRef}
+                                        key={content.playReelVideo}
+                                        autoPlay
+                                        loop
+                                        muted
+                                        playsInline
+                                        preload="auto"
+                                        onCanPlay={() => {
+                                            setIsInlineReelReady(true);
+                                            const playPromise = inlineReelRef.current?.play();
+                                            if (playPromise && typeof playPromise.catch === 'function') {
+                                                playPromise.catch(() => {});
+                                            }
+                                        }}
+                                        onError={() => setIsInlineReelReady(false)}
+                                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${isInlineReelReady ? 'opacity-100' : 'opacity-0'}`}
+                                    >
+                                        <source src={content.playReelVideo} type="video/mp4" />
+                                    </video>
+                                )}
                                 <div className="absolute bottom-2 right-3">
                                     <div className="relative overflow-hidden border border-white/10 transition-[background-size,color] duration-300 bg-no-repeat bg-right hover:bg-left bg-black text-white hover:text-black bg-gradient-to-r from-white to-white bg-[length:0%_100%] hover:bg-[length:100%_100%] px-3 py-1.5 flex items-center gap-2">
                                         <span className="relative z-10 text-[9px] md:text-[11px] font-bold tracking-widest leading-none">Play Reel</span>

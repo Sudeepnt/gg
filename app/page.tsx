@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import ParticleText from './animations/ParticleText';
 import CookieConsent from './animations/CookieConsent';
-import { getCMSData } from "./actions/cmsActions";
+import { getCMSDataClient } from "./lib/cmsClient";
 
 export default function Home() {
   const [content, setContent] = useState({
@@ -13,7 +13,7 @@ export default function Home() {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const cmsData = await getCMSData();
+        const cmsData = await getCMSDataClient();
         if (cmsData && cmsData.home) {
           setContent(cmsData.home);
         }
