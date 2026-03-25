@@ -201,6 +201,11 @@ export default function AdminDashboard() {
                 image: publicUrl
             };
             setData(newData);
+
+            const saveResult = await saveCMSData(newData);
+            if (!saveResult.success) {
+                throw new Error(saveResult.error?.message || "Failed to save logo URL.");
+            }
         } catch (error: any) {
             console.error("Upload error:", error);
             alert(`Upload failed: ${error.message}. Make sure the "gg-content" bucket exists and has public policies.`);
@@ -248,6 +253,11 @@ export default function AdminDashboard() {
                 }
                 current[path[path.length - 1]] = publicUrl;
                 setData(newData);
+
+                const saveResult = await saveCMSData(newData);
+                if (!saveResult.success) {
+                    throw new Error(saveResult.error?.message || "Failed to save video URL.");
+                }
 
                 alert("Video uploaded and URL updated!");
             } catch (error: any) {
@@ -299,7 +309,7 @@ export default function AdminDashboard() {
                             {isUploading ? "Uploading video..." : "Upload or replace video reel"}
                         </p>
                         <p className="text-[10px] text-gray-400 uppercase tracking-wider">
-                            Supabase Storage (gg-content bucket)
+                            Cloudflare R2 (gg-content bucket)
                         </p>
                         <p className="text-[10px] text-gray-400 uppercase tracking-wider">
                             Max file size: {MAX_REEL_VIDEO_SIZE_MB}MB
