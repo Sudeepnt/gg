@@ -223,6 +223,7 @@ export default function AboutPage() {
               </video>
             )}
           </figure>
+          <p className="about-brief-reel-label">Animation</p>
 
           <div className="about-brief-text">
             {content.brief.map((p, i) => (
@@ -453,6 +454,15 @@ export default function AboutPage() {
         }
         .about-brief-reel-video {
           z-index: 1;
+        }
+        .about-brief-reel-label {
+          margin: 1rem 6vw 0 6vw;
+          text-align: center;
+          font-size: clamp(10px, 0.75vw, 12px);
+          font-weight: 700;
+          letter-spacing: 0.3em;
+          text-transform: uppercase;
+          color: rgba(255, 255, 255, 0.75);
         }
         .about-brief-text {
           margin: clamp(4rem, 10vw, 8rem) 6vw 0 6vw;

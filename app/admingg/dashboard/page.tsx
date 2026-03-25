@@ -162,6 +162,7 @@ export default function AdminDashboard() {
     const [isUploading, setIsUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
     const [saveSuccess, setSaveSuccess] = useState(false);
+    const [isAuthChecked, setIsAuthChecked] = useState(false);
     const router = useRouter();
 
     const normalizeGGClient = (client: any) => {
@@ -215,11 +216,7 @@ export default function AdminDashboard() {
     };
 
     const renderVideoUpload = (label: string, value: string, path: string[]) => {
-        const onUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-            const file = e.target.files?.[0];
-            if (!file) return;
-
-            // Simple validation
+        const uploadVideoFile = async (file: File) => {
             if (!file.type.startsWith('video/')) {
                 alert('Please upload a video file.');
                 return;
@@ -268,8 +265,26 @@ export default function AdminDashboard() {
             }
         };
 
+        const onUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            await uploadVideoFile(file);
+        };
+
         return (
-            <div className="mb-8 p-6 bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl transition-all hover:bg-white hover:border-[#1A2E35]/30">
+            <div
+                className="mb-8 p-6 bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl transition-all hover:bg-white hover:border-[#1A2E35]/30"
+                onDragOver={(e) => {
+                    e.preventDefault();
+                }}
+                onDrop={(e) => {
+                    e.preventDefault();
+                    const file = e.dataTransfer.files?.[0];
+                    if (file) {
+                        void uploadVideoFile(file);
+                    }
+                }}
+            >
                 <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em] mb-4">
                     {label}
                 </label>
@@ -339,12 +354,15 @@ export default function AdminDashboard() {
     };
 
     useEffect(() => {
-        // Simple auth check
-        const auth = localStorage.getItem("admin_auth");
+        const auth = sessionStorage.getItem("admin_auth");
+        localStorage.removeItem("admin_auth");
         if (auth !== "true") {
-            router.push("/admingg");
+            setIsAuthChecked(true);
+            router.replace("/admingg");
             return;
         }
+
+        setIsAuthChecked(true);
 
         const fetchData = async () => {
             const cmsData = await getCMSData();
@@ -399,6 +417,7 @@ export default function AdminDashboard() {
     };
 
     const handleLogout = () => {
+        sessionStorage.removeItem("admin_auth");
         localStorage.removeItem("admin_auth");
         router.push("/admingg");
     };
@@ -531,7 +550,7 @@ export default function AdminDashboard() {
         }
     };
 
-    if (!data) return <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center font-sans">Loading...</div>;
+    if (!isAuthChecked || !data) return <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center font-sans">Loading...</div>;
 
     const tabs = [
         { id: "inquiries", label: "General Inquiries", icon: ListFilter },
@@ -1226,7 +1245,7 @@ export default function AdminDashboard() {
                                                 <div>
                                                     <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Client Image / Logo</label>
                                                     <div
-                                                        className={`p-4 bg-white border-2 border-dashed rounded-xl transition-all ${isUploading ? 'border-gray-200 opacity-60' : 'border-gray-200 hover:border-[#1A2E35]/30 hover:bg-gray-50'} cursor-pointer`}
+                                                        className={`relative p-4 bg-white border-2 border-dashed rounded-xl transition-all ${isUploading ? 'border-gray-200 opacity-60' : 'border-gray-200 hover:border-[#1A2E35]/30 hover:bg-gray-50'} cursor-pointer`}
                                                         onClick={() => document.getElementById(`gg-client-logo-${i}`)?.click()}
                                                         onDragOver={(e) => {
                                                             e.preventDefault();
@@ -1239,6 +1258,24 @@ export default function AdminDashboard() {
                                                             }
                                                         }}
                                                     >
+                                                        {normalizedClient.image && (
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    e.stopPropagation();
+                                                                    const newData = { ...data };
+                                                                    newData.ggProductions.clients[i] = {
+                                                                        ...normalizedClient,
+                                                                        image: ""
+                                                                    };
+                                                                    setData(newData);
+                                                                }}
+                                                                className="absolute right-3 top-3 p-1.5 text-gray-300 hover:text-red-500 transition-colors bg-white rounded-md border border-gray-100"
+                                                                title="Remove Logo"
+                                                            >
+                                                                <X size={14} />
+                                                            </button>
+                                                        )}
                                                         <div className="flex flex-col items-center justify-center gap-3 text-center">
                                                             {normalizedClient.image ? (
                                                                 <img
@@ -1279,8 +1316,8 @@ export default function AdminDashboard() {
                                                         newData.ggProductions.clients.splice(i, 1);
                                                         setData(newData);
                                                     }}
-                                                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-gray-300 hover:text-red-500 transition-colors"
-                                                    title="Remove Client"
+                                                    className="absolute right-3 top-3 p-1.5 text-gray-300 hover:text-red-500 transition-colors"
+                                                    title="Delete Client"
                                                 >
                                                     <Trash2 size={14} />
                                                 </button>
