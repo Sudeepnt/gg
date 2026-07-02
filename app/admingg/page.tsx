@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
@@ -9,11 +9,15 @@ export default function AdminLoginPage() {
     const [error, setError] = useState("");
     const router = useRouter();
 
+    useEffect(() => {
+        localStorage.removeItem("admin_auth");
+    }, []);
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (password === "gg5656") {
-            // In a real app, we'd use a secure cookie or session
-            localStorage.setItem("admin_auth", "true");
+            sessionStorage.setItem("admin_auth", "true");
+            localStorage.removeItem("admin_auth");
             router.push("/admingg/dashboard");
         } else {
             setError("Incorrect password");

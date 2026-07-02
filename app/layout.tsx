@@ -60,8 +60,8 @@ export const metadata: Metadata = {
     images: ["/logos/logo1black.png"],
   },
   icons: {
-    icon: "/logos/logo1white.png",
-    apple: "/logos/logo1white.png",
+    icon: "/logos/logo1black.png",
+    apple: "/logos/logo1black.png",
   },
 };
 

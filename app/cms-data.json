@@ -1,7 +1,7 @@
 {
   "home": {
     "particleText": "Gattabara Games",
-    "playReelVideo": "https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/hero-reels/1771752371285-26619-359604050_tiny.mp4",
+    "playReelVideo": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/hero-reels/1774408082516-GG_Website_Showreel-(1)-(1).mp4",
     "socials": {
       "instagram": "https://instagram.com/gattabaragames",
       "twitter": "https://twitter.com/gattabaragames",
@@ -41,36 +41,22 @@
     ],
     "clientsTitle": "Our Clients",
     "clients": [
-      "Nexon Games MapleStory Worlds",
-      "Singular Scheme",
-      "BattleBucks",
+      {
+        "name": "BattleBucks",
+        "image": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/client-logos/1774422694532-Screenshot-2026-03-09-at-1.11.52-PM.png"
+      },
       "Magadha Studios",
       "Qila Games",
-      "Studio Cupcakes"
+      "Studio Cupcakes",
+      {
+        "name": "Silvine Game Studios",
+        "image": ""
+      }
     ],
     "footerTitle": "Looking for a game development partner?",
     "footerCta": "Let's make magic",
     "copyright": "Gattabara Games",
-    "projects": [
-      {
-        "title": "NEasdfWfasdfd PasROJECTasdfasd",
-        "image": "https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/projects/1771751411399-Screenshot-2026-02-18-at-10.00.08-PM.png",
-        "description": "Describe your project here...sdf",
-        "screenshots": [
-          "https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/screenshots/1771751422654-Screenshot-2026-02-18-at-8.38.21-PM.png"
-        ],
-        "wishlistOn": [
-          {
-            "label": "Steam",
-            "url": "asdf"
-          }
-        ],
-        "followOn": [],
-        "availableOn": [],
-        "sub": "fasdf",
-        "developedBy": "fasdf"
-      }
-    ]
+    "projects": []
   },
   "pitch": {
     "title": "Inbound Form",
@@ -93,7 +79,7 @@
     "buttonText": "Send",
     "companyName": "Gattabara Games",
     "email": "info@gattabaragames.com",
-    "phone": "+91 9900114038",
+    "phone": " ",
     "address1": "No. 55, 1st Floor, 10th Cross, 2nd Stage, Mahalakshmipuram,",
     "address2": "WOC Road, Bengaluru, Karnataka,",
     "address3": "India - 560086"
@@ -147,7 +133,7 @@
       "howHeardHint": "(Referral, person, event, community, etc. Helps us route your submission internally.)",
       "notRobot": "I'm not a robot",
       "chooseFile": "Choose a file to upload",
-      "dragDrop": "or drag and drop here",
+      "dragDrop": "",
       "submit": "Submit",
       "submitting": "Submitting...",
       "submitted": "Submitted!",
@@ -157,47 +143,5 @@
       "successButton": "Return to Pitch Page"
     }
   },
-  "projects": [
-    {
-      "sub": "Describe your project here...sdfsdfasdfasdf",
-      "image": "https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/projects/1771748632570-Screenshot-2026-02-19-at-3.19.53-PM.png",
-      "title": "xxxxDescribe your project here...sdfsdfasdfasdf",
-      "video": "https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/project-videos/1771750612201-26619-359604050_tiny.mp4",
-      "followOn": [
-        {
-          "url": "Describe your project here...sdfsdfasdfasdf",
-          "label": "YouTube"
-        },
-        {
-          "url": "Describe your project here...sdfsdfasdfasdf",
-          "label": "Twitter"
-        },
-        {
-          "url": "Describe your project here...sdfsdfasdfasdf",
-          "label": "Discord"
-        }
-      ],
-      "wishlistOn": [
-        {
-          "url": "https://www.ringg.ai/ads/ai-customer-support?utm_source=google&utm_medium=search&utm_campaign=ai_customer_support&ad_device=c&keyword=conversational%20ai%20in%20customer%20service&gad_source=1&gad_campaignid=23387129019&gbraid=0AAAAA_zsJUQjFGGOnATgSZdw3UM6gAO1G",
-          "label": "Steam"
-        },
-        {
-          "url": "Describe your project here...sdfsdfasdfasdf",
-          "label": "Epic"
-        }
-      ],
-      "availableOn": [
-        {
-          "url": "Describe your project here...sdfsdfasdfasdf",
-          "label": "Console"
-        }
-      ],
-      "description": "Describe your project here...sdfsdfasdfasdfDescribe your project here...sdfsdfasdfasdfDescribe your project here...sdfsdfasdfasdfDescribe your project here...sdfsdfasdfasdfDescribe your project here...sdfsdfasdfasdfDescribe your project here...sdfsdfasdfasdf",
-      "developedBy": "Describe your project here...sdfsdfasdfasdf",
-      "screenshots": [
-        "https://ldvdieoeccelcsaesajq.supabase.co/storage/v1/object/public/gg-content/applications/screenshots/1771750621154-Screenshot-2026-02-16-at-11.56.34-AM.png"
-      ]
-    }
-  ]
+  "projects": []
 }
