@@ -6,7 +6,7 @@ import crypto from "crypto";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { sbConfig } from "@/lib/supabaseRest";
-import { BACKUP_ROW, CONTENT_ROW, bundledContent, mergeContent, readRow, type Row } from "@/lib/content";
+import { BACKUP_KEY, CMS_ROW, SITE_KEY, bundledContent, mergeContent, readRow, type Row } from "@/lib/content";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 /* Admin back end for the current site. No database: content is one JSON file (src/content/site-content.json).
@@ -37,39 +37,39 @@ export async function logoutAdmin() {
   return { ok: true };
 }
 
-/* ---- content: Supabase table cms_settings (row 2 = live, row 3 = previous version); local file only when Supabase isn't configured ---- */
-async function writeRow(id: number, data: any, matchUpdatedAt?: string | null) {
+/* ---- content: Supabase table cms_settings, row 1, keys data.site (live) and data.site_backup (previous). Other keys are preserved. ---- */
+type Slice = { site?: any; backup?: any };
+/* write `slice` into row 1's data, keeping every other key; compare-and-swap on updated_at so two editors can't overwrite each other.
+   returns the saved row, or null when the row changed since `version` was read */
+async function writeSlice(current: Row | null, slice: Slice, version: string | null): Promise<Row | null> {
   const c = sbConfig()!;
   const now = new Date().toISOString();
-  const body = JSON.stringify({ id, data, default_data: bundledContent, updated_at: now });
+  const data = { ...(current?.data || {}) } as Record<string, any>;
+  if (slice.site !== undefined) data[SITE_KEY] = slice.site;
+  if (slice.backup !== undefined) data[BACKUP_KEY] = slice.backup;
   const h = { ...c.headers, "Content-Type": "application/json", Prefer: "return=representation" };
-  if (matchUpdatedAt !== undefined) {
-    /* compare-and-swap: only update if nobody saved since this editor loaded */
-    if (matchUpdatedAt === null) {
-      const r = await fetch(`${c.url}/rest/v1/cms_settings`, { method: "POST", headers: { ...h, Prefer: "return=representation,resolution=ignore-duplicates" }, body });
-      if (!r.ok) throw new Error(`Save failed (${r.status}) ${(await r.text()).slice(0, 160)}`);
-      return ((await r.json()) as Row[])[0] || null;               /* null = a row appeared meanwhile */
-    }
-    const r = await fetch(`${c.url}/rest/v1/cms_settings?id=eq.${id}&updated_at=eq.${encodeURIComponent(matchUpdatedAt)}`, { method: "PATCH", headers: h, body: JSON.stringify({ data, default_data: bundledContent, updated_at: now }) });
+  if (!current) {
+    const r = await fetch(`${c.url}/rest/v1/cms_settings`, { method: "POST", headers: { ...h, Prefer: "return=representation,resolution=ignore-duplicates" }, body: JSON.stringify({ id: CMS_ROW, data, default_data: bundledContent, updated_at: now }) });
     if (!r.ok) throw new Error(`Save failed (${r.status}) ${(await r.text()).slice(0, 160)}`);
-    return ((await r.json()) as Row[])[0] || null;                  /* null = changed elsewhere */
+    return ((await r.json()) as Row[])[0] || null;                  /* null = a row appeared meanwhile */
   }
-  const r = await fetch(`${c.url}/rest/v1/cms_settings?on_conflict=id`, { method: "POST", headers: { ...h, Prefer: "return=representation,resolution=merge-duplicates" }, body });
+  const r = await fetch(`${c.url}/rest/v1/cms_settings?id=eq.${CMS_ROW}&updated_at=eq.${encodeURIComponent(version || current.updated_at)}`, { method: "PATCH", headers: h, body: JSON.stringify({ data, updated_at: now }) });
   if (!r.ok) throw new Error(`Save failed (${r.status}) ${(await r.text()).slice(0, 160)}`);
-  return ((await r.json()) as Row[])[0];
+  return ((await r.json()) as Row[])[0] || null;                    /* null = changed elsewhere */
 }
 
 export async function getSiteContent() {
   try {
     await requireAdmin();
     if (sbConfig()) {
-      const [row, backup] = await Promise.all([readRow(CONTENT_ROW), readRow(BACKUP_ROW)]);
-      return { ok: true as const, content: mergeContent(bundledContent, row?.data), canSave: true, storage: "database" as const, version: row?.updated_at ?? null, hasBackup: !!backup };
+      const row = await readRow();
+      return { ok: true as const, content: mergeContent(bundledContent, row?.data?.[SITE_KEY]), canSave: true, storage: "database" as const, version: row?.updated_at ?? null, hasBackup: !!row?.data?.[BACKUP_KEY] };
     }
     const content = JSON.parse(await fs.readFile(CONTENT_FILE, "utf-8"));
     return { ok: true as const, content, canSave: canWrite(), storage: "file" as const, version: null, hasBackup: false };
   } catch (e: any) {
-    return { ok: false as const, error: e.message || "Could not load content" };
+    const m = String(e?.message || "");
+    return { ok: false as const, error: /not authori[sz]ed/i.test(m) ? m : /fetch failed|ECONN|ENOTFOUND|timeout/i.test(m) ? "Could not reach the database (Supabase). Your content is safe. Check the connection and try again." : m || "Could not load content" };
   }
 }
 
@@ -78,13 +78,13 @@ export async function saveSiteContent(content: any, version: string | null) {
     await requireAdmin();
     if (!content || typeof content !== "object" || !Array.isArray(content.games) || !Array.isArray(content.news)) throw new Error("That does not look like site content.");
     if (sbConfig()) {
-      const current = await readRow(CONTENT_ROW);
+      const current = await readRow();
       if ((current?.updated_at ?? null) !== (version ?? null)) return { ok: false, conflict: true, error: "The content was changed somewhere else since you opened this page. Press Export to keep your edits, then reload to see the latest version." };
-      if (current) await writeRow(BACKUP_ROW, current.data);       /* one-step undo */
-      const saved = await writeRow(CONTENT_ROW, content, current ? current.updated_at : null);
+      const previous = current?.data?.[SITE_KEY];
+      const saved = await writeSlice(current, { site: content, ...(previous ? { backup: previous } : {}) }, version);   /* previous version kept for one-step undo */
       if (!saved) return { ok: false, conflict: true, error: "The content was changed somewhere else while saving. Press Export to keep your edits, then reload." };
       revalidatePath("/");
-      return { ok: true, version: saved.updated_at, hasBackup: !!current };
+      return { ok: true, version: saved.updated_at, hasBackup: !!previous };
     }
     if (!canWrite()) return { ok: false, error: "Database storage (Supabase) is not configured on this server, so changes can't be saved here." };
     await fs.writeFile(CONTENT_FILE, JSON.stringify(content, null, 2) + "\n", "utf-8");
@@ -100,12 +100,13 @@ export async function restorePreviousContent() {
   try {
     await requireAdmin();
     if (!sbConfig()) throw new Error("Database storage is not configured.");
-    const [current, backup] = await Promise.all([readRow(CONTENT_ROW), readRow(BACKUP_ROW)]);
+    const current = await readRow();
+    const backup = current?.data?.[BACKUP_KEY];
     if (!backup) throw new Error("There is no previous version to restore yet.");
-    if (current) await writeRow(BACKUP_ROW, current.data);
-    const saved = await writeRow(CONTENT_ROW, backup.data);
+    const saved = await writeSlice(current, { site: backup, backup: current?.data?.[SITE_KEY] ?? bundledContent }, current!.updated_at);
+    if (!saved) throw new Error("The content was changed somewhere else while restoring. Reload and try again.");
     revalidatePath("/");
-    return { ok: true, content: mergeContent(bundledContent, backup.data), version: saved.updated_at, hasBackup: true };
+    return { ok: true, content: mergeContent(bundledContent, backup), version: saved.updated_at, hasBackup: true };
   } catch (e: any) {
     return { ok: false, error: e.message || "Restore failed" };
   }

@@ -17,17 +17,24 @@ Every tab uses the same words as the website. Lists (news, games, people, client
 have **Add**, **Remove** and reorder. **All other text** covers every remaining heading, button and label, grouped by section.
 Images and videos upload to the Cloudflare R2 bucket.
 
-Everything is stored in one file: `src/content/site-content.json`.
+Content is stored in **Supabase**, table `cms_settings` (a table that only allows row 1): the live content is `data.site` and the version before
+the last save is `data.site_backup` (the **Restore previous** button puts it back). All other keys in that row belong to the previous site and are preserved.
 
-- **Local / normal server:** *Save All Changes* writes that file and the site updates.
-- **Vercel (read-only disk):** use **Export**, replace `src/content/site-content.json` in the project, commit and redeploy.
-  A database can replace the file later: only `saveSiteContent` / `getSiteContent` in `src/app/actions/adminActions.ts` change.
+- **Save All Changes** writes to the database and the website updates immediately (the public page is also refreshed every minute).
+- If two people edit at once, the second save is refused with a message instead of overwriting the first.
+- If Supabase can't be reached, the public site falls back to the content bundled in `src/content/site-content.json`.
+- Without Supabase configured (local development), saving writes `src/content/site-content.json` instead.
+- **Export / Import** still produce and load that JSON file.
+
+Form submissions (Contact, Pitch us) are saved in the `inquiries` table and listed in **Inquiries** / **Applications** in the admin.
 
 ## Project map
 
 | Path | What it is |
 |---|---|
-| `src/content/site-content.json` | All editable content |
+| `src/content/site-content.json` | Shipped default content (the database holds the live copy) |
+| `src/lib/content.ts`, `src/lib/supabaseRest.ts` | Reading content from Supabase, merge with defaults, fallback |
+| `supabase/setup.sql` | One-time bucket + security setup for Supabase (read its header first) |
 | `src/content/page-texts.json` | Index of the page's static text (for the *All other text* tab). Rebuild with `npm run texts` after changing the markup |
 | `src/content/pageTextRules.js` | Which text is editable and how edits are applied |
 | `src/app/(site)/` | Public site: `page.tsx`, `markup.ts` (the HTML), `globals.css` |
@@ -41,7 +48,8 @@ Everything is stored in one file: `src/content/site-content.json`.
 
 `.env.local` (never committed): `CLOUDFLARE_R2_ENDPOINT`, `CLOUDFLARE_R2_ACCESS_KEY_ID`, `CLOUDFLARE_R2_SECRET_ACCESS_KEY`,
 `CLOUDFLARE_R2_BUCKET_NAME`, `CLOUDFLARE_R2_PUBLIC_BASE_URL` (uploads from the admin).
-Optional: `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` (only used by the public Contact and Pitch forms to store submissions),
+`NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` (or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`): content, forms. Recommended: `SUPABASE_SERVICE_ROLE_KEY` (server only) so the tables can be locked with `supabase/setup.sql`.
+Optional:
 `NEXT_PUBLIC_SITE_URL`, `ADMIN_PASSWORD`, `ADMIN_SECRET`.
 
 ## Known limits
