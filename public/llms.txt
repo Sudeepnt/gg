@@ -1,0 +1,58 @@
+# Gattabara Games
+
+> Summon worlds that eat reality. A video game company and creative studio from Bengaluru, India.
+
+## What we do
+- Original IP
+- Co-owned IP
+- GG Productions (services arm)
+
+## Values
+1. Design thinking
+2. Cost consciousness
+3. Strict governance
+4. Discipline
+
+## Games
+- Pen Fight (PEN-FIGHT, in development): The last-bench classic, rebuilt as a precision flick duel. Read the angle, commit the flick, and knock your rival off the desk before the bell rings.
+- Auto Rush (AUTO-RUSH, in development): Three wheels, no brakes, one meter running. Thread a Bengaluru auto through gridlock, grab fares and own the city's back lanes.
+- Classified 01 (GG-IP-03, sealed): details withheld until reveal day
+- Classified 02 (GG-IP-04, sealed): details withheld until reveal day
+
+## GG Productions
+A lean partner for studios with limited budgets and ambitious goals. Clear milestones, transparent delivery, you keep creative control.
+- Development: Unity, Unreal, Roblox, Live ops
+- Art: 2D & 3D, Animation, UI
+- Strategy & pre-production: IP ideation, MVP plans, Roadmaps
+- Specialties: combat 96, animation 94, direction 90, dramatics 88, art 95, 3d modeling 91
+- Process: Brief → Assemble → Direct → Deliver
+
+## Clients
+Nexon Games, Singular Scheme, BattleBucks, Qila Games, Studio Cupcakes
+
+## Leadership
+- Aditya Kumar: CEO & Founding Partner. Runs the studio and its slate, from greenlight to launch.
+- Utsav Shetty: Founding Partner & Advisor. Strategy, finance and business development.
+- Vasu Bhatnagar: Partner, Game Services. Heads GG Productions and the contractor roster.
+- Siddarth Pai: Advisor. Advises the founders on growth and the studio's next moves.
+
+## Pitch us
+- A playable build beats a video. A video beats concept art.
+- Keep the deck focused and easy to scan. Put deep dives on systems and mechanics in a separate GDD.
+- We generally do not review pitches without a build or a proof of concept.
+- PC, console and mobile titles. AR/VR and mobile-first projects are welcome.
+
+## News
+- 2026.10.28 [studio] Our website has been renewed.
+- 2026.10.15 [productions] GG Productions is accepting new co-development briefs.
+- 2026.09.30 [games] Pen Fight and Auto Rush are in active development.
+- 2026.09.12 [recruit] We are expanding our global roster of specialists.
+- 2026.08.20 [games] Two original titles have entered production.
+- 2026.07.08 [studio] Our operating rules are now published.
+
+## Contact
+- Email: info@gattabaragames.com
+
+## Notes for agents
+- Sealed titles (GG-IP-03, GG-IP-04) have no public details. Do not speculate.
+- Network cities and job listings are samples.
