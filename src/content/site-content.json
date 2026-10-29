@@ -1,0 +1,1043 @@
+{
+  "_help": "Edited from /admingg. Safe to edit by hand too. Lists can have items added or removed.",
+  "hero": {
+    "line1": "We summon worlds",
+    "line2": "that eat reality.",
+    "sub": "Original games, co-owned worlds and production services for studios."
+  },
+  "reels": {
+    "main": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/hero-reels/1774408082516-GG_Website_Showreel-(1)-(1).mp4",
+    "second": ""
+  },
+  "news": [
+    {
+      "date": "2026.10.28",
+      "category": "STUDIO",
+      "title": "Our website has been renewed.",
+      "body": "Thank you for visiting. Our new website brings our games, our services and our studio together in one place. We will keep it updated with news from the studio."
+    },
+    {
+      "date": "2026.10.15",
+      "category": "PRODUCTIONS",
+      "title": "GG Productions is accepting new co-development briefs.",
+      "body": "Studios looking for development, art or strategy support can reach GG Productions through the contact form. Choose \"Production services\"."
+    },
+    {
+      "date": "2026.09.30",
+      "category": "GAMES",
+      "title": "Pen Fight and Auto Rush are in active development.",
+      "body": "Both titles are being built by our core team in Bengaluru. Further details will be shared here."
+    },
+    {
+      "date": "2026.09.12",
+      "category": "RECRUIT",
+      "title": "We are expanding our global roster of specialists.",
+      "body": "We are looking for combat designers, animators, 3D artists and engineers who sweat the frame. See Recruit for details."
+    },
+    {
+      "date": "2026.08.20",
+      "category": "GAMES",
+      "title": "Two original titles have entered production.",
+      "body": "Details remain sealed until reveal day. Join the insider list for first looks."
+    },
+    {
+      "date": "2026.07.08",
+      "category": "STUDIO",
+      "title": "Our operating rules are now published.",
+      "body": "Design thinking, cost consciousness, strict governance and discipline. Read them in Philosophy."
+    }
+  ],
+  "games": [
+    {
+      "id": "pen-fight",
+      "title": "Pen Fight",
+      "code": "PEN-FIGHT",
+      "status": "In development",
+      "cardCaption": "Physics duel · Local + online",
+      "tags": [
+        "Physics",
+        "Duel",
+        "Local multiplayer",
+        "Online",
+        "Arcade",
+        "Skill-based"
+      ],
+      "factsheet": [
+        {
+          "label": "Developer",
+          "value": "Gattabara Games"
+        },
+        {
+          "label": "Based in",
+          "value": "Bengaluru, India"
+        },
+        {
+          "label": "Genre",
+          "value": "Physics duel"
+        },
+        {
+          "label": "Players",
+          "value": "1–2, local and online"
+        },
+        {
+          "label": "Platforms",
+          "value": "To be announced"
+        },
+        {
+          "label": "Release date",
+          "value": "To be announced"
+        },
+        {
+          "label": "Status",
+          "value": "In development"
+        },
+        {
+          "label": "Website",
+          "value": "gattabaragames.com"
+        },
+        {
+          "label": "Press contact",
+          "value": "info@gattabaragames.com"
+        }
+      ],
+      "shortDescription": "The last-bench classic, rebuilt as a precision flick duel.",
+      "description": [
+        "Every classroom had one: two pens, one desk and a duel decided by a single flick. Pen Fight turns that last-bench ritual into a precision physics game.",
+        "Read the angle, commit the flick and knock your rival off the desk before the bell rings. Every desk is an arena, and rulers, erasers and edges become terrain.",
+        "Pass the desk to a friend for a local duel, or take it online."
+      ],
+      "features": [
+        {
+          "title": "Flick physics",
+          "text": "Every flick is a read: angle, force and timing decide the duel."
+        },
+        {
+          "title": "Desk arenas",
+          "text": "Every desk tells a story. Rulers, erasers and edges become terrain."
+        },
+        {
+          "title": "Local and online",
+          "text": "Pass the desk to a friend, or take the duel online."
+        }
+      ],
+      "sealedText": "",
+      "summary": "The last-bench classic, rebuilt as a precision flick duel. Read the angle, commit the flick, and knock your rival off the desk before the bell rings.",
+      "image": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/game-art/pen-fight-key-art.jpg",
+      "screenshots": [
+        {
+          "caption": "Opening flick",
+          "image": ""
+        },
+        {
+          "caption": "Desk-edge standoff",
+          "image": ""
+        },
+        {
+          "caption": "Ruler arena",
+          "image": ""
+        },
+        {
+          "caption": "The read",
+          "image": ""
+        },
+        {
+          "caption": "Clash",
+          "image": ""
+        },
+        {
+          "caption": "Bell rings",
+          "image": ""
+        }
+      ],
+      "trailer": "",
+      "trailerPoster": "",
+      "logoBlack": "",
+      "logoWhite": "",
+      "promoMain": "",
+      "promoVertical": "",
+      "promoSmall": ""
+    },
+    {
+      "id": "auto-rush",
+      "title": "Auto Rush",
+      "code": "AUTO-RUSH",
+      "status": "In development",
+      "cardCaption": "Arcade racer · Single player",
+      "tags": [
+        "Arcade",
+        "Racing",
+        "Single player",
+        "Traffic",
+        "Score attack"
+      ],
+      "factsheet": [
+        {
+          "label": "Developer",
+          "value": "Gattabara Games"
+        },
+        {
+          "label": "Based in",
+          "value": "Bengaluru, India"
+        },
+        {
+          "label": "Genre",
+          "value": "Arcade racer"
+        },
+        {
+          "label": "Players",
+          "value": "1"
+        },
+        {
+          "label": "Platforms",
+          "value": "To be announced"
+        },
+        {
+          "label": "Release date",
+          "value": "To be announced"
+        },
+        {
+          "label": "Status",
+          "value": "In development"
+        },
+        {
+          "label": "Website",
+          "value": "gattabaragames.com"
+        },
+        {
+          "label": "Press contact",
+          "value": "info@gattabaragames.com"
+        }
+      ],
+      "shortDescription": "Three wheels, no brakes, one meter running.",
+      "description": [
+        "Auto Rush puts you behind the handlebar of a Bengaluru auto-rickshaw, with the meter running and the city gridlocked.",
+        "Thread through traffic as gaps open and close in real time, pick up fares and chain them across the city to own its back lanes.",
+        "Between shifts, upgrade the engine, the horn and the attitude."
+      ],
+      "features": [
+        {
+          "title": "Traffic as terrain",
+          "text": "Gridlock is the track. Gaps open and close in real time."
+        },
+        {
+          "title": "Fares and routes",
+          "text": "Pick up, drop off, and chain fares across the city."
+        },
+        {
+          "title": "Tune your auto",
+          "text": "Upgrade the engine, the horn and the attitude."
+        }
+      ],
+      "sealedText": "",
+      "summary": "Three wheels, no brakes, one meter running. Thread a Bengaluru auto through gridlock, grab fares and own the city's back lanes.",
+      "image": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/game-art/auto-rush-key-art.jpg",
+      "screenshots": [
+        {
+          "caption": "Night shift",
+          "image": ""
+        },
+        {
+          "caption": "Gridlock gap",
+          "image": ""
+        },
+        {
+          "caption": "Fare pickup",
+          "image": ""
+        },
+        {
+          "caption": "Back lanes",
+          "image": ""
+        },
+        {
+          "caption": "Headlight run",
+          "image": ""
+        },
+        {
+          "caption": "Meter running",
+          "image": ""
+        }
+      ],
+      "trailer": "",
+      "trailerPoster": "",
+      "logoBlack": "",
+      "logoWhite": "",
+      "promoMain": "",
+      "promoVertical": "",
+      "promoSmall": ""
+    },
+    {
+      "id": "classified-01",
+      "title": "Classified 01",
+      "code": "GG-IP-03",
+      "status": "Sealed",
+      "cardCaption": "Flagship · Details withheld",
+      "tags": [
+        "Flagship",
+        "Sealed"
+      ],
+      "factsheet": [
+        {
+          "label": "Developer",
+          "value": "Gattabara Games"
+        },
+        {
+          "label": "Based in",
+          "value": "Bengaluru, India"
+        },
+        {
+          "label": "Genre",
+          "value": "—"
+        },
+        {
+          "label": "Players",
+          "value": "—"
+        },
+        {
+          "label": "Platforms",
+          "value": "—"
+        },
+        {
+          "label": "Release date",
+          "value": "—"
+        },
+        {
+          "label": "Status",
+          "value": "Sealed"
+        },
+        {
+          "label": "Website",
+          "value": "gattabaragames.com"
+        },
+        {
+          "label": "Press contact",
+          "value": "info@gattabaragames.com"
+        }
+      ],
+      "shortDescription": "Our flagship. Details withheld until reveal day.",
+      "description": [],
+      "features": [],
+      "sealedText": "Built by our core team in Bengaluru. Our biggest world yet. First look goes to the insider list.",
+      "summary": "Our flagship. Title, genre and platform stay sealed until reveal day.",
+      "image": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/game-art/classified-01-key-art.jpg",
+      "screenshots": [],
+      "trailer": "",
+      "trailerPoster": "",
+      "logoBlack": "",
+      "logoWhite": "",
+      "promoMain": "",
+      "promoVertical": "",
+      "promoSmall": ""
+    },
+    {
+      "id": "classified-02",
+      "title": "Classified 02",
+      "code": "GG-IP-04",
+      "status": "Sealed",
+      "cardCaption": "Original IP · Details withheld",
+      "tags": [
+        "Original IP",
+        "Sealed"
+      ],
+      "factsheet": [
+        {
+          "label": "Developer",
+          "value": "Gattabara Games"
+        },
+        {
+          "label": "Based in",
+          "value": "Bengaluru, India"
+        },
+        {
+          "label": "Genre",
+          "value": "—"
+        },
+        {
+          "label": "Players",
+          "value": "—"
+        },
+        {
+          "label": "Platforms",
+          "value": "—"
+        },
+        {
+          "label": "Release date",
+          "value": "—"
+        },
+        {
+          "label": "Status",
+          "value": "Sealed"
+        },
+        {
+          "label": "Website",
+          "value": "gattabaragames.com"
+        },
+        {
+          "label": "Press contact",
+          "value": "info@gattabaragames.com"
+        }
+      ],
+      "shortDescription": "A comedy with teeth. That is all we are cleared to say.",
+      "description": [],
+      "features": [],
+      "sealedText": "Systems-driven, darkly funny, and painfully familiar to anyone who has stood in a queue. Reveal date: sealed.",
+      "summary": "A comedy with teeth. That is all we are cleared to say.",
+      "image": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/game-art/classified-02-key-art.jpg",
+      "screenshots": [],
+      "trailer": "",
+      "trailerPoster": "",
+      "logoBlack": "",
+      "logoWhite": "",
+      "promoMain": "",
+      "promoVertical": "",
+      "promoSmall": ""
+    }
+  ],
+  "pressKit": {
+    "about": "Gattabara Games is a video game company and creative studio based in Bengaluru, India. It builds original IP, co-owns and co-develops worlds with independent creators, and offers development, art and strategy services to studios worldwide through GG Productions.",
+    "contact": [
+      {
+        "label": "Press",
+        "value": "info@gattabaragames.com"
+      },
+      {
+        "label": "Business",
+        "value": "info@gattabaragames.com"
+      },
+      {
+        "label": "Website",
+        "value": "gattabaragames.com"
+      }
+    ],
+    "studioLogo": "/logos/gg-white.png",
+    "studioLogoBlack": "/logos/gg-black.png"
+  },
+  "network": {
+    "disciplines": [
+      "Combat",
+      "Animation",
+      "Direction",
+      "Dramatics",
+      "Art",
+      "3D Modeling",
+      "Development"
+    ],
+    "tiers": [
+      "Indie",
+      "AA",
+      "AAA-ready"
+    ],
+    "people": [
+      {
+        "role": "Combat designer",
+        "city": "Kraków",
+        "lat": 50.06,
+        "lon": 19.94,
+        "discipline": "Combat",
+        "tier": "AAA-ready",
+        "experience": "9 yrs"
+      },
+      {
+        "role": "Combat animator",
+        "city": "Montréal",
+        "lat": 45.5,
+        "lon": -73.57,
+        "discipline": "Combat",
+        "tier": "AAA-ready",
+        "experience": "11 yrs"
+      },
+      {
+        "role": "Animator",
+        "city": "Pune",
+        "lat": 18.52,
+        "lon": 73.86,
+        "discipline": "Animation",
+        "tier": "AA",
+        "experience": "6 yrs"
+      },
+      {
+        "role": "Mocap cleanup lead",
+        "city": "Manila",
+        "lat": 14.6,
+        "lon": 120.98,
+        "discipline": "Animation",
+        "tier": "AA",
+        "experience": "7 yrs"
+      },
+      {
+        "role": "Cinematic director",
+        "city": "Seoul",
+        "lat": 37.57,
+        "lon": 126.98,
+        "discipline": "Direction",
+        "tier": "AAA-ready",
+        "experience": "12 yrs"
+      },
+      {
+        "role": "Layout artist",
+        "city": "Bengaluru",
+        "lat": 12.97,
+        "lon": 77.59,
+        "discipline": "Direction",
+        "tier": "Indie",
+        "experience": "4 yrs"
+      },
+      {
+        "role": "Performance director",
+        "city": "London",
+        "lat": 51.5,
+        "lon": -0.12,
+        "discipline": "Dramatics",
+        "tier": "AAA-ready",
+        "experience": "10 yrs"
+      },
+      {
+        "role": "Acting coach",
+        "city": "Mumbai",
+        "lat": 19.08,
+        "lon": 72.88,
+        "discipline": "Dramatics",
+        "tier": "AA",
+        "experience": "8 yrs"
+      },
+      {
+        "role": "Concept artist",
+        "city": "Jakarta",
+        "lat": -6.2,
+        "lon": 106.85,
+        "discipline": "Art",
+        "tier": "AA",
+        "experience": "7 yrs"
+      },
+      {
+        "role": "Key art painter",
+        "city": "Lisbon",
+        "lat": 38.72,
+        "lon": -9.14,
+        "discipline": "Art",
+        "tier": "AAA-ready",
+        "experience": "9 yrs"
+      },
+      {
+        "role": "Character modeler",
+        "city": "Hyderabad",
+        "lat": 17.39,
+        "lon": 78.49,
+        "discipline": "3D Modeling",
+        "tier": "AA",
+        "experience": "6 yrs"
+      },
+      {
+        "role": "Environment artist",
+        "city": "Bogotá",
+        "lat": 4.71,
+        "lon": -74.07,
+        "discipline": "3D Modeling",
+        "tier": "Indie",
+        "experience": "5 yrs"
+      },
+      {
+        "role": "Hard-surface modeler",
+        "city": "Tallinn",
+        "lat": 59.44,
+        "lon": 24.75,
+        "discipline": "3D Modeling",
+        "tier": "AAA-ready",
+        "experience": "8 yrs"
+      },
+      {
+        "role": "Gameplay engineer",
+        "city": "Bengaluru",
+        "lat": 12.97,
+        "lon": 77.59,
+        "discipline": "Development",
+        "tier": "AA",
+        "experience": "7 yrs"
+      },
+      {
+        "role": "Unreal engineer",
+        "city": "Austin",
+        "lat": 30.27,
+        "lon": -97.74,
+        "discipline": "Development",
+        "tier": "AAA-ready",
+        "experience": "10 yrs"
+      },
+      {
+        "role": "Roblox developer",
+        "city": "Singapore",
+        "lat": 1.35,
+        "lon": 103.82,
+        "discipline": "Development",
+        "tier": "Indie",
+        "experience": "4 yrs"
+      }
+    ]
+  },
+  "heroCaptions": [
+    {
+      "label": "Pen Fight",
+      "sub": "Original IP · In development"
+    },
+    {
+      "label": "Auto Rush",
+      "sub": "Original IP · In development"
+    },
+    {
+      "label": "Pen Fight × Auto Rush",
+      "sub": "Two worlds in production"
+    },
+    {
+      "label": "Classified 01",
+      "sub": "Sealed · Flagship"
+    },
+    {
+      "label": "The slate",
+      "sub": "Four titles · One standard"
+    },
+    {
+      "label": "Classified 02",
+      "sub": "Sealed · A comedy with teeth"
+    },
+    {
+      "label": "GG Productions",
+      "sub": "Global roster · On call"
+    },
+    {
+      "label": "Roster × Flagship",
+      "sub": "Services feed the slate"
+    },
+    {
+      "label": "Pen Fight",
+      "sub": "Close-up"
+    },
+    {
+      "label": "Gattabara Games",
+      "sub": "Bengaluru · For the world"
+    }
+  ],
+  "texts": {},
+  "philosophy": {
+    "mission": "Summon worlds that eat reality.",
+    "vision": "To be remembered not for noise, but for depth.",
+    "valuesIntro": "Four rules govern every project, ours or a partner's. They are written down, reviewed at every milestone, and owned by a named lead.",
+    "values": [
+      {
+        "title": "Design thinking",
+        "text": "Every feature begins as a question about the player. We prototype, playtest, then produce."
+      },
+      {
+        "title": "Cost consciousness",
+        "text": "Budgets are set per milestone and tracked weekly. A lean core and an on-call roster. No idle bench."
+      },
+      {
+        "title": "Strict governance",
+        "text": "Decision rights, milestone gates and transparent reporting, agreed before work begins."
+      },
+      {
+        "title": "Discipline",
+        "text": "Scope is a design constraint. We finish what we start, on the timeline we agreed."
+      }
+    ],
+    "doc": "Craft is the foundation. Authorship creates accountability. Every frame must carry weight."
+  },
+  "production": {
+    "services": [
+      {
+        "title": "Development",
+        "description": "Concept to build: core systems, gameplay foundations, mechanics and level design. Rapid prototyping through full-cycle development, with long-term updates and live ops.",
+        "tags": [
+          "Unity",
+          "Unreal",
+          "Roblox",
+          "Live ops"
+        ],
+        "quote": ""
+      },
+      {
+        "title": "Art",
+        "description": "Visual style discovery and world-building, then cohesive 2D and 3D art, animation and UI that serve the gameplay.",
+        "tags": [
+          "2D & 3D",
+          "Animation",
+          "UI"
+        ],
+        "quote": ""
+      },
+      {
+        "title": "Strategy & pre-production",
+        "description": "IP ideation, concept validation, MVP planning for fundraising, design documents and production roadmaps.",
+        "tags": [
+          "IP ideation",
+          "MVP plans",
+          "Roadmaps"
+        ],
+        "quote": "Make the right game before you make the whole game."
+      }
+    ],
+    "specialties": [
+      {
+        "name": "Combat",
+        "score": 96,
+        "description": "Hit-stop, frame data, readable telegraphs"
+      },
+      {
+        "name": "Animation",
+        "score": 94,
+        "description": "Keyframe and mocap cleanup, engine-ready"
+      },
+      {
+        "name": "Direction",
+        "score": 90,
+        "description": "Camera, staging and pacing"
+      },
+      {
+        "name": "Dramatics",
+        "score": 88,
+        "description": "Performance, timing and beats"
+      },
+      {
+        "name": "Art",
+        "score": 95,
+        "description": "Concept to final look"
+      },
+      {
+        "name": "3D Modeling",
+        "score": 91,
+        "description": "Clean topology, textures, LODs"
+      }
+    ]
+  },
+  "letter": {
+    "big": "Players first. Long term. Every frame owned.",
+    "to": "To players, partners and the creators who trust us with their worlds:",
+    "before": [
+      "India has one of the largest player bases on earth, and it has yet to ship a global hit. We don't think that is a talent problem. It is a design problem, a cost problem and a patience problem. Gattabara Games exists to solve all three.",
+      "We make decisions differently from most studios, so it is worth writing down how:"
+    ],
+    "principles": [
+      {
+        "title": "We start with the player and work backwards.",
+        "text": "Feel is decided in greybox, before art and before marketing. If a mechanic doesn't feel right with boxes, it won't feel right with polish."
+      },
+      {
+        "title": "We play the long game.",
+        "text": "We will turn down revenue that dilutes an IP, and accept short-term cost when it compounds into a better game."
+      },
+      {
+        "title": "We spend like owners.",
+        "text": "Every rupee is either on screen or making what is on screen better. A small core, an on-call roster and no idle bench."
+      },
+      {
+        "title": "Every frame has a name behind it.",
+        "text": "Each system, scene and line of code has one owner. Authorship creates accountability."
+      },
+      {
+        "title": "We decide fast and correct fast.",
+        "text": "Most decisions can be reversed, so we make them with the information we have and fix them in the next build. The few that can't be reversed, we make slowly."
+      },
+      {
+        "title": "Our games and our services feed each other.",
+        "text": "Every world we build surfaces new talent, and that talent becomes the roster our partners hire."
+      }
+    ],
+    "after": [
+      "We will make mistakes. When we do, we will say so, fix them and keep the bar where it is.",
+      "Our measure is simple. When a player has one free evening, do they choose our world? Everything else is detail.",
+      "We are early. We think that is an advantage."
+    ],
+    "signature": "The Founding Partners",
+    "signatureLine": "Gattabara Games LLP · Bengaluru · October 2026"
+  },
+  "leadership": [
+    {
+      "name": "Aditya Kumar",
+      "role": "CEO & Founding Partner",
+      "bio": "Runs the studio and its slate, from greenlight to launch.",
+      "id": "GG-001",
+      "photo": ""
+    },
+    {
+      "name": "Utsav Shetty",
+      "role": "Founding Partner & Advisor",
+      "bio": "Strategy, finance and business development.",
+      "id": "GG-002",
+      "photo": ""
+    },
+    {
+      "name": "Vasu Bhatnagar",
+      "role": "Partner, Game Services",
+      "bio": "Heads GG Productions and the contractor roster.",
+      "id": "GG-003",
+      "photo": ""
+    },
+    {
+      "name": "Siddarth Pai",
+      "role": "Advisor",
+      "bio": "Advises the founders on growth and the studio's next moves.",
+      "id": "GG-A01",
+      "photo": ""
+    }
+  ],
+  "clients": [
+    {
+      "name": "Nexon Games America",
+      "logo": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/client-logos/1774423165417-79df150833611f3fd8a320b59b5fb55ee455642b_full.jpg"
+    },
+    {
+      "name": "Magadha Studios",
+      "logo": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/client-logos/1774423169395-images.jpg"
+    },
+    {
+      "name": "Qila Games",
+      "logo": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/client-logos/1774423173406-images.png"
+    },
+    {
+      "name": "Studio Cupcakes",
+      "logo": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/client-logos/1774423176475-images-1.jpg"
+    },
+    {
+      "name": "Silvine Game Studios",
+      "logo": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/client-logos/1774423183121-images-2.jpg"
+    },
+    {
+      "name": "BattleBucks",
+      "logo": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/client-logos/1774423187281-images-3.jpg"
+    },
+    {
+      "name": "Singular Scheme",
+      "logo": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/client-logos/1774423191955-unnamed.jpg"
+    }
+  ],
+  "jobs": [
+    {
+      "role": "Combat Designer",
+      "type": "Contract",
+      "location": "Remote"
+    },
+    {
+      "role": "3D Character Artist",
+      "type": "Contract",
+      "location": "Remote"
+    },
+    {
+      "role": "Gameplay Engineer (Unity)",
+      "type": "Full-time",
+      "location": "Bengaluru"
+    },
+    {
+      "role": "Animator",
+      "type": "Contract",
+      "location": "Remote / Bengaluru"
+    }
+  ],
+  "pitch": {
+    "title": "Inbound Form",
+    "buttonText": "Click Here to Start",
+    "paragraphs": [
+      "Pitch with clarity and conviction. We want to see what you are building, why it matters, and how you plan to ship it end to end.",
+      "Keep your deck focused and easy to scan. Deep dives on systems or mechanics can live in a separate GDD or design doc.",
+      "Show us something real. A playable build beats a video. A video beats concept art. We generally do not review pitches without a build or proof of concept.",
+      "GG collaborates on PC, Console, and mobile titles. AR/VR and mobile-first projects are welcome."
+    ]
+  },
+  "contact": {
+    "email": "info@gattabaragames.com",
+    "company": "Gattabara Games LLP",
+    "address": "Bengaluru, Karnataka, India",
+    "tagline": "We summon worlds that eat reality."
+  },
+  "applicationForm": {
+    "title": "Gattabara Games Application Form",
+    "intro": "Use this form to introduce your project or studio to Gattabara Games. We collaborate with solo creators and independent studios to co-create original games, aligning on vision, authorship, and long-term ownership.",
+    "labels": {
+      "studioName": "Studio / Creator Name",
+      "studioWebsite": "Studio or Portfolio Website",
+      "studioWebsiteHint": "(If solo creator, link to portfolio or previous work)",
+      "yourName": "Your Name",
+      "email": "Your Email Address",
+      "country": "Country",
+      "gameTitle": "Game / Project Title",
+      "gameTitleHint": "(This can be a working title or internal project codename.)",
+      "collaboration": "What kind of collaboration are you seeking?",
+      "collaborationHint": "(Select all that apply)",
+      "collabCoDev": "Co-Development Partnership",
+      "collabCoDevDesc": "Hands-on creative and production collaboration with Gattabara to build the game together.",
+      "collabCoFunding": "Project Co-Funding",
+      "collabCoFundingDesc": "Financial support to help bring your game to life, including development, localisation, marketing, porting, etc.",
+      "collabPublishing": "Go-To-Market & Publishing Support",
+      "collabPublishingDesc": "Gattabara supports release, distribution, marketing, and launch strategy while you retain creative authorship.",
+      "description": "Short Project Description",
+      "descriptionHint": "(Tell us what you’re building, why it matters, and what makes it distinct.)",
+      "totalBudget": "Total Project Budget (USD)",
+      "totalBudgetHint": "(The estimated total cost to ship the project, including any spend to date.)",
+      "budgetAsk": "Collaboration Budget Ask (USD)",
+      "budgetAskHint": "(How much support are you seeking from Gattabara Games?)",
+      "platforms": "Target Platform(s)",
+      "platformsHint": "(Select all that apply.)",
+      "genre": "Genre",
+      "compTitle": "Comparable Title",
+      "compTitleHint": "(Based on gameplay, tone, and scope. Preferably released in the last 10 years.)",
+      "materials": "Playable / Materials",
+      "materialsHint": "We prioritize projects with something tangible to experience (playable builds, prototypes, vertical slices, or strong proof of concept. If available, include gameplay footage alongside your build.)",
+      "materialsLinks": "Materials (Links) and/or Access Details",
+      "materialsLinksHint": "(Builds may fail to upload. Please include links to playable builds, pitch decks, gameplay videos, and access details here. If sharing Steam keys, please include at least 5 keys.)",
+      "multiplayer": "Is this a Multiplayer Build?",
+      "multiplayerHint": "(Check the box if the build requires local/online multiplayer.)",
+      "launchWindow": "Target Launch Window (Quarter / Year)",
+      "launchWindowHint": "(Format: Q1 2026)",
+      "estimatedPrice": "Estimated Launch Price (USD)",
+      "estimatedPriceHint": "(Your current target price at launch. This can evolve.)",
+      "teamSize": "Current Team Size",
+      "teamSizeHint": "(Number of people actively working on the project.)",
+      "additionalNotes": "Additional Notes",
+      "additionalNotesHint": "(Anything else we should know about the project, team, or vision.)",
+      "howHeard": "How did you hear about Gattabara Games?",
+      "howHeardHint": "(Referral, person, event, community, etc. Helps us route your submission internally.)",
+      "notRobot": "I'm not a robot",
+      "chooseFile": "Choose a file to upload",
+      "dragDrop": "",
+      "submit": "Submit",
+      "submitting": "Submitting...",
+      "submitted": "Submitted!",
+      "tryAgain": "Try Again",
+      "successTitle": "Application Received!",
+      "successMessage": "Thank you for introducing your project. Our team will review your application and get back to you soon.",
+      "successButton": "Return to Pitch Page",
+      "selectPlaceholder": "Select an option",
+      "platformOptions": "Console, Mobile, PC, VR",
+      "alertRobot": "Please verify that you are not a robot.",
+      "alertFiles": "You can only upload up to 5 files.",
+      "alertSize": "Total file size must be under 50MB.",
+      "sendingTitle": "Sending Application",
+      "failTitle": "Submission Failed",
+      "captchaNote": "reCAPTCHA is changing its terms of service.",
+      "captchaAction": "Take action.",
+      "captchaBrand": "reCAPTCHA",
+      "captchaPrivacy": "Privacy",
+      "captchaTerms": "Terms"
+    }
+  },
+  "contactPage": {
+    "tabContact": "Contact",
+    "tabPitch": "Pitch us",
+    "subContact": "Inquiries",
+    "subPitch": "Pitch a game",
+    "intro": "Choose the type of inquiry and fill in the form below. Each message is read by the team it concerns. To pitch a game, use",
+    "introLink": "Pitch us",
+    "typeLabel": "Inquiry type",
+    "types": [
+      {
+        "value": "production",
+        "label": "Production services (GG Productions)"
+      },
+      {
+        "value": "insider",
+        "label": "Insider list (first looks)"
+      },
+      {
+        "value": "career",
+        "label": "Careers / roster"
+      },
+      {
+        "value": "press",
+        "label": "Press and media"
+      },
+      {
+        "value": "other",
+        "label": "Other inquiries"
+      }
+    ],
+    "nameLabel": "Name",
+    "companyLabel": "Company / studio",
+    "emailLabel": "Email",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Tell us about your project, your IP, or yourself.",
+    "requiredTag": "REQUIRED",
+    "optionalTag": "OPTIONAL",
+    "consent": "I agree that Gattabara Games may use the information above to respond to this inquiry.",
+    "button": "Send",
+    "thankTitle": "Thank you.",
+    "thankText": "Your inquiry has been received. This is a demonstration build, so the form is not yet connected to an inbox. Until it is, please write to us directly.",
+    "newButton": "New inquiry",
+    "errName": "Please enter your name.",
+    "errEmail": "Please enter your email address.",
+    "errEmailBad": "This email address looks incomplete. Please check it.",
+    "errMessage": "Please write a short message.",
+    "errConsent": "Please agree to continue.",
+    "toastSent": "Inquiry received",
+    "toastFail": "Could not send. Please email info@gattabaragames.com",
+    "emailLine": "Email",
+    "copyButton": "Copy"
+  },
+  "pressKitLabels": {
+    "navFact": "Factsheet",
+    "navDesc": "Description",
+    "navMedia": "Media",
+    "navAbout": "About",
+    "navContact": "Contact",
+    "tag": "PRESS KIT",
+    "release": "Release date:",
+    "insider": "Join the insider list",
+    "downloadAll": "↓ Download all media (.zip)",
+    "inquiry": "Press inquiry",
+    "fact": "Factsheet",
+    "factDl": "↓ Factsheet .md",
+    "descTitle": "Description",
+    "short": "Short description",
+    "descLabel": "Description",
+    "features": "Features",
+    "feature": "FEATURE",
+    "restricted": "Access restricted",
+    "sealedLine": "This file is sealed.",
+    "hold": "Hold to decrypt",
+    "decrypting": "Decrypting",
+    "decrypted": "Decrypted",
+    "decryptedLine": "File decrypted.",
+    "withheld": "Withheld until reveal",
+    "media": "Media",
+    "embargoTag": "EMBARGOED",
+    "embargoText": "Media embargoed until reveal day",
+    "trailer": "Trailer",
+    "comingSoonTag": "COMING SOON",
+    "comingSoonText": "Trailer · coming soon",
+    "logo": "Logo",
+    "logoSpec": "TRANSPARENT PNG · 1600×640",
+    "black": "Black",
+    "white": "White",
+    "screenshots": "Screenshots",
+    "screenshotSpec": "PNG · 1920×1080",
+    "promo": "Promo graphics",
+    "promoSpec": "STORE CAPSULES",
+    "cap_main": "Main capsule",
+    "cap_vertical": "Vertical capsule",
+    "cap_small": "Small capsule",
+    "note": "※ Images are key visuals from our halftone renderer until final in-game captures are released.",
+    "dlPng": "↓ PNG",
+    "dlFile": "↓ File",
+    "about": "About the developer",
+    "logoWhiteBtn": "↓ Logo (white)",
+    "logoBlackBtn": "↓ Logo (black)",
+    "contact": "Contact",
+    "others": "Other titles",
+    "pressKitWord": "Press kit"
+  },
+  "clientsPage": {
+    "ctaTitle": "Your studio",
+    "ctaText": "Start a brief →"
+  },
+  "heroHud": {
+    "play": "PLAY",
+    "pause": "PAUSE",
+    "clip": "CLIP",
+    "pressKit": "Press kit ↗"
+  },
+  "networkCall": {
+    "ring": "Incoming call…",
+    "missed": "Missed · tap to return",
+    "connected": "Connected",
+    "ended": "Call ended · tap to call back",
+    "idle": "Line idle",
+    "onCall": "On call",
+    "standby": "Standby"
+  }
+}

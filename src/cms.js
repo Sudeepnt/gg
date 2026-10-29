@@ -1,9 +1,7 @@
-/* ================= CMS (data carried over from the previous gg site) =================
-   Bundled snapshot (cms-data.json) paints first; the live row in Supabase `cms_settings` (id 1) is merged over it.
-   Credentials come from the NEXT_PUBLIC_SUPABASE_* env vars already set on Vercel. */
+/* Content loader. All editable content now comes from src/content/site-content.json (embedded in the page as
+   #gg-content and edited from /admingg). Nothing is read from Supabase. The bundled gg snapshot (cms-data.json) only
+   supplies the application-form labels, which have no editor yet. */
 import snapshot from './cms-data.json';
-
-const URL_ = import.meta.env.NEXT_PUBLIC_SUPABASE_URL, KEY = import.meta.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 function merge(base, over) {
   const out = { ...base };
@@ -11,14 +9,20 @@ function merge(base, over) {
   return out;
 }
 
+export function siteContent() {
+  try { return JSON.parse(document.getElementById('gg-content').textContent); } catch { return null; }
+}
+
 export async function loadCMS() {
-  if (!URL_ || !KEY) return snapshot;
-  try {
-    const r = await fetch(`${URL_}/rest/v1/cms_settings?id=eq.1&select=data`, { headers: { apikey: KEY, Authorization: `Bearer ${KEY}` } });
-    if (!r.ok) return snapshot;
-    const rows = await r.json();
-    return merge(snapshot, rows[0]?.data);
-  } catch { return snapshot; }
+  const c = siteContent();
+  if (!c) return snapshot;
+  return merge(snapshot, {
+    home: { playReelVideo: c.reels?.main || '', playReelVideo2: c.reels?.second || '' },
+    ggProductions: { clients: (c.clients || []).map(x => ({ name: x.name, image: x.logo })) },
+    pitch: { title: c.pitch?.title, paragraphs: c.pitch?.paragraphs, buttonText: c.pitch?.buttonText },
+    contact: { email: c.contact?.email },
+    form: c.applicationForm ? { title: c.applicationForm.title, intro: c.applicationForm.intro, labels: c.applicationForm.labels } : undefined,
+  });
 }
 
 /* clients come as plain strings or {name, image} */

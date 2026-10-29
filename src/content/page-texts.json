@@ -1,0 +1,782 @@
+[
+ {
+  "key": "Header::GATTABARA",
+  "group": "Header",
+  "label": "Bold text",
+  "text": "GATTABARA"
+ },
+ {
+  "key": "Header::GAMES · BENGALURU",
+  "group": "Header",
+  "label": "Small text",
+  "text": "GAMES · BENGALURU"
+ },
+ {
+  "key": "Header::NEWS",
+  "group": "Header",
+  "label": "Text",
+  "text": "NEWS"
+ },
+ {
+  "key": "Header::PHILOSOPHY",
+  "group": "Header",
+  "label": "Text",
+  "text": "PHILOSOPHY"
+ },
+ {
+  "key": "Header::GAMES",
+  "group": "Header",
+  "label": "Text",
+  "text": "GAMES"
+ },
+ {
+  "key": "Header::BUSINESS",
+  "group": "Header",
+  "label": "Text",
+  "text": "BUSINESS"
+ },
+ {
+  "key": "Header::GG PRODUCTIONS",
+  "group": "Header",
+  "label": "Text",
+  "text": "GG PRODUCTIONS"
+ },
+ {
+  "key": "Header::COMPANY",
+  "group": "Header",
+  "label": "Text",
+  "text": "COMPANY"
+ },
+ {
+  "key": "Header::RECRUIT",
+  "group": "Header",
+  "label": "Text",
+  "text": "RECRUIT"
+ },
+ {
+  "key": "Header::HUMAN",
+  "group": "Header",
+  "label": "Link / button",
+  "text": "HUMAN"
+ },
+ {
+  "key": "Header::MACHINE",
+  "group": "Header",
+  "label": "Link / button",
+  "text": "MACHINE"
+ },
+ {
+  "key": "Header::PITCH US",
+  "group": "Header",
+  "label": "Link / button",
+  "text": "PITCH US"
+ },
+ {
+  "key": "Header::CONTACT",
+  "group": "Header",
+  "label": "Link / button",
+  "text": "CONTACT"
+ },
+ {
+  "key": "Header::MENU",
+  "group": "Header",
+  "label": "Text",
+  "text": "MENU"
+ },
+ {
+  "key": "Menu::GATTABARA GAMES LLP",
+  "group": "Menu",
+  "label": "Heading",
+  "text": "GATTABARA GAMES LLP"
+ },
+ {
+  "key": "Menu::A video game company and creative studio in Bengaluru, India. Original IP, co-owned IP and production services through GG Productions.",
+  "group": "Menu",
+  "label": "Paragraph",
+  "text": "A video game company and creative studio in Bengaluru, India. Original IP, co-owned IP and production services through GG Productions."
+ },
+ {
+  "key": "Menu::CONTACT",
+  "group": "Menu",
+  "label": "Heading",
+  "text": "CONTACT"
+ },
+ {
+  "key": "Menu::info@gattabaragames.com",
+  "group": "Menu",
+  "label": "Paragraph",
+  "text": "info@gattabaragames.com"
+ },
+ {
+  "key": "Menu::VIEW",
+  "group": "Menu",
+  "label": "Heading",
+  "text": "VIEW"
+ },
+ {
+  "key": "Menu::HUMAN",
+  "group": "Menu",
+  "label": "Link / button",
+  "text": "HUMAN"
+ },
+ {
+  "key": "Menu::MACHINE",
+  "group": "Menu",
+  "label": "Link / button",
+  "text": "MACHINE"
+ },
+ {
+  "key": "Other::GATTABARA GAMES — WE SUMMON WORLDS THAT EAT REALITY",
+  "group": "Other",
+  "label": "Text",
+  "text": "GATTABARA GAMES — WE SUMMON WORLDS THAT EAT REALITY"
+ },
+ {
+  "key": "Other::PAGE",
+  "group": "Other",
+  "label": "Text",
+  "text": "PAGE"
+ },
+ {
+  "key": "Other::TOP",
+  "group": "Other",
+  "label": "Text",
+  "text": "TOP"
+ },
+ {
+  "key": "Other::VIEW",
+  "group": "Other",
+  "label": "Bold text",
+  "text": "VIEW"
+ },
+ {
+  "key": "Top::12.9716° N",
+  "group": "Top",
+  "label": "Text",
+  "text": "12.9716° N"
+ },
+ {
+  "key": "Top::77.5946° E",
+  "group": "Top",
+  "label": "Text",
+  "text": "77.5946° E"
+ },
+ {
+  "key": "Top::Explore games",
+  "group": "Top",
+  "label": "Text",
+  "text": "Explore games"
+ },
+ {
+  "key": "Top::Pitch us a game",
+  "group": "Top",
+  "label": "Text",
+  "text": "Pitch us a game"
+ },
+ {
+  "key": "Top::NEWS",
+  "group": "Top",
+  "label": "Text",
+  "text": "NEWS"
+ },
+ {
+  "key": "Top::View all",
+  "group": "Top",
+  "label": "Text",
+  "text": "View all"
+ },
+ {
+  "key": "News::News",
+  "group": "News",
+  "label": "Heading",
+  "text": "News"
+ },
+ {
+  "key": "News::Studio updates",
+  "group": "News",
+  "label": "Paragraph",
+  "text": "Studio updates"
+ },
+ {
+  "key": "News::All",
+  "group": "News",
+  "label": "Link / button",
+  "text": "All"
+ },
+ {
+  "key": "News::Games",
+  "group": "News",
+  "label": "Link / button",
+  "text": "Games"
+ },
+ {
+  "key": "News::Studio",
+  "group": "News",
+  "label": "Link / button",
+  "text": "Studio"
+ },
+ {
+  "key": "News::Productions",
+  "group": "News",
+  "label": "Link / button",
+  "text": "Productions"
+ },
+ {
+  "key": "News::Recruit",
+  "group": "News",
+  "label": "Link / button",
+  "text": "Recruit"
+ },
+ {
+  "key": "News::View all news",
+  "group": "News",
+  "label": "Text",
+  "text": "View all news"
+ },
+ {
+  "key": "Philosophy::Philosophy",
+  "group": "Philosophy",
+  "label": "Heading",
+  "text": "Philosophy"
+ },
+ {
+  "key": "Philosophy::Mission · Vision · Values",
+  "group": "Philosophy",
+  "label": "Paragraph",
+  "text": "Mission · Vision · Values"
+ },
+ {
+  "key": "Philosophy::MISSION",
+  "group": "Philosophy",
+  "label": "Bold text",
+  "text": "MISSION"
+ },
+ {
+  "key": "Philosophy::VISION",
+  "group": "Philosophy",
+  "label": "Bold text",
+  "text": "VISION"
+ },
+ {
+  "key": "Philosophy::VALUES",
+  "group": "Philosophy",
+  "label": "Bold text",
+  "text": "VALUES"
+ },
+ {
+  "key": "Philosophy::FROM THE STUDIO HANDBOOK",
+  "group": "Philosophy",
+  "label": "Text",
+  "text": "FROM THE STUDIO HANDBOOK"
+ },
+ {
+  "key": "Games::Games",
+  "group": "Games",
+  "label": "Heading",
+  "text": "Games"
+ },
+ {
+  "key": "Games::Title lineup",
+  "group": "Games",
+  "label": "Paragraph",
+  "text": "Title lineup"
+ },
+ {
+  "key": "Games::All titles",
+  "group": "Games",
+  "label": "Link / button",
+  "text": "All titles"
+ },
+ {
+  "key": "Games::In development",
+  "group": "Games",
+  "label": "Link / button",
+  "text": "In development"
+ },
+ {
+  "key": "Games::Sealed",
+  "group": "Games",
+  "label": "Link / button",
+  "text": "Sealed"
+ },
+ {
+  "key": "Business::Business",
+  "group": "Business",
+  "label": "Heading",
+  "text": "Business"
+ },
+ {
+  "key": "Business::Three lines of work",
+  "group": "Business",
+  "label": "Paragraph",
+  "text": "Three lines of work"
+ },
+ {
+  "key": "Business::Gattabara works along three lines. Each runs on the same craft, the same rules and the same core team.",
+  "group": "Business",
+  "label": "Paragraph",
+  "text": "Gattabara works along three lines. Each runs on the same craft, the same rules and the same core team."
+ },
+ {
+  "key": "Business::Original IP",
+  "group": "Business",
+  "label": "Heading",
+  "text": "Original IP"
+ },
+ {
+  "key": "Business::Worlds we invent, own and build in-house. Pen Fight, Auto Rush and two sealed titles are on the line now.",
+  "group": "Business",
+  "label": "Paragraph",
+  "text": "Worlds we invent, own and build in-house. Pen Fight, Auto Rush and two sealed titles are on the line now."
+ },
+ {
+  "key": "Business::Co-owned IP",
+  "group": "Business",
+  "label": "Heading",
+  "text": "Co-owned IP"
+ },
+ {
+  "key": "Business::We co-own and co-develop with independent creators. You bring the spark and the world. We bring production, discipline and reach. Pitch us.",
+  "group": "Business",
+  "label": "Paragraph",
+  "text": "We co-own and co-develop with independent creators. You bring the spark and the world. We bring production, discipline and reach. Pitch us."
+ },
+ {
+  "key": "Business::GG Productions",
+  "group": "Business",
+  "label": "Heading",
+  "text": "GG Productions"
+ },
+ {
+  "key": "Business::Our services arm. Development, art and strategy for studios worldwide, with clear milestones and transparent delivery.",
+  "group": "Business",
+  "label": "Paragraph",
+  "text": "Our services arm. Development, art and strategy for studios worldwide, with clear milestones and transparent delivery."
+ },
+ {
+  "key": "GG Productions::GG Productions",
+  "group": "GG Productions",
+  "label": "Heading",
+  "text": "GG Productions"
+ },
+ {
+  "key": "GG Productions::Services arm",
+  "group": "GG Productions",
+  "label": "Paragraph",
+  "text": "Services arm"
+ },
+ {
+  "key": "GG Productions::A lean partner for studios with limited budgets and ambitious goals. We add the talent your project needs across art, tech, design and production, with clear milestones and transparent delivery. You keep creative control.",
+  "group": "GG Productions",
+  "label": "Paragraph",
+  "text": "A lean partner for studios with limited budgets and ambitious goals. We add the talent your project needs across art, tech, design and production, with clear milestones and transparent delivery. You keep creative control."
+ },
+ {
+  "key": "GG Productions::▶ Play reel",
+  "group": "GG Productions",
+  "label": "Link / button",
+  "text": "▶ Play reel"
+ },
+ {
+  "key": "GG Productions::Animation",
+  "group": "GG Productions",
+  "label": "Link / button",
+  "text": "Animation"
+ },
+ {
+  "key": "GG Productions::Art",
+  "group": "GG Productions",
+  "label": "Link / button",
+  "text": "Art"
+ },
+ {
+  "key": "GG Productions::※ Reel shown is a placeholder sample.",
+  "group": "GG Productions",
+  "label": "Paragraph",
+  "text": "※ Reel shown is a placeholder sample."
+ },
+ {
+  "key": "GG Productions::STEP 01",
+  "group": "GG Productions",
+  "label": "Text",
+  "text": "STEP 01"
+ },
+ {
+  "key": "GG Productions::Brief",
+  "group": "GG Productions",
+  "label": "Bold text",
+  "text": "Brief"
+ },
+ {
+  "key": "GG Productions::Scope, quality tier and budget are locked before anyone is hired.",
+  "group": "GG Productions",
+  "label": "Paragraph",
+  "text": "Scope, quality tier and budget are locked before anyone is hired."
+ },
+ {
+  "key": "GG Productions::STEP 02",
+  "group": "GG Productions",
+  "label": "Text",
+  "text": "STEP 02"
+ },
+ {
+  "key": "GG Productions::Assemble",
+  "group": "GG Productions",
+  "label": "Bold text",
+  "text": "Assemble"
+ },
+ {
+  "key": "GG Productions::Specialists are matched from the roster, per discipline.",
+  "group": "GG Productions",
+  "label": "Paragraph",
+  "text": "Specialists are matched from the roster, per discipline."
+ },
+ {
+  "key": "GG Productions::STEP 03",
+  "group": "GG Productions",
+  "label": "Text",
+  "text": "STEP 03"
+ },
+ {
+  "key": "GG Productions::Direct",
+  "group": "GG Productions",
+  "label": "Bold text",
+  "text": "Direct"
+ },
+ {
+  "key": "GG Productions::Our leads own review and sign-off. Quality lives in one place.",
+  "group": "GG Productions",
+  "label": "Paragraph",
+  "text": "Our leads own review and sign-off. Quality lives in one place."
+ },
+ {
+  "key": "GG Productions::STEP 04",
+  "group": "GG Productions",
+  "label": "Text",
+  "text": "STEP 04"
+ },
+ {
+  "key": "GG Productions::Deliver",
+  "group": "GG Productions",
+  "label": "Bold text",
+  "text": "Deliver"
+ },
+ {
+  "key": "GG Productions::The work ships and the squad stands down. No bench on your invoice.",
+  "group": "GG Productions",
+  "label": "Paragraph",
+  "text": "The work ships and the squad stands down. No bench on your invoice."
+ },
+ {
+  "key": "Network::Network",
+  "group": "Network",
+  "label": "Heading",
+  "text": "Network"
+ },
+ {
+  "key": "Network::A world on call",
+  "group": "Network",
+  "label": "Paragraph",
+  "text": "A world on call"
+ },
+ {
+  "key": "Network::A core team in Bengaluru. A world on call. Around our leads is a vetted roster of specialist contractors, activated for the discipline and quality bar each brief needs, then stood down when the work ships.",
+  "group": "Network",
+  "label": "Paragraph",
+  "text": "A core team in Bengaluru. A world on call. Around our leads is a vetted roster of specialist contractors, activated for the discipline and quality bar each brief needs, then stood down when the work ships."
+ },
+ {
+  "key": "Network::Global roster",
+  "group": "Network",
+  "label": "Bold text",
+  "text": "Global roster"
+ },
+ {
+  "key": "Network::Specialists",
+  "group": "Network",
+  "label": "Text",
+  "text": "Specialists"
+ },
+ {
+  "key": "Network::Cities",
+  "group": "Network",
+  "label": "Text",
+  "text": "Cities"
+ },
+ {
+  "key": "Network::Disciplines",
+  "group": "Network",
+  "label": "Text",
+  "text": "Disciplines"
+ },
+ {
+  "key": "Network::ORIGIN · BENGALURU",
+  "group": "Network",
+  "label": "Paragraph",
+  "text": "ORIGIN · BENGALURU"
+ },
+ {
+  "key": "Network::SAMPLE ROSTER · 15 LINKS",
+  "group": "Network",
+  "label": "Paragraph",
+  "text": "SAMPLE ROSTER · 15 LINKS"
+ },
+ {
+  "key": "Message::Message",
+  "group": "Message",
+  "label": "Heading",
+  "text": "Message"
+ },
+ {
+  "key": "Message::From the founding partners",
+  "group": "Message",
+  "label": "Paragraph",
+  "text": "From the founding partners"
+ },
+ {
+  "key": "Leadership::Leadership",
+  "group": "Leadership",
+  "label": "Heading",
+  "text": "Leadership"
+ },
+ {
+  "key": "Leadership::The team accountable",
+  "group": "Leadership",
+  "label": "Paragraph",
+  "text": "The team accountable"
+ },
+ {
+  "key": "Clients::Clients",
+  "group": "Clients",
+  "label": "Heading",
+  "text": "Clients"
+ },
+ {
+  "key": "Clients::Studios we have built with",
+  "group": "Clients",
+  "label": "Paragraph",
+  "text": "Studios we have built with"
+ },
+ {
+  "key": "Clients::Studios that have trusted us with their games, through GG Productions.",
+  "group": "Clients",
+  "label": "Paragraph",
+  "text": "Studios that have trusted us with their games, through GG Productions."
+ },
+ {
+  "key": "Recruit::Recruit",
+  "group": "Recruit",
+  "label": "Heading",
+  "text": "Recruit"
+ },
+ {
+  "key": "Recruit::Careers",
+  "group": "Recruit",
+  "label": "Paragraph",
+  "text": "Careers"
+ },
+ {
+  "key": "Recruit::Join",
+  "group": "Recruit",
+  "label": "Bold text",
+  "text": "Join"
+ },
+ {
+  "key": "Recruit::the",
+  "group": "Recruit",
+  "label": "Paragraph",
+  "text": "the"
+ },
+ {
+  "key": "Recruit::craft.",
+  "group": "Recruit",
+  "label": "Paragraph",
+  "text": "craft."
+ },
+ {
+  "key": "Recruit::We are looking for craftspeople who sweat the frame. Our core team works from Bengaluru. Our roster works from everywhere.",
+  "group": "Recruit",
+  "label": "Paragraph",
+  "text": "We are looking for craftspeople who sweat the frame. Our core team works from Bengaluru. Our roster works from everywhere."
+ },
+ {
+  "key": "Recruit::Entry",
+  "group": "Recruit",
+  "label": "Link / button",
+  "text": "Entry"
+ },
+ {
+  "key": "Recruit::※ Listings shown are samples.",
+  "group": "Recruit",
+  "label": "Paragraph",
+  "text": "※ Listings shown are samples."
+ },
+ {
+  "key": "Contact::Contact",
+  "group": "Contact",
+  "label": "Heading",
+  "text": "Contact"
+ },
+ {
+  "key": "Footer::GAMES",
+  "group": "Footer",
+  "label": "Heading",
+  "text": "GAMES"
+ },
+ {
+  "key": "Footer::Title lineup",
+  "group": "Footer",
+  "label": "Link / button",
+  "text": "Title lineup"
+ },
+ {
+  "key": "Footer::News",
+  "group": "Footer",
+  "label": "Link / button",
+  "text": "News"
+ },
+ {
+  "key": "Footer::COMPANY",
+  "group": "Footer",
+  "label": "Heading",
+  "text": "COMPANY"
+ },
+ {
+  "key": "Footer::Philosophy",
+  "group": "Footer",
+  "label": "Link / button",
+  "text": "Philosophy"
+ },
+ {
+  "key": "Footer::Business",
+  "group": "Footer",
+  "label": "Link / button",
+  "text": "Business"
+ },
+ {
+  "key": "Footer::GG Productions",
+  "group": "Footer",
+  "label": "Link / button",
+  "text": "GG Productions"
+ },
+ {
+  "key": "Footer::Network",
+  "group": "Footer",
+  "label": "Link / button",
+  "text": "Network"
+ },
+ {
+  "key": "Footer::Message",
+  "group": "Footer",
+  "label": "Link / button",
+  "text": "Message"
+ },
+ {
+  "key": "Footer::Leadership",
+  "group": "Footer",
+  "label": "Link / button",
+  "text": "Leadership"
+ },
+ {
+  "key": "Footer::Clients",
+  "group": "Footer",
+  "label": "Link / button",
+  "text": "Clients"
+ },
+ {
+  "key": "Footer::JOIN",
+  "group": "Footer",
+  "label": "Heading",
+  "text": "JOIN"
+ },
+ {
+  "key": "Footer::Recruit",
+  "group": "Footer",
+  "label": "Link / button",
+  "text": "Recruit"
+ },
+ {
+  "key": "Footer::Pitch us",
+  "group": "Footer",
+  "label": "Link / button",
+  "text": "Pitch us"
+ },
+ {
+  "key": "Footer::Contact",
+  "group": "Footer",
+  "label": "Link / button",
+  "text": "Contact"
+ },
+ {
+  "key": "Footer::Machine view",
+  "group": "Footer",
+  "label": "Link / button",
+  "text": "Machine view"
+ },
+ {
+  "key": "Footer::Gattabara",
+  "group": "Footer",
+  "label": "Paragraph",
+  "text": "Gattabara"
+ },
+ {
+  "key": "Footer::© 2026 Gattabara Games LLP. All rights reserved.",
+  "group": "Footer",
+  "label": "Text",
+  "text": "© 2026 Gattabara Games LLP. All rights reserved."
+ },
+ {
+  "key": "Footer::Bengaluru · India",
+  "group": "Footer",
+  "label": "Text",
+  "text": "Bengaluru · India"
+ },
+ {
+  "key": "Other::GATTABARA GAMES",
+  "group": "Other",
+  "label": "Text",
+  "text": "GATTABARA GAMES"
+ },
+ {
+  "key": "Other::PRESS KIT",
+  "group": "Other",
+  "label": "Text",
+  "text": "PRESS KIT"
+ },
+ {
+  "key": "Other::Close ×",
+  "group": "Other",
+  "label": "Link / button",
+  "text": "Close ×"
+ },
+ {
+  "key": "Network roster window::● Connected · Global roster",
+  "group": "Network roster window",
+  "label": "Text",
+  "text": "● Connected · Global roster"
+ },
+ {
+  "key": "Network roster window::Assemble a squad",
+  "group": "Network roster window",
+  "label": "Heading",
+  "text": "Assemble a squad"
+ },
+ {
+  "key": "Network roster window::Choose disciplines and the quality bar. Matching specialists light up on the scope, linked to our Bengaluru core. Sample roster.",
+  "group": "Network roster window",
+  "label": "Paragraph",
+  "text": "Choose disciplines and the quality bar. Matching specialists light up on the scope, linked to our Bengaluru core. Sample roster."
+ },
+ {
+  "key": "Network roster window::Quality bar",
+  "group": "Network roster window",
+  "label": "Label",
+  "text": "Quality bar"
+ },
+ {
+  "key": "Network roster window::Send a brief",
+  "group": "Network roster window",
+  "label": "Link / button",
+  "text": "Send a brief"
+ }
+]
