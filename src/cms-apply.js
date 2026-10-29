@@ -79,7 +79,11 @@ function applyHeroReel(url) {
   v.id = 'herovid';
   Object.assign(v, { src: lean(url, 'hero'), muted: true, loop: true, autoplay: true, playsInline: true, preload: 'auto', poster: lean(url, 'poster') });
   v.setAttribute('aria-hidden', 'true');
-  v.addEventListener('playing', () => document.body.classList.add('reelhero'), { once: true });
+  v.addEventListener('playing', () => { document.body.classList.add('reelhero'); document.body.classList.remove('reelwait'); }, { once: true });
+  /* if the video cannot play (error or too slow), fall back to the generated montage instead of a blank hero */
+  const giveUp = () => document.body.classList.remove('reelwait');
+  v.addEventListener('error', giveUp, { once: true });
+  setTimeout(() => { if (!document.body.classList.contains('reelhero')) giveUp(); }, 12000);
   st.insertBefore(v, $('#kv').nextSibling);
 
   /* Only decode while the hero is on screen and nothing covers it (press kit, Machine view, menu, tab hidden),

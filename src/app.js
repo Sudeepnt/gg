@@ -6,6 +6,8 @@ const nativeHist={replaceState:(...a)=>History.prototype.replaceState.apply(hist
 const HASH0=(location.hash||'').slice(1);let landing=!!HASH0;
 /* editable site content (src/content/site-content.json, edited from /admingg). The arrays below are the fallback. */
 const GGC=(()=>{try{return JSON.parse(document.getElementById('gg-content').textContent)}catch(e){return null}})();
+/* a showreel is configured: keep the generated WebGL montage hidden (and idle) until the video is really playing */
+if(GGC&&GGC.reels&&GGC.reels.main)document.body.classList.add('reelwait');
 const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches,FINE=matchMedia('(pointer:fine)').matches;
 const S={get(k,d){try{const v=localStorage.getItem('ggj_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('ggj_'+k,JSON.stringify(v))}catch(e){}}};
@@ -226,7 +228,7 @@ const KV={i:0,acc:0,gl:0,fl:0,cov:false,paused:RM};
   function loop(){requestAnimationFrame(loop);const now=performance.now(),dt=Math.min(.1,(now-last)/1000);last=now;if(!vis||KV.cov||document.hidden)return;
     if(!KV.paused){KV.acc+=dt;if(KV.acc>=CLIPS[KV.i].d)cut(KV.i+1)}
     /* the showreel video replaces the shader, but the game caption + timeline underneath keep cycling */
-    if(document.body.classList.contains('reelhero')){const cc=CLIPS[KV.i];hudTick(Math.min(1,KV.acc/cc.d));return}
+    if((document.body.classList.contains('reelhero')||document.body.classList.contains('reelwait'))){const cc=CLIPS[KV.i];hudTick(Math.min(1,KV.acc/cc.d));return}
     const c=CLIPS[KV.i],p=Math.min(1,KV.acc/c.d),e=p*p*(3-2*p);const t=RM?3:(now-start)/1000;
     KV.gl=Math.max(0,KV.gl-dt*2.6);KV.fl=Math.max(0,KV.fl-dt*7);m[0]+=(G.mx-m[0])*.05;m[1]+=(-G.my-m[1])*.05;
     const asp=cv.width/cv.height,mob=innerWidth<900;const tile=c.t===1&&asp<1.05?3:c.t;

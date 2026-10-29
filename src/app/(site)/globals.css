@@ -1402,3 +1402,15 @@ body{font-size:14px;line-height:1.75}
 /* hero loading line: 60% narrower again, all screen sizes */
 .kv-cap #kvsegs{width:10.4%;min-width:40px}
 @media (min-width:901px){.kv-cap #kvsegs{width:9.6%}}
+
+/* application form: full screen, flat (no card, shadow or border) */
+.ggform{padding:0;display:block}
+.ggform .form-card{max-width:none;width:100%;min-height:100vh;margin:0;border:0;border-radius:0;box-shadow:none;padding:clamp(72px,8vw,110px) clamp(20px,6vw,96px) 80px;overflow:visible}
+.ggform .form-header,.ggform .application-form{max-width:820px;margin-left:auto;margin-right:auto}
+.ggform .close-button{top:20px;right:20px}
+@media (max-width:768px){.ggform{padding:0}.ggform .form-card{padding:72px 20px 56px}}
+@media (max-width:768px){.ggform .close-button{width:40px;height:40px;top:12px;right:12px}}
+
+/* while the showreel loads: no flash of the generated WebGL montage */
+body.reelwait #kv,body.reelwait .kv-fb,body.reelwait #kvvid,body.reelwait .kv-hud{visibility:hidden}
+body.reelwait .kv-st{background:#000}
