@@ -267,7 +267,7 @@ function putWithProgress(url: string, file: File, onProgress: (pct: number) => v
 }
 
 function Upload({ kind, value, onChange }: { kind: "image" | "video"; value: string; onChange: (v: string) => void }) {
-    const [busy, setBusy] = useState(false); const [pct, setPct] = useState(0); const [err, setErr] = useState(""); const [done, setDone] = useState(false); const ref = useRef<HTMLInputElement>(null);
+    const [busy, setBusy] = useState(false); const [pct, setPct] = useState(0); const [err, setErr] = useState(""); const [done, setDone] = useState(false); const [over, setOver] = useState(false); const ref = useRef<HTMLInputElement>(null);
     const pick = async (file?: File) => {
         if (!file) return; setBusy(true); setErr(""); setPct(0); setDone(false);
         try {
@@ -284,7 +284,9 @@ function Upload({ kind, value, onChange }: { kind: "image" | "video"; value: str
         setBusy(false);
     };
     return (
-        <div className="border border-dashed border-gray-200 rounded-2xl p-4 bg-gray-50/50">
+        <div className={`border border-dashed rounded-2xl p-4 transition-colors ${over ? "border-[#1A2E35] bg-[#1A2E35]/5" : "border-gray-200 bg-gray-50/50"}`}
+            onDragOver={(e) => { e.preventDefault(); if (!busy) setOver(true); }} onDragLeave={() => setOver(false)}
+            onDrop={(e) => { e.preventDefault(); setOver(false); if (!busy) pick(e.dataTransfer.files?.[0]); }}>
             <div className="flex gap-4 items-start">
                 <div className="w-40 aspect-video bg-white border border-gray-100 rounded-lg overflow-hidden flex items-center justify-center shrink-0">
                     {value ? (kind === "image" ? <img src={value} alt="" className="w-full h-full object-contain" /> : <video src={value} className="w-full h-full object-cover" muted preload="metadata" />)
@@ -302,7 +304,7 @@ function Upload({ kind, value, onChange }: { kind: "image" | "video"; value: str
                     {busy && <div className="mt-3 h-1.5 w-full max-w-xs bg-gray-200 rounded-full overflow-hidden"><div className="h-full bg-[#1A2E35] transition-[width]" style={{ width: `${pct}%` }} /></div>}
                     {err && <p className="text-red-500 text-xs mt-2">{err}</p>}
                     {done && !busy && !err && <p className="text-[13px] font-semibold text-emerald-600 mt-3">✓ Uploaded. It goes live on the website after you press “Save All Changes” (top right).</p>}
-                    <p className="text-[11px] text-gray-400 mt-2">Stored in the Cloudflare R2 bucket. Images up to 25 MB, videos up to 600 MB.</p>
+                    <p className="text-[11px] text-gray-400 mt-2">Click Upload or drag a file onto this box. Stored in the Cloudflare R2 bucket. Images up to 25 MB, videos up to 600 MB.</p>
                 </div>
             </div>
         </div>

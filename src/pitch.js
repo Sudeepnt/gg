@@ -26,6 +26,8 @@ if (root) {
     ov.setAttribute('data-lenis-prevent', '');
     ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', (((cms.form || {}).labels) || {}).formAria || 'Application form');
     ov.innerHTML = form();
+    /* a file dropped just outside the upload box must not make the browser open it and throw the form away */
+    ['dragover', 'drop'].forEach(t => ov.addEventListener(t, e => e.preventDefault()));
     document.body.appendChild(ov);
     document.body.style.overflow = 'hidden';
     wire(); ov.scrollTop = 0;
