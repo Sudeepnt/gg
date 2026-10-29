@@ -1,7 +1,7 @@
 /* Saves form submissions to the same Supabase project the previous site used:
    table `inquiries` (name, email, message, data jsonb) and storage bucket `gg-content` (applications/…).
    Credentials come from the NEXT_PUBLIC_SUPABASE_* env vars already set on Vercel. */
-const URL_ = process.env.NEXT_PUBLIC_SUPABASE_URL, KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const URL_ = process.env.NEXT_PUBLIC_SUPABASE_URL, KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 const auth = () => ({ apikey: KEY, Authorization: `Bearer ${KEY}` });
 export const configured = () => !!(URL_ && KEY);
 

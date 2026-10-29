@@ -206,6 +206,8 @@ for(let i=0;i<4;i++){const c=REN.draw(960,600,{id:i,t:2.2+i,dot:6,sc:.95});if(c)
 /* key art URLs come from the content file (Games tab in /admingg); the generated halftone is the fallback */
 GAMES.forEach((g,k)=>{if(g.image)THUMBS[k]=g.image});
 function thumb(i){return THUMBS[i]||''}
+function soonHTML(){const t=esc0(GP.comingSoonText||'Coming Soon...');return `<span class="soon" aria-label="${t}"><span class="o" aria-hidden="true">${t}</span><span class="f" aria-hidden="true">${t}</span></span>`}
+
 /* live KV: montage reel. Each clip is a cut of the halftone renderer; `src` (an mp4 URL) can replace any clip with real footage later. */
 const CLIPS=[
  {ids:[0],t:0,cam:[0,0,1.12,.04,.02,.92],d:2.8,lb:'Pen Fight',sb:'Original IP · In development',g:0,k:0},
@@ -348,7 +350,7 @@ function openDp(i,push=true){const g=GAMES[i];dpLast=dpLast||document.activeElem
     <p class="note" style="color:#7A7A77">${esc(pl('note','※ Images are key visuals from our halftone renderer until final in-game captures are released.'))}</p>`;
   $('#dpbody').innerHTML=`<nav class="pk-nav" aria-label="Press kit sections"><div class="wrap"><a href="#pk-fact" data-pk>${pl('navFact','Factsheet')}</a><a href="#pk-desc" data-pk>${pl('navDesc','Description')}</a><a href="#pk-media" data-pk>${pl('navMedia','Media')}</a><a href="#pk-about" data-pk>${pl('navAbout','About')}</a><a href="#pk-contact" data-pk>${pl('navContact','Contact')}</a></div></nav>
    <div class="wrap">
-    <header class="pk-hero"><div class="cap">${thumb(i)?`<img src="${thumb(i)}" alt="Capsule art for ${g.t}">`:`<div style="position:absolute;inset:0;color:#F3F3F0">${fbArt(i)}</div>`}</div>
+    <header class="pk-hero"><div class="cap">${GP.showComingSoon!==false?soonHTML():thumb(i)?`<img src="${thumb(i)}" alt="Capsule art for ${g.t}">`:`<div style="position:absolute;inset:0;color:#F3F3F0">${fbArt(i)}</div>`}</div>
      <div><p class="lbl"><b>${pl('tag','PRESS KIT')}</b>${g.code}</p><h1 id="dpt">${g.t}</h1><p class="rel">${pl('release','Release date:')} <b>${sealed?'Sealed':esc(factOf(g,'Release date')||'To be announced')}</b></p>
       <div class="pk-tags">${g.tags.map(t=>`<span class="tag">${sealed&&!opened&&t==='Sealed'?t:esc(t)}</span>`).join('')}</div>
       <div class="acts">${sealed?`<a class="btn" href="#contact" data-line="insider">${pl('insider','Join the insider list')}</a>`:`<button class="btn" type="button" data-dl="all">${pl('downloadAll','↓ Download all media (.zip)')}</button>`}<a class="btn ln" href="#contact" data-line="press">${pl('inquiry','Press inquiry')}</a></div></div></header>
@@ -360,7 +362,7 @@ function openDp(i,push=true){const g=GAMES[i];dpLast=dpLast||document.activeElem
     <section class="pk-s" id="pk-about"><h2>${pl('about','About the developer')}</h2><div><p class="lead">${BOILER}</p><div class="studio"><img class="studio-logo" src="${esc(PKSTUDIO.white)}" alt="Gattabara Games logo"><div class="bt"><button class="dl" type="button" data-dl="studio:white">${pl('logoWhiteBtn','\u2193 Logo (white)')}</button><button class="dl" type="button" data-dl="studio:black">${pl('logoBlackBtn','\u2193 Logo (black)')}</button></div></div></div></section>
     <section class="pk-s" id="pk-contact"><h2>${pl('contact','Contact')}</h2><div><table class="prof">${PKCONTACT.map(r=>`<tr><th>${esc(r[0])}</th><td>${esc(r[1])}</td></tr>`).join('')}</table></div></section>
     <div class="pk-s" style="border-bottom:0;padding-bottom:30px"><h2>${pl('others','Other titles')}</h2><div></div></div>
-    <div class="others">${others.map(j=>`<button type="button" data-j="${j}">${thumb(j)?`<img src="${thumb(j)}" alt="">`:''}<b>${GAMES[j].t}</b><span class="mono" style="color:#7A7A77">${GAMES[j].st} · ${pl('pressKitWord','Press kit')}</span></button>`).join('')}</div></div>`;
+    <div class="others">${others.map(j=>`<button type="button" data-j="${j}"><span class="oim">${GP.showComingSoon!==false?soonHTML():thumb(j)?`<img src="${thumb(j)}" alt="">`:''}</span><b>${GAMES[j].t}</b><span class="mono" style="color:#7A7A77">${GAMES[j].st} · ${pl('pressKitWord','Press kit')}</span></button>`).join('')}</div></div>`;
   $$('#dpbody .others button').forEach(b=>b.onclick=()=>{$('#dp').scrollTo({top:0});openDp(+b.dataset.j,false);try{nativeHist.replaceState({dp:GAMES[+b.dataset.j].id},'','#title/'+GAMES[+b.dataset.j].id)}catch(e){}});
   {const tb=$('#dpbody [data-trailer]');if(tb)mountTrailer(tb,g.trailer,g.trailerPoster)}
   $$('#dpbody [data-dl]').forEach(b=>b.onclick=async()=>{b.disabled=true;await pkDownload(i,b.dataset.dl);b.disabled=false});

@@ -6,12 +6,12 @@ import React, { createContext, useCallback, useContext, useEffect, useRef, useSt
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-    Home, Newspaper, Gamepad2, BookOpen, Clapperboard, Mail, Users, Building2, Briefcase, Send, Phone, Globe, Type, Search, ChevronDown, Sun, Moon, Inbox, ClipboardList, RefreshCw, Paperclip,
+    Home, Newspaper, Gamepad2, BookOpen, Clapperboard, Mail, Users, Building2, Briefcase, Send, Phone, Globe, Type, Search, ChevronDown, Sun, Moon, Inbox, ClipboardList, RefreshCw, Paperclip, History,
     Save, LogOut, Download, UploadCloud, Plus, Trash2, ArrowUp, ArrowDown, Loader2, Check, X, Image as ImageIcon, Film,
 } from "lucide-react";
 import pageTexts from "@/content/page-texts.json";
 import cmsSnapshot from "@/cms-data.json";
-import { getSiteContent, saveSiteContent, uploadAsset, logoutAdmin, getSubmissions, deleteSubmission } from "@/app/actions/adminActions";
+import { getSiteContent, saveSiteContent, uploadAsset, logoutAdmin, getSubmissions, deleteSubmission, restorePreviousContent } from "@/app/actions/adminActions";
 
 /* ---------- what can be edited, per tab. Labels are the words the website itself shows. ---------- */
 type F = { key: string; label: string; type: "text" | "toggle" | "textarea" | "lines" | "tags" | "number" | "select" | "image" | "video" | "rows"; options?: string[]; hint?: string;
@@ -501,6 +501,15 @@ function PageText({ content, update, groups: only, title }: { content: any; upda
     );
 }
 
+function RestoreButton({ enabled, onRestored, onError }: { enabled: boolean; onRestored: (r: any) => void; onError: (m: string) => void }) {
+    const ask = useContext(ConfirmCtx); const [busy, setBusy] = useState(false);
+    if (!enabled) return null;
+    return <button type="button" disabled={busy} title="Restore the version that was live before your last save" onClick={async () => {
+        if (!(await ask({ title: "Restore the previous version?", message: "The website will go back to how it was before your last save. Your current version is kept, so you can switch back.", confirmLabel: "Restore", danger: false }))) return;
+        setBusy(true); const r: any = await restorePreviousContent(); setBusy(false); if (r.ok) onRestored(r); else onError(r.error || "Restore failed");
+    }} className="hidden md:inline-flex items-center gap-2 text-[13px] text-gray-600 border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-50 disabled:opacity-60">{busy ? <Loader2 size={15} className="animate-spin" /> : <History size={15} />} Restore previous</button>;
+}
+
 function BlockView({ b, content, update }: { b: Block; content: any; update: (path: string, v: any) => void }) {
     const card = "bg-white border border-gray-100 rounded-[24px] shadow-sm p-4 sm:p-8";
     if (b.kind === "submissions") return <SubmissionsView which={b.which} />;
@@ -527,6 +536,10 @@ export default function Dashboard() {
     const router = useRouter();
     const [content, setContent] = useState<any>(null);
     const [canSave, setCanSave] = useState(true);
+    const [storage, setStorage] = useState<"database" | "file">("file");
+    const [version, setVersion] = useState<string | null>(null);
+    const [hasBackup, setHasBackup] = useState(false);
+    const [loadError, setLoadError] = useState("");
     const [tab, setTab] = useState(TABS[0].id);
     const [saving, setSaving] = useState(false);
     const [dirty, setDirty] = useState(false);
@@ -549,23 +562,26 @@ export default function Dashboard() {
     useEffect(() => { document.documentElement.classList.toggle("admin-dark", dark); return () => document.documentElement.classList.remove("admin-dark"); }, [dark]);
     const toggleTheme = () => setDark((d) => { const n = !d; localStorage.setItem("gg_admin_theme", n ? "dark" : "light"); return n; });
 
-    useEffect(() => {
+    const loadContent = useCallback(() => {
+        setLoadError("");
         getSiteContent().then((r: any) => {
-            if (!r.ok) { router.replace("/admingg"); return; }
-            setContent(r.content); setCanSave(r.canSave);
+            if (!r.ok) { if (/not authori[sz]ed/i.test(r.error || "")) router.replace("/admingg"); else setLoadError(r.error || "Could not load the content."); return; }
+            setContent(r.content); setCanSave(r.canSave); setStorage(r.storage); setVersion(r.version); setHasBackup(!!r.hasBackup); setDirty(false);
         });
     }, [router]);
+    useEffect(() => { loadContent(); }, [loadContent]);
     useEffect(() => { if (!toast) return; const t = setTimeout(() => setToast(null), 5000); return () => clearTimeout(t); }, [toast]);
     useEffect(() => { const h = (e: BeforeUnloadEvent) => { if (dirty) { e.preventDefault(); e.returnValue = ""; } }; window.addEventListener("beforeunload", h); return () => window.removeEventListener("beforeunload", h); }, [dirty]);
 
     const update = (path: string, v: any) => { setContent((c: any) => setAt(c, path, v)); setDirty(true); };
     const save = async () => {
         setSaving(true);
-        const r: any = await saveSiteContent(content);
+        const r: any = await saveSiteContent(content, version);
         setSaving(false);
-        if (r.ok) { setDirty(false); setToast({ ok: true, text: "Saved. The site now shows these changes." }); }
+        if (r.ok) { setDirty(false); setVersion(r.version ?? null); setHasBackup(!!r.hasBackup); setToast({ ok: true, text: storage === "database" ? "Saved to the database. The website now shows these changes." : "Saved. The site now shows these changes." }); }
         else setToast({ ok: false, text: r.error || "Save failed" });
     };
+    const restored = (r: any) => { setContent(r.content); setVersion(r.version); setHasBackup(true); setDirty(false); setToast({ ok: true, text: "Previous version restored. The website shows it now." }); };
     const exportJson = () => {
         const a = document.createElement("a");
         a.href = URL.createObjectURL(new Blob([JSON.stringify(content, null, 2) + "\n"], { type: "application/json" }));
@@ -578,6 +594,7 @@ export default function Dashboard() {
     };
     const logout = async () => { await logoutAdmin(); router.push("/admingg"); };
 
+    if (loadError) return <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center gap-4 p-6 text-center"><p className="max-w-md text-gray-700">{loadError}</p><button type="button" onClick={loadContent} className="bg-[#1A2E35] text-white font-semibold text-[14px] px-6 py-3 rounded-xl">Try again</button></div>;
     if (!content) return <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center text-gray-400"><Loader2 className="animate-spin" /></div>;
     const cur = TABS.find((t) => t.id === tab)!;
 
@@ -592,6 +609,7 @@ export default function Dashboard() {
                     <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                         <button type="button" onClick={toggleTheme} aria-label={dark ? "Switch to light theme" : "Switch to dark theme"} title={dark ? "Light theme" : "Dark theme"} className="p-2.5 text-gray-500 border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-gray-900">{dark ? <Sun size={17} /> : <Moon size={17} />}</button>
                         <a href="/" target="_blank" className="hidden sm:inline-flex text-[13px] text-gray-500 border border-gray-200 rounded-lg px-4 py-2 hover:bg-gray-50">View site</a>
+                        <RestoreButton enabled={storage === "database" && hasBackup} onRestored={restored} onError={(m) => setToast({ ok: false, text: m })} />
                         <button type="button" onClick={exportJson} className="inline-flex items-center gap-2 text-[13px] text-gray-600 border border-gray-200 rounded-lg px-2.5 sm:px-3 py-2.5 sm:py-2 hover:bg-gray-50" aria-label="Export"><Download size={15} /> <span className="hidden sm:inline">Export</span></button>
                         <button type="button" onClick={() => importRef.current?.click()} className="hidden sm:inline-flex items-center gap-2 text-[13px] text-gray-600 border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-50"><UploadCloud size={15} /> Import</button>
                         <input ref={importRef} type="file" hidden accept="application/json,.json" onChange={(e) => { importJson(e.target.files?.[0]); e.target.value = ""; }} />
@@ -602,7 +620,7 @@ export default function Dashboard() {
             </header>
 
             <main className="max-w-[1100px] mx-auto px-3 sm:px-4 mt-5 sm:mt-8">
-                {!canSave && (<div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 text-amber-800 text-sm px-5 py-4">This copy of the site cannot save to disk (read-only hosting). You can still edit, then press <b>Export</b> and replace <code>src/content/site-content.json</code> in the project.</div>)}
+                {!canSave && (<div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 text-amber-800 text-sm px-5 py-4">Saving is not available here: database storage (Supabase) is not configured on this server. You can still edit and press <b>Export</b>.</div>)}
                 <nav className="bg-white border border-gray-100 rounded-2xl shadow-sm p-1.5 sm:p-2 flex flex-nowrap sm:flex-wrap gap-1 mb-5 sm:mb-8 overflow-x-auto sm:overflow-visible [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                     {TABS.map((t) => { const I = t.icon; const on = t.id === tab; return (
                         <button key={t.id} type="button" onClick={() => setTab(t.id)} className={`inline-flex shrink-0 whitespace-nowrap items-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl text-[13px] sm:text-[13.5px] font-semibold transition-colors ${on ? "bg-[#1A2E35] text-white" : "text-gray-500 hover:bg-gray-50"}`}><I size={16} /> {t.label}{(t.id === "inquiries" || t.id === "applications") && subs.loaded && <span className={`ml-1 text-[11px] font-bold px-1.5 py-0.5 rounded-full ${on ? "bg-white/20" : "bg-gray-100 text-gray-500"}`}>{subs.rows.filter((r) => (t.id === "applications") === isApplication(r)).length}</span>}</button>); })}

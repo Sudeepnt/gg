@@ -1,16 +1,17 @@
 import { NextResponse } from "next/server";
+import { sbConfig } from "@/lib/supabaseRest";
 
-// Vercel cron (see vercel.json): logs a heartbeat row so the free Supabase project does not pause.
+// Vercel cron (see vercel.json): pings the `heartbeat` table (row 1, like the previous site) so the Supabase project does not pause.
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL, key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key) return NextResponse.json({ success: false, error: "Supabase env vars missing" }, { status: 500 });
+  const c = sbConfig();
+  if (!c) return NextResponse.json({ success: false, error: "Supabase env vars missing" }, { status: 500 });
   try {
-    const r = await fetch(`${url}/rest/v1/project_heartbeat`, {
+    const r = await fetch(`${c.url}/rest/v1/heartbeat?on_conflict=id`, {
       method: "POST",
-      headers: { apikey: key, Authorization: `Bearer ${key}`, "Content-Type": "application/json", Prefer: "return=minimal" },
-      body: JSON.stringify({ message: "hi" }),
+      headers: { ...c.headers, "Content-Type": "application/json", Prefer: "resolution=merge-duplicates,return=minimal" },
+      body: JSON.stringify({ id: 1, last_ping: new Date().toISOString(), message: "ping" }),
     });
     if (!r.ok) return NextResponse.json({ success: false, error: await r.text() }, { status: 500 });
     return NextResponse.json({ success: true });

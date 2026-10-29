@@ -1,10 +1,14 @@
 import markup from "./markup";
 import Markup from "./SiteMarkup";
 import Boot from "./Boot";
-import content from "@/content/site-content.json";
+import { getRuntimeContent } from "@/lib/content";
 import { applyTexts } from "@/content/pageTextRules";
 
-export default function Home() {
+/* content comes from Supabase (see src/lib/content.ts); the page is refreshed at most every minute and immediately after the admin saves */
+export const revalidate = 60;
+
+export default async function Home() {
+  const content = await getRuntimeContent();
   return (
     <>
       <Markup html={applyTexts(markup, (content as { texts?: Record<string, string> }).texts)} />

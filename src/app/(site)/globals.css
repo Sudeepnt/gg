@@ -1425,10 +1425,12 @@ footer .brand .gglockup{height:44px}
 @media (max-width:640px){.brand .gglockup{height:26px}}
 
 /* Games cards: the old site's "Coming Soon..." liquid text in the picture area */
-.gc .im{container-type:inline-size}
-.gc .im .soon{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse at center,#161616 0%,#050505 75%)}
-.gc .im .soon>span{grid-area:1/1;font-family:'NT Brick Sans',var(--cond),sans-serif;font-weight:400;font-size:5.6cqw;letter-spacing:.15em;text-transform:uppercase;white-space:nowrap;margin:0}
-.gc .im .soon .o{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.4)}
-.gc .im .soon .f{color:#fff;animation:ggliquid 4s ease-in-out infinite}
+.gc .im,.pk-hero .cap,.others .oim{container-type:inline-size}
+.gc .im .soon,.pk-hero .cap .soon,.others .oim .soon{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse at center,#161616 0%,#050505 75%)}
+:is(.gc .im,.pk-hero .cap,.others .oim) .soon>span{grid-area:1/1;font-family:'NT Brick Sans',var(--cond),sans-serif;font-weight:400;font-size:5.6cqw;letter-spacing:.15em;text-transform:uppercase;white-space:nowrap;margin:0}
+:is(.gc .im,.pk-hero .cap,.others .oim) .soon .o{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.4)}
+:is(.gc .im,.pk-hero .cap,.others .oim) .soon .f{color:#fff;animation:ggliquid 4s ease-in-out infinite}
 @keyframes ggliquid{0%,100%{clip-path:polygon(0% 45%,16% 44%,33% 50%,54% 60%,70% 61%,84% 59%,100% 52%,100% 100%,0% 100%)}50%{clip-path:polygon(0% 60%,15% 65%,34% 66%,51% 62%,67% 50%,84% 45%,100% 46%,100% 100%,0% 100%)}}
-@media (max-width:600px){.gc .im .soon .o{-webkit-text-stroke:.5px rgba(255,255,255,.3)}.gc .im .soon>span{font-size:6.4cqw}}
+@media (max-width:600px){:is(.gc .im,.pk-hero .cap,.others .oim) .soon .o{-webkit-text-stroke:.5px rgba(255,255,255,.3)}:is(.gc .im,.pk-hero .cap,.others .oim) .soon>span{font-size:6.4cqw}}
+.others .oim{position:relative;display:block;aspect-ratio:16/10;overflow:hidden;background:#000}
+.pk-hero .cap .soon{z-index:1}
