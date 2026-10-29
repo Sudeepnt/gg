@@ -267,18 +267,18 @@ function putWithProgress(url: string, file: File, onProgress: (pct: number) => v
 }
 
 function Upload({ kind, value, onChange }: { kind: "image" | "video"; value: string; onChange: (v: string) => void }) {
-    const [busy, setBusy] = useState(false); const [pct, setPct] = useState(0); const [err, setErr] = useState(""); const ref = useRef<HTMLInputElement>(null);
+    const [busy, setBusy] = useState(false); const [pct, setPct] = useState(0); const [err, setErr] = useState(""); const [done, setDone] = useState(false); const ref = useRef<HTMLInputElement>(null);
     const pick = async (file?: File) => {
-        if (!file) return; setBusy(true); setErr(""); setPct(0);
+        if (!file) return; setBusy(true); setErr(""); setPct(0); setDone(false);
         try {
             const sig: any = await getUploadUrl(file.name, file.type, kind, file.size);
             if (!sig.ok) throw new Error(sig.error);
-            try { await putWithProgress(sig.uploadUrl, file, setPct); onChange(sig.publicUrl); }
+            try { await putWithProgress(sig.uploadUrl, file, setPct); onChange(sig.publicUrl); setDone(true); }
             catch (e: any) {
                 if (e.message !== "blocked") throw e;
                 if (file.size > 4 * 1024 * 1024) throw new Error("The upload was blocked by Cloudflare. Add the CORS rule from cloudflare/r2-cors.json to the R2 bucket (see README), then try again.");
                 const fd = new FormData(); fd.append("file", file); fd.append("kind", kind);       /* small file: send it through the server instead */
-                const r: any = await uploadAsset(fd); if (!r.ok) throw new Error(r.error || "Upload failed"); onChange(r.url);
+                const r: any = await uploadAsset(fd); if (!r.ok) throw new Error(r.error || "Upload failed"); onChange(r.url); setDone(true);
             }
         } catch (e: any) { setErr(e.message || "Upload failed"); }
         setBusy(false);
@@ -301,6 +301,7 @@ function Upload({ kind, value, onChange }: { kind: "image" | "video"; value: str
                     </div>
                     {busy && <div className="mt-3 h-1.5 w-full max-w-xs bg-gray-200 rounded-full overflow-hidden"><div className="h-full bg-[#1A2E35] transition-[width]" style={{ width: `${pct}%` }} /></div>}
                     {err && <p className="text-red-500 text-xs mt-2">{err}</p>}
+                    {done && !busy && !err && <p className="text-[13px] font-semibold text-emerald-600 mt-3">✓ Uploaded. It goes live on the website after you press “Save All Changes” (top right).</p>}
                     <p className="text-[11px] text-gray-400 mt-2">Stored in the Cloudflare R2 bucket. Images up to 25 MB, videos up to 600 MB.</p>
                 </div>
             </div>
