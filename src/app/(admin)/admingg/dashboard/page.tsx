@@ -10,6 +10,7 @@ import {
     Save, LogOut, Download, UploadCloud, Plus, Trash2, ArrowUp, ArrowDown, Loader2, Check, X, Image as ImageIcon, Film,
 } from "lucide-react";
 import pageTexts from "@/content/page-texts.json";
+import { UI_STRINGS } from "@/content/uiStrings.js";
 import cmsSnapshot from "@/cms-data.json";
 import { getSiteContent, saveSiteContent, uploadAsset, logoutAdmin, getSubmissions, deleteSubmission, restorePreviousContent, getUploadUrl } from "@/app/actions/adminActions";
 
@@ -20,11 +21,12 @@ type Block =
     | { kind: "object"; path: string; title: string; fields: F[] }
     | { kind: "lines"; path: string; title: string; hint?: string }
     | { kind: "pagetext"; groups?: string[]; title?: string }
+    | { kind: "uitext"; title?: string }
     | { kind: "submissions"; which: "general" | "applications" }
     | { kind: "list"; path: string; title: string; addLabel: string; fields: F[]; blank: () => any; label: (it: any) => string; fixed?: boolean };
 
 /* the application form's fields are named after the sentence the visitor reads, so the client sees the same words */
-const FORM_ORDER = ["studioName", "studioWebsite", "yourName", "email", "country", "gameTitle", "collaboration", "collabCoDev", "collabCoFunding", "collabPublishing", "selectPlaceholder", "description", "totalBudget", "budgetAsk", "platforms", "platformOptions", "genre", "compTitle", "materials", "chooseFile", "dragDrop", "alertFiles", "alertSize", "materialsLinks", "multiplayer", "launchWindow", "estimatedPrice", "teamSize", "additionalNotes", "howHeard", "notRobot", "alertRobot", "captchaNote", "captchaAction", "captchaBrand", "captchaPrivacy", "captchaTerms", "submit", "submitting", "submitted", "tryAgain", "sendingTitle", "failTitle", "successTitle", "successMessage", "successButton"];
+const FORM_ORDER = ["studioName", "studioWebsite", "yourName", "email", "country", "gameTitle", "collaboration", "collabCoDev", "collabCoFunding", "collabPublishing", "selectPlaceholder", "description", "totalBudget", "budgetAsk", "platforms", "platformOptions", "genre", "compTitle", "materials", "chooseFile", "dragDrop", "alertFiles", "alertSize", "materialsLinks", "multiplayer", "launchWindow", "estimatedPrice", "teamSize", "additionalNotes", "howHeard", "notRobot", "alertRobot", "captchaNote", "captchaAction", "captchaBrand", "captchaPrivacy", "captchaTerms", "formAria", "closeForm", "submit", "submitting", "submitted", "finalizing", "errorFallback", "tryAgain", "sendingTitle", "failTitle", "successTitle", "successMessage", "successButton"];
 const FORM_LABELS = (cmsSnapshot as any).form.labels as Record<string, string>;
 const FORM_SORTED = FORM_ORDER.flatMap((k) => [k, k + "Hint", k + "Desc"]).filter((k) => k in FORM_LABELS);
 const FORM_LABEL_FIELDS: F[] = FORM_SORTED.map((k) => [k, FORM_LABELS[k]] as [string, string]).map(([k, v]) => ({ key: k, label: String(v).length > 90 ? String(v).slice(0, 87) + "\u2026" : String(v), type: String(v).length > 70 ? "textarea" as const : "text" as const }));
@@ -226,7 +228,7 @@ const TABS: { id: string; label: string; icon: any; blocks: Block[] }[] = [
         { kind: "object", path: "contact", title: "Footer and contact details (shown in the footer and under the form)", fields: [
             { key: "tagline", label: "Footer line", type: "text" }, { key: "company", label: "Company name", type: "text" },
             { key: "address", label: "Address", type: "text" }, { key: "email", label: "Email address", type: "text" }] }] },
-    { id: "texts", label: "All other text", icon: Type, blocks: [{ kind: "pagetext" }] },
+    { id: "texts", label: "All other text", icon: Type, blocks: [{ kind: "pagetext" }, { kind: "uitext", title: "Pop-ups, loading screen, Machine view and other wording the page builds itself" }] },
 ];
 
 /* each tab ends with the section's remaining headings, buttons and labels, so nothing has to be hunted for in another tab */
@@ -497,17 +499,19 @@ function Field({ f, value, onChange }: { f: F; value: any; onChange: (v: any) =>
 }
 
 /* every other piece of text on the page, grouped by section, shown exactly as it reads on the site */
-function PageText({ content, update, groups: only, title }: { content: any; update: (path: string, v: any) => void; groups?: string[]; title?: string }) {
+function PageText({ content, update, groups: only, title, ui }: { content: any; update: (path: string, v: any) => void; groups?: string[]; title?: string; ui?: boolean }) {
     const [q, setQ] = useState("");
-    const texts: Record<string, string> = content.texts || {};
+    const path = ui ? "uiText" : "texts";
+    const texts: Record<string, string> = content[path] || {};
+    const entries: any[] = ui ? (UI_STRINGS as string[][]).map(([group, label, text]) => ({ key: text, group, label, text })) : (pageTexts as any[]);
     const groups: Record<string, typeof pageTexts> = {};
-    (pageTexts as any[]).forEach((e) => { if (only && !only.includes(e.group)) return; if (!q || (texts[e.key] ?? e.text).toLowerCase().includes(q.toLowerCase()) || e.group.toLowerCase().includes(q.toLowerCase())) (groups[e.group] = groups[e.group] || []).push(e); });
-    const set = (e: any, v: string) => { const n = { ...texts }; if (v === e.text) delete n[e.key]; else n[e.key] = v; update("texts", n); };
+    entries.forEach((e) => { if (only && !only.includes(e.group)) return; if (!q || (texts[e.key] ?? e.text).toLowerCase().includes(q.toLowerCase()) || e.group.toLowerCase().includes(q.toLowerCase())) (groups[e.group] = groups[e.group] || []).push(e); });
+    const set = (e: any, v: string) => { const n = { ...texts }; if (v === e.text) delete n[e.key]; else n[e.key] = v; update(path, n); };
     return (
         <section className="bg-white border border-gray-100 rounded-[24px] shadow-sm p-4 sm:p-8">
             <h3 className="text-xl font-bold mb-2">{title || "All other text on the website"}</h3>
             <p className="text-gray-400 text-sm mb-6">Headings, buttons, labels and small print, grouped by the section they appear in. Each box shows the text exactly as it reads on the site; change it and save.</p>
-            <div className="relative mb-6"><Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" /><input className={inputBase + " bg-gray-50 border-gray-100 text-gray-900 pl-11"} placeholder="Search the text\u2026" value={q} onChange={(e) => setQ(e.target.value)} /></div>
+            <div className="relative mb-6"><Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" /><input className={inputBase + " bg-gray-50 border-gray-100 text-gray-900 pl-11"} placeholder="Search the text…" value={q} onChange={(e) => setQ(e.target.value)} /></div>
             {Object.entries(groups).map(([g, list]) => (
                 <details key={g} className="border border-gray-100 rounded-2xl mb-3 bg-gray-50/40" open={!!q || !!only}>
                     <summary className="cursor-pointer select-none px-5 py-4 font-semibold text-[15px] flex items-center justify-between">{g}<span className="text-gray-300 font-normal text-sm">{list.length}</span></summary>
@@ -515,7 +519,7 @@ function PageText({ content, update, groups: only, title }: { content: any; upda
                         {list.map((e: any) => { const v = texts[e.key] ?? e.text; return (
                             <div key={e.key}><Label text={e.label} />
                                 {v.length > 70 ? <textarea rows={3} className={inputCls} value={v} onChange={(ev) => set(e, ev.target.value)} /> : <input className={e.label === "Heading" ? keyCls : inputCls} value={v} onChange={(ev) => set(e, ev.target.value)} />}
-                                {texts[e.key] !== undefined && <button type="button" onClick={() => { const n = { ...texts }; delete n[e.key]; update("texts", n); }} className="text-[12px] text-gray-400 hover:text-gray-700 mt-1 px-1">Reset to original</button>}</div>); })}
+                                {texts[e.key] !== undefined && <button type="button" onClick={() => { const n = { ...texts }; delete n[e.key]; update(path, n); }} className="text-[12px] text-gray-400 hover:text-gray-700 mt-1 px-1">Reset to original</button>}</div>); })}
                     </div>
                 </details>))}
             {Object.keys(groups).length === 0 && <p className="text-gray-400 text-sm py-6 text-center">No text matches \u201c{q}\u201d.</p>}
@@ -535,6 +539,7 @@ function RestoreButton({ enabled, onRestored, onError }: { enabled: boolean; onR
 function BlockView({ b, content, update }: { b: Block; content: any; update: (path: string, v: any) => void }) {
     const card = "bg-white border border-gray-100 rounded-[24px] shadow-sm p-4 sm:p-8";
     if (b.kind === "submissions") return <SubmissionsView which={b.which} />;
+    if (b.kind === "uitext") return <PageText content={content} update={update} title={b.title} ui />;
     if (b.kind === "pagetext") return <PageText content={content} update={update} groups={b.groups} title={b.title} />;
     if (b.kind === "object") {
         const obj = getAt(content, b.path) || {};

@@ -4,8 +4,9 @@
 import { parse } from 'node-html-parser';
 
 export const EXCLUDE = ['#gl', '#svc', '#spx', '#jobs', '#cli', '#ldr', '#fmlist', '#msgbody', '.vals', '.mvv .v', '.mvv .lead', '#doc', '.msg > .big', '#kvcatch', '.kv-sub',
-  '#kvlb', '#kvpk', '#csub', '#tn', 'button[data-open]', '#kvsb', '#kvhud', '#shot', '#clk', '#pitch', '#mail', '.wbar', '#dpbody', '#dpbc', '#machine', '.fsm > div:first-child', '#ctsub', '#cttabs', '#toast', '#slotv', '#slotn',
-  '#rsec', '#rno', '#pka', '#pkt', '#ld', '#nl', '.sc', '#ptc', '.kv-th', '#kvsegs', '#kvn', '#kvtot', '#kvtc', '#kvstate', '#ldn', '#bios', '#panelContact', '.mail'];
+  '#kvlb', '#kvpk', '#csub', '#tn', 'button[data-open]', '#kvsb', '#kvhud', '#shot', '#clk', '#pitch', '#mail', '.wbar', '#dpbody', '#dpbc', '#mstat', '#mnav', '#mdoc', '.fsm > div:first-child', '#ctsub', '#cttabs', '#toast', '#slotv', '#slotn',
+  '#rsec', '#rno', '#pka', '#pkt', '#nl', '.sc', '#ptc', '.kv-th', '#kvsegs', '#kvn', '#kvtot', '#kvtc', '#kvstate', '#ldn', '#bios', '#panelContact', '.mail'];
+const ATTRS = [['aria-label', 'Screen-reader label'], ['title', 'Tooltip'], ['placeholder', 'Hint inside the box'], ['alt', 'Image description'], ['data-name', 'Section name (window bar and side rail)']];
 const SKIP_TAGS = new Set(['script', 'style', 'svg', 'canvas', 'noscript', 'textarea', 'option', 'select']);
 export const norm = t => String(t).replace(/\s+/g, ' ').trim();
 const titleCase = s => s.toLowerCase().replace(/\b\w/g, c => c.toUpperCase()).replace(/\bGg\b/, 'GG');
@@ -15,6 +16,8 @@ function groupOf(node) {
     if (n.tagName === 'SECTION' && n.getAttribute?.('data-name')) return titleCase(n.getAttribute('data-name'));
     if (n.getAttribute?.('id') === 'fm') return 'Menu';
     if (n.getAttribute?.('id') === 'modal') return 'Network roster window';
+    if (n.getAttribute?.('id') === 'machine') return 'Machine view';
+    if (n.getAttribute?.('id') === 'ld') return 'Loading screen';
     if (n.tagName === 'HEADER' && n.classList?.contains('hd')) return 'Header';
     if (n.tagName === 'FOOTER') return 'Footer';
   }
@@ -41,6 +44,29 @@ export function walk(html, visit) {
     }
   };
   go(root);
+  /* second pass: wording that is not on screen but is read out or shown as a tooltip / placeholder / section name.
+     Collected first and applied after, so a renamed section never changes the group (and key) of the entries inside it. */
+  /* attributes the script rewrites itself are edited under "All other text" (uiStrings.js) or their own tab, never twice */
+  const ATTR_SKIP = new Set();
+  ['#kvpp', '#panelContact', '#pitch', '#toast'].forEach(sel => { try { root.querySelectorAll(sel).forEach(e => { ATTR_SKIP.add(e); e.querySelectorAll('*').forEach(c => ATTR_SKIP.add(c)); }); } catch { /* ignore */ } });
+  const found = [];
+  const walkEls = node => {
+    for (const ch of node.childNodes) {
+      if (ch.nodeType !== 1) continue;
+      if (ATTR_SKIP.has(ch)) continue;
+      for (const [attr, label] of ATTRS) {
+        const v = ch.getAttribute?.(attr);
+        const text = v == null ? '' : norm(v);
+        if (text.length < 2 || !/[A-Za-z]/.test(text)) continue;
+        if (attr === 'data-name' && ch.tagName !== 'SECTION') continue;
+        const group = attr === 'data-name' ? titleCase(text) : groupOf(ch);
+        found.push([ch, { key: `${group}::[${attr}] ${text}`, group, label, text, attr }]);
+      }
+      if (!['script', 'style'].includes(ch.tagName?.toLowerCase())) walkEls(ch);
+    }
+  };
+  walkEls(root);
+  found.forEach(([el, info]) => visit(el, info));
   return root;
 }
 
@@ -48,9 +74,10 @@ export function walk(html, visit) {
 export function applyTexts(html, overrides) {
   if (!overrides || !Object.keys(overrides).length) return html;
   const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
-  const root = walk(html, (node, { key }) => {
+  const root = walk(html, (node, { key, attr }) => {
     const v = overrides[key];
     if (typeof v === 'string' && v.trim()) {
+      if (attr) { node.setAttribute(attr, v.trim()); return; }
       const raw = node.rawText, lead = raw.match(/^\s*/)[0], trail = raw.match(/\s*$/)[0];
       node.rawText = lead + esc(v.trim()) + trail;
     }

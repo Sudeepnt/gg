@@ -914,7 +914,11 @@
       "captchaAction": "Take action.",
       "captchaBrand": "reCAPTCHA",
       "captchaPrivacy": "Privacy",
-      "captchaTerms": "Terms"
+      "captchaTerms": "Terms",
+      "formAria": "Application form",
+      "closeForm": "Close form",
+      "finalizing": "Finalizing submission...",
+      "errorFallback": "An unexpected error occurred. Please check your connection and try again."
     }
   },
   "contactPage": {
@@ -1043,5 +1047,6 @@
   "gamesPage": {
     "showComingSoon": true,
     "comingSoonText": "Coming Soon..."
-  }
+  },
+  "uiText": {}
 }

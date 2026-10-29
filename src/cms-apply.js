@@ -1,5 +1,6 @@
 /* Applies the carried-over gg CMS data to the page: client logos, the reel video and the contact email. */
 import { loadCMS, clientsOf } from './cms.js';
+import { tx } from './tx.js';
 
 const $ = s => document.querySelector(s);
 
@@ -41,11 +42,11 @@ function applyReel(url, url2) {
   v.src = reels.anim;
   const ctl = document.createElement('div');
   ctl.className = 'rv-ctl';
-  ctl.innerHTML = `<div class="rv-row"><button type="button" class="rv-btn" data-a="play" aria-label="Pause reel">${svg('pause')}</button><button type="button" class="rv-btn" data-a="mute" aria-label="Unmute reel">${svg('mute')}</button></div><div class="rv-bar" role="progressbar" aria-label="Reel progress"><i></i></div>`;
+  ctl.innerHTML = `<div class="rv-row"><button type="button" class="rv-btn" data-a="play" aria-label="${tx('Pause reel')}">${svg('pause')}</button><button type="button" class="rv-btn" data-a="mute" aria-label="${tx('Unmute reel')}">${svg('mute')}</button></div><div class="rv-bar" role="progressbar" aria-label="${tx('Reel progress')}"><i></i></div>`;
   scr.append(v, ctl);
   canvas.style.visibility = 'hidden';            /* keep its size so the monitor does not collapse */
   const play = $('#play'); if (play) play.style.display = 'none';
-  const shot = $('#shot'); if (shot) shot.textContent = 'GG Productions · Showreel';
+  const shot = $('#shot'); if (shot) shot.textContent = tx('GG Productions · Showreel');
   const note = scr.closest('.rv')?.querySelector('.note'); if (note) note.style.display = 'none';
 
   const bPlay = ctl.querySelector('[data-a=play]'), bMute = ctl.querySelector('[data-a=mute]'), fill = ctl.querySelector('.rv-bar i');
@@ -54,7 +55,7 @@ function applyReel(url, url2) {
     const want = inView && !userPaused && !document.hidden;
     if (want && v.paused) v.play().catch(() => {}); else if (!want && !v.paused) v.pause();
   };
-  const icons = () => { bPlay.innerHTML = svg(v.paused ? 'play' : 'pause'); bPlay.setAttribute('aria-label', v.paused ? 'Play reel' : 'Pause reel'); bMute.innerHTML = svg(v.muted ? 'mute' : 'vol'); bMute.setAttribute('aria-label', v.muted ? 'Unmute reel' : 'Mute reel'); };
+  const icons = () => { bPlay.innerHTML = svg(v.paused ? 'play' : 'pause'); bPlay.setAttribute('aria-label', v.paused ? tx('Play reel') : tx('Pause reel')); bMute.innerHTML = svg(v.muted ? 'mute' : 'vol'); bMute.setAttribute('aria-label', v.muted ? tx('Unmute reel') : tx('Mute reel')); };
   const toggle = () => { userPaused = !v.paused; if (v.paused) v.play().catch(() => {}); else v.pause(); };
   bPlay.onclick = e => { e.stopPropagation(); toggle(); };
   bMute.onclick = e => { e.stopPropagation(); v.muted = !v.muted; icons(); };

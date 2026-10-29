@@ -24,7 +24,7 @@ if (root) {
     ov = document.createElement('div');
     ov.className = 'ggov';
     ov.setAttribute('data-lenis-prevent', '');
-    ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'Application form');
+    ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', (((cms.form || {}).labels) || {}).formAria || 'Application form');
     ov.innerHTML = form();
     document.body.appendChild(ov);
     document.body.style.overflow = 'hidden';
@@ -51,7 +51,7 @@ if (root) {
   function form() {
     const f = cms.form || {}, L = f.labels || {};
     const d = (k, dflt) => L[k] || dflt;
-    return `<div class="ggform form-page-container"><button type="button" class="close-button" id="pf_close" aria-label="Close form">${ico('x')}</button><div class="form-card" id="pf_card">
+    return `<div class="ggform form-page-container"><button type="button" class="close-button" id="pf_close" aria-label="${esc(d('closeForm', 'Close form'))}">${ico('x')}</button><div class="form-card" id="pf_card">
       <div class="form-header">
         <div class="header-top"><img class="header-logo" src="/logos/logo1black.png" alt="Logo" width="80" height="80"></div>
         <h1>${esc(f.title)}</h1>
@@ -163,13 +163,14 @@ if (root) {
   const reset = () => { files = []; platforms = []; multi = false; bot = false; };
 
   async function submit(e) {
+    const L = (cms.form || {}).labels || {};
     e.preventDefault();
     if (!bot) return notify(((cms.form || {}).labels || {}).alertRobot || 'Please verify that you are not a robot.');
     status('loading', '');
     try {
       const attachedFiles = []; let n = 0;
       for (const f of files) { n++; status('loading', `Uploading ${f.name} (${n}/${files.length})...`); attachedFiles.push(await uploadFile(f)); }
-      status('loading', 'Finalizing submission...');
+      status('loading', L.finalizing || 'Finalizing submission...');
       const formData = {
         studioName: val('pf_studio'), studioWebsite: val('pf_site'), yourName: val('pf_name'), email: val('pf_email'),
         country: val('pf_country'), gameTitle: val('pf_title'), collaborationTypes: [$('#pf_collab').value], description: $('#pf_desc').value,
@@ -186,7 +187,7 @@ if (root) {
       files = []; status('success');
     } catch (ex) {
       console.error('Submission error:', ex);
-      status('error', ex.message || 'An unexpected error occurred. Please check your connection and try again.');
+      status('error', ex.message || L.errorFallback || 'An unexpected error occurred. Please check your connection and try again.');
     }
   }
 

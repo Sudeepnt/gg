@@ -1,5 +1,17 @@
 [
  {
+  "key": "Loading screen::GATTABARA GAMES",
+  "group": "Loading screen",
+  "label": "Text",
+  "text": "GATTABARA GAMES"
+ },
+ {
+  "key": "Loading screen::BENGALURU · IN",
+  "group": "Loading screen",
+  "label": "Text",
+  "text": "BENGALURU · IN"
+ },
+ {
   "key": "Header::NEWS",
   "group": "Header",
   "label": "Text",
@@ -766,5 +778,266 @@
   "group": "Network roster window",
   "label": "Link / button",
   "text": "Send a brief"
+ },
+ {
+  "key": "Machine view::GATTABARA/AI",
+  "group": "Machine view",
+  "label": "Bold text",
+  "text": "GATTABARA/AI"
+ },
+ {
+  "key": "Machine view::Copy .md",
+  "group": "Machine view",
+  "label": "Link / button",
+  "text": "Copy .md"
+ },
+ {
+  "key": "Machine view::Save",
+  "group": "Machine view",
+  "label": "Link / button",
+  "text": "Save"
+ },
+ {
+  "key": "Machine view::HUMAN",
+  "group": "Machine view",
+  "label": "Link / button",
+  "text": "HUMAN"
+ },
+ {
+  "key": "Machine view::MACHINE",
+  "group": "Machine view",
+  "label": "Link / button",
+  "text": "MACHINE"
+ },
+ {
+  "key": "Header::[aria-label] Gattabara Games, top",
+  "group": "Header",
+  "label": "Screen-reader label",
+  "text": "Gattabara Games, top",
+  "attr": "aria-label"
+ },
+ {
+  "key": "Header::[alt] Gattabara Games",
+  "group": "Header",
+  "label": "Image description",
+  "text": "Gattabara Games",
+  "attr": "alt"
+ },
+ {
+  "key": "Header::[aria-label] Main",
+  "group": "Header",
+  "label": "Screen-reader label",
+  "text": "Main",
+  "attr": "aria-label"
+ },
+ {
+  "key": "Header::[aria-label] View mode",
+  "group": "Header",
+  "label": "Screen-reader label",
+  "text": "View mode",
+  "attr": "aria-label"
+ },
+ {
+  "key": "Other::[aria-label] Site menu",
+  "group": "Other",
+  "label": "Screen-reader label",
+  "text": "Site menu",
+  "attr": "aria-label"
+ },
+ {
+  "key": "Menu::[aria-label] View mode",
+  "group": "Menu",
+  "label": "Screen-reader label",
+  "text": "View mode",
+  "attr": "aria-label"
+ },
+ {
+  "key": "Other::[aria-label] Back to top of page",
+  "group": "Other",
+  "label": "Screen-reader label",
+  "text": "Back to top of page",
+  "attr": "aria-label"
+ },
+ {
+  "key": "Top::[data-name] TOP",
+  "group": "Top",
+  "label": "Section name (window bar and side rail)",
+  "text": "TOP",
+  "attr": "data-name"
+ },
+ {
+  "key": "Top::[aria-label] Montage of Gattabara Games key visuals",
+  "group": "Top",
+  "label": "Screen-reader label",
+  "text": "Montage of Gattabara Games key visuals",
+  "attr": "aria-label"
+ },
+ {
+  "key": "Top::[aria-label] Montage clips",
+  "group": "Top",
+  "label": "Screen-reader label",
+  "text": "Montage clips",
+  "attr": "aria-label"
+ },
+ {
+  "key": "News::[data-name] NEWS",
+  "group": "News",
+  "label": "Section name (window bar and side rail)",
+  "text": "NEWS",
+  "attr": "data-name"
+ },
+ {
+  "key": "News::[aria-label] Filter news",
+  "group": "News",
+  "label": "Screen-reader label",
+  "text": "Filter news",
+  "attr": "aria-label"
+ },
+ {
+  "key": "Philosophy::[data-name] PHILOSOPHY",
+  "group": "Philosophy",
+  "label": "Section name (window bar and side rail)",
+  "text": "PHILOSOPHY",
+  "attr": "data-name"
+ },
+ {
+  "key": "Games::[data-name] GAMES",
+  "group": "Games",
+  "label": "Section name (window bar and side rail)",
+  "text": "GAMES",
+  "attr": "data-name"
+ },
+ {
+  "key": "Games::[aria-label] Filter titles",
+  "group": "Games",
+  "label": "Screen-reader label",
+  "text": "Filter titles",
+  "attr": "aria-label"
+ },
+ {
+  "key": "Business::[data-name] BUSINESS",
+  "group": "Business",
+  "label": "Section name (window bar and side rail)",
+  "text": "BUSINESS",
+  "attr": "data-name"
+ },
+ {
+  "key": "GG Productions::[data-name] GG PRODUCTIONS",
+  "group": "GG Productions",
+  "label": "Section name (window bar and side rail)",
+  "text": "GG PRODUCTIONS",
+  "attr": "data-name"
+ },
+ {
+  "key": "GG Productions::[aria-label] Sample reel preview",
+  "group": "GG Productions",
+  "label": "Screen-reader label",
+  "text": "Sample reel preview",
+  "attr": "aria-label"
+ },
+ {
+  "key": "GG Productions::[aria-label] Choose reel",
+  "group": "GG Productions",
+  "label": "Screen-reader label",
+  "text": "Choose reel",
+  "attr": "aria-label"
+ },
+ {
+  "key": "Network::[data-name] NETWORK",
+  "group": "Network",
+  "label": "Section name (window bar and side rail)",
+  "text": "NETWORK",
+  "attr": "data-name"
+ },
+ {
+  "key": "Network::[aria-label] Answer the call to open the contractor roster",
+  "group": "Network",
+  "label": "Screen-reader label",
+  "text": "Answer the call to open the contractor roster",
+  "attr": "aria-label"
+ },
+ {
+  "key": "Network::[aria-label] Globe showing roster cities linked to Bengaluru",
+  "group": "Network",
+  "label": "Screen-reader label",
+  "text": "Globe showing roster cities linked to Bengaluru",
+  "attr": "aria-label"
+ },
+ {
+  "key": "Message::[data-name] MESSAGE",
+  "group": "Message",
+  "label": "Section name (window bar and side rail)",
+  "text": "MESSAGE",
+  "attr": "data-name"
+ },
+ {
+  "key": "Leadership::[data-name] LEADERSHIP",
+  "group": "Leadership",
+  "label": "Section name (window bar and side rail)",
+  "text": "LEADERSHIP",
+  "attr": "data-name"
+ },
+ {
+  "key": "Clients::[data-name] CLIENTS",
+  "group": "Clients",
+  "label": "Section name (window bar and side rail)",
+  "text": "CLIENTS",
+  "attr": "data-name"
+ },
+ {
+  "key": "Recruit::[data-name] RECRUIT",
+  "group": "Recruit",
+  "label": "Section name (window bar and side rail)",
+  "text": "RECRUIT",
+  "attr": "data-name"
+ },
+ {
+  "key": "Contact::[data-name] CONTACT",
+  "group": "Contact",
+  "label": "Section name (window bar and side rail)",
+  "text": "CONTACT",
+  "attr": "data-name"
+ },
+ {
+  "key": "Contact::[aria-label] Contact or pitch a game",
+  "group": "Contact",
+  "label": "Screen-reader label",
+  "text": "Contact or pitch a game",
+  "attr": "aria-label"
+ },
+ {
+  "key": "Footer::[alt] Gattabara Games",
+  "group": "Footer",
+  "label": "Image description",
+  "text": "Gattabara Games",
+  "attr": "alt"
+ },
+ {
+  "key": "Network roster window::[aria-label] Close",
+  "group": "Network roster window",
+  "label": "Screen-reader label",
+  "text": "Close",
+  "attr": "aria-label"
+ },
+ {
+  "key": "Other::[aria-label] Machine view",
+  "group": "Other",
+  "label": "Screen-reader label",
+  "text": "Machine view",
+  "attr": "aria-label"
+ },
+ {
+  "key": "Machine view::[aria-label] View mode",
+  "group": "Machine view",
+  "label": "Screen-reader label",
+  "text": "View mode",
+  "attr": "aria-label"
+ },
+ {
+  "key": "Machine view::[aria-label] Machine pages",
+  "group": "Machine view",
+  "label": "Screen-reader label",
+  "text": "Machine pages",
+  "attr": "aria-label"
  }
 ]
