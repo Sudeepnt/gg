@@ -1,0 +1,15 @@
+[
+  {
+    "AllowedOrigins": [
+      "https://www.gattabaragames.com",
+      "https://gattabaragames.com",
+      "https://*.vercel.app",
+      "http://localhost:3000",
+      "http://localhost:3100"
+    ],
+    "AllowedMethods": ["GET", "HEAD", "PUT"],
+    "AllowedHeaders": ["*"],
+    "ExposeHeaders": ["ETag"],
+    "MaxAgeSeconds": 3600
+  }
+]

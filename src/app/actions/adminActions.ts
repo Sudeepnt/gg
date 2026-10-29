@@ -8,6 +8,7 @@ import { revalidatePath } from "next/cache";
 import { sbConfig } from "@/lib/supabaseRest";
 import { BACKUP_KEY, CMS_ROW, SITE_KEY, bundledContent, mergeContent, readRow, type Row } from "@/lib/content";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 /* Admin back end for the current site. No database: content is one JSON file (src/content/site-content.json).
    Saving writes that file when the server's disk is writable (local dev / any normal server). On Vercel the disk is
@@ -164,5 +165,25 @@ export async function deleteSubmission(id: string | number) {
     return { ok: true };
   } catch (e: any) {
     return { ok: false, error: e.message || "Delete failed" };
+  }
+}
+
+/* ---------- big uploads: the browser sends the file straight to Cloudflare R2 with a short-lived signed link ----------
+   (a file sent through this server would hit Vercel's ~4.5 MB request limit). Needs the CORS rule in cloudflare/r2-cors.json on the bucket. */
+const MAX_BYTES = { image: 25 * 1024 * 1024, video: 600 * 1024 * 1024 } as const;
+export async function getUploadUrl(name: string, type: string, kind: "image" | "video", size: number) {
+  try {
+    await requireAdmin();
+    if (kind !== "image" && kind !== "video") throw new Error("Unknown file kind.");
+    if (!type.startsWith(kind + "/")) throw new Error(`Please choose ${kind === "video" ? "a video" : "an image"} file.`);
+    if (!(size > 0) || size > MAX_BYTES[kind]) throw new Error(`That file is too large. The limit is ${Math.round(MAX_BYTES[kind] / 1048576)} MB for ${kind === "video" ? "videos" : "images"}.`);
+    const base = process.env.CLOUDFLARE_R2_PUBLIC_BASE_URL?.replace(/\/$/, "");
+    if (!base) throw new Error("Cloudflare R2 public URL is not configured.");
+    const safe = name.replace(/[^A-Za-z0-9._-]+/g, "-").slice(-120);
+    const key = `applications/site/${kind === "video" ? "videos" : "images"}/${Date.now()}-${safe}`;
+    const uploadUrl = await getSignedUrl(r2(), new PutObjectCommand({ Bucket: process.env.CLOUDFLARE_R2_BUCKET_NAME || "gg-content", Key: key, ContentType: type }), { expiresIn: 900 });
+    return { ok: true, uploadUrl, publicUrl: `${base}/${key}` };
+  } catch (e: any) {
+    return { ok: false, error: e.message || "Could not prepare the upload" };
   }
 }

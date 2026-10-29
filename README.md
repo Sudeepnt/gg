@@ -52,7 +52,13 @@ Form submissions (Contact, Pitch us) are saved in the `inquiries` table and list
 Optional:
 `NEXT_PUBLIC_SITE_URL`, `ADMIN_PASSWORD`, `ADMIN_SECRET`.
 
+## Image and video uploads (one-time Cloudflare step)
+
+The admin sends files straight from the browser to the R2 bucket (no 4.5 MB Vercel limit; images up to 25 MB, videos up to 600 MB).
+For that, the bucket needs a CORS rule: Cloudflare dashboard -> R2 -> your bucket -> Settings -> CORS policy -> Add -> paste `cloudflare/r2-cors.json`.
+The same rule lets the press-kit download buttons save uploaded files. Until it is added, only images under ~4 MB can be uploaded (they go through the server).
+For fast video playback also connect a custom domain to the bucket (R2 -> Settings -> Custom Domains) and set `CLOUDFLARE_R2_PUBLIC_BASE_URL` to it: the default `r2.dev` link is slow and rate-limited.
+
 ## Known limits
 
-- Uploads through the admin are limited to ~4.5 MB on Vercel (platform limit); larger files upload fine on a normal server.
 - The Machine view text and the press-kit page's fixed headings (Factsheet, Description, ...) are not editable.

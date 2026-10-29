@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import pageTexts from "@/content/page-texts.json";
 import cmsSnapshot from "@/cms-data.json";
-import { getSiteContent, saveSiteContent, uploadAsset, logoutAdmin, getSubmissions, deleteSubmission, restorePreviousContent } from "@/app/actions/adminActions";
+import { getSiteContent, saveSiteContent, uploadAsset, logoutAdmin, getSubmissions, deleteSubmission, restorePreviousContent, getUploadUrl } from "@/app/actions/adminActions";
 
 /* ---------- what can be edited, per tab. Labels are the words the website itself shows. ---------- */
 type F = { key: string; label: string; type: "text" | "toggle" | "textarea" | "lines" | "tags" | "number" | "select" | "image" | "video" | "rows"; options?: string[]; hint?: string;
@@ -251,19 +251,40 @@ function Label({ text, hint }: { text: string; hint?: string }) {
     return (<div className="mb-2 px-1"><label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">{text}</label>{hint && <p className="text-[12px] text-gray-400 mt-1 normal-case tracking-normal">{hint}</p>}</div>);
 }
 
+/* send a file straight to Cloudflare R2 with a signed link (progress bar); small images fall back to going through the server */
+function putWithProgress(url: string, file: File, onProgress: (pct: number) => void): Promise<void> {
+    return new Promise((resolve, reject) => {
+        const x = new XMLHttpRequest();
+        x.open("PUT", url);
+        x.setRequestHeader("Content-Type", file.type);
+        x.upload.onprogress = (e) => { if (e.lengthComputable) onProgress(Math.round((e.loaded / e.total) * 100)); };
+        x.onload = () => (x.status >= 200 && x.status < 300 ? resolve() : reject(new Error(`R2 answered ${x.status}`)));
+        x.onerror = () => reject(new Error("blocked"));
+        x.send(file);
+    });
+}
+
 function Upload({ kind, value, onChange }: { kind: "image" | "video"; value: string; onChange: (v: string) => void }) {
-    const [busy, setBusy] = useState(false); const [err, setErr] = useState(""); const ref = useRef<HTMLInputElement>(null);
+    const [busy, setBusy] = useState(false); const [pct, setPct] = useState(0); const [err, setErr] = useState(""); const ref = useRef<HTMLInputElement>(null);
     const pick = async (file?: File) => {
-        if (!file) return; setBusy(true); setErr("");
-        const fd = new FormData(); fd.append("file", file); fd.append("kind", kind);
-        const r: any = await uploadAsset(fd);
-        if (r.ok) onChange(r.url); else setErr(r.error || "Upload failed");
+        if (!file) return; setBusy(true); setErr(""); setPct(0);
+        try {
+            const sig: any = await getUploadUrl(file.name, file.type, kind, file.size);
+            if (!sig.ok) throw new Error(sig.error);
+            try { await putWithProgress(sig.uploadUrl, file, setPct); onChange(sig.publicUrl); }
+            catch (e: any) {
+                if (e.message !== "blocked") throw e;
+                if (file.size > 4 * 1024 * 1024) throw new Error("The upload was blocked by Cloudflare. Add the CORS rule from cloudflare/r2-cors.json to the R2 bucket (see README), then try again.");
+                const fd = new FormData(); fd.append("file", file); fd.append("kind", kind);       /* small file: send it through the server instead */
+                const r: any = await uploadAsset(fd); if (!r.ok) throw new Error(r.error || "Upload failed"); onChange(r.url);
+            }
+        } catch (e: any) { setErr(e.message || "Upload failed"); }
         setBusy(false);
     };
     return (
         <div className="border border-dashed border-gray-200 rounded-2xl p-4 bg-gray-50/50">
-            <div className="flex flex-col sm:flex-row gap-4 items-start">
-                <div className="w-full sm:w-40 aspect-video bg-white border border-gray-100 rounded-lg overflow-hidden flex items-center justify-center shrink-0">
+            <div className="flex gap-4 items-start">
+                <div className="w-40 aspect-video bg-white border border-gray-100 rounded-lg overflow-hidden flex items-center justify-center shrink-0">
                     {value ? (kind === "image" ? <img src={value} alt="" className="w-full h-full object-contain" /> : <video src={value} className="w-full h-full object-cover" muted preload="metadata" />)
                         : (kind === "image" ? <ImageIcon className="text-gray-300" /> : <Film className="text-gray-300" />)}
                 </div>
@@ -271,13 +292,14 @@ function Upload({ kind, value, onChange }: { kind: "image" | "video"; value: str
                     <input className={inputCls} value={value || ""} onChange={(e) => onChange(e.target.value)} placeholder={`${kind === "image" ? "Image" : "Video"} URL (or upload a file)`} />
                     <div className="flex items-center gap-3 mt-3">
                         <button type="button" disabled={busy} onClick={() => ref.current?.click()} className="inline-flex items-center gap-2 bg-[#1A2E35] text-white text-[13px] font-semibold px-4 py-2 rounded-lg hover:opacity-90 disabled:opacity-60">
-                            {busy ? <Loader2 size={15} className="animate-spin" /> : <UploadCloud size={15} />} {busy ? "Uploading..." : `Upload ${kind}`}
+                            {busy ? <Loader2 size={15} className="animate-spin" /> : <UploadCloud size={15} />} {busy ? `Uploading ${pct}%` : `Upload ${kind}`}
                         </button>
-                        {value && <button type="button" onClick={() => onChange("")} className="text-[13px] text-gray-400 hover:text-red-500">Remove</button>}
+                        {value && !busy && <button type="button" onClick={() => onChange("")} className="text-[13px] text-gray-400 hover:text-red-500">Remove</button>}
                         <input ref={ref} type="file" hidden accept={kind === "image" ? "image/*" : "video/*"} onChange={(e) => { pick(e.target.files?.[0]); e.target.value = ""; }} />
                     </div>
+                    {busy && <div className="mt-3 h-1.5 w-full max-w-xs bg-gray-200 rounded-full overflow-hidden"><div className="h-full bg-[#1A2E35] transition-[width]" style={{ width: `${pct}%` }} /></div>}
                     {err && <p className="text-red-500 text-xs mt-2">{err}</p>}
-                    <p className="text-[11px] text-gray-400 mt-2">Files are stored in the Cloudflare R2 bucket.</p>
+                    <p className="text-[11px] text-gray-400 mt-2">Stored in the Cloudflare R2 bucket. Images up to 25 MB, videos up to 600 MB.</p>
                 </div>
             </div>
         </div>
