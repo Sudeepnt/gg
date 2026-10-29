@@ -1414,3 +1414,21 @@ body{font-size:14px;line-height:1.75}
 /* while the showreel loads: no flash of the generated WebGL montage */
 body.reelwait #kv,body.reelwait .kv-fb,body.reelwait #kvvid,body.reelwait .kv-hud{visibility:hidden}
 body.reelwait .kv-st{background:#000}
+
+/* footer particle wordmark: never selectable / highlightable */
+#fwm,#fwm *,#fwm canvas{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+#fwm::selection,#fwm *::selection{background:transparent;color:transparent}
+
+/* logo lockup (GG + Gattabara Games) replaces the old mark + text block */
+.brand .gglockup{height:30px;width:auto;display:block}
+footer .brand .gglockup{height:44px}
+@media (max-width:640px){.brand .gglockup{height:26px}}
+
+/* Games cards: the old site's "Coming Soon..." liquid text in the picture area */
+.gc .im{container-type:inline-size}
+.gc .im .soon{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse at center,#161616 0%,#050505 75%)}
+.gc .im .soon>span{grid-area:1/1;font-family:'NT Brick Sans',var(--cond),sans-serif;font-weight:400;font-size:5.6cqw;letter-spacing:.15em;text-transform:uppercase;white-space:nowrap;margin:0}
+.gc .im .soon .o{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.4)}
+.gc .im .soon .f{color:#fff;animation:ggliquid 4s ease-in-out infinite}
+@keyframes ggliquid{0%,100%{clip-path:polygon(0% 45%,16% 44%,33% 50%,54% 60%,70% 61%,84% 59%,100% 52%,100% 100%,0% 100%)}50%{clip-path:polygon(0% 60%,15% 65%,34% 66%,51% 62%,67% 50%,84% 45%,100% 46%,100% 100%,0% 100%)}}
+@media (max-width:600px){.gc .im .soon .o{-webkit-text-stroke:.5px rgba(255,255,255,.3)}.gc .im .soon>span{font-size:6.4cqw}}

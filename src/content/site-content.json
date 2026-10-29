@@ -957,7 +957,7 @@
     "consent": "I agree that Gattabara Games may use the information above to respond to this inquiry.",
     "button": "Send",
     "thankTitle": "Thank you.",
-    "thankText": "Your inquiry has been received. This is a demonstration build, so the form is not yet connected to an inbox. Until it is, please write to us directly.",
+    "thankText": "Your inquiry has been received. Our team will get back to you soon.",
     "newButton": "New inquiry",
     "errName": "Please enter your name.",
     "errEmail": "Please enter your email address.",
@@ -1039,5 +1039,9 @@
     "idle": "Line idle",
     "onCall": "On call",
     "standby": "Standby"
+  },
+  "gamesPage": {
+    "showComingSoon": true,
+    "comingSoonText": "Coming Soon..."
   }
 }

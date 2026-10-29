@@ -1,17 +1,5 @@
 [
  {
-  "key": "Header::GATTABARA",
-  "group": "Header",
-  "label": "Bold text",
-  "text": "GATTABARA"
- },
- {
-  "key": "Header::GAMES · BENGALURU",
-  "group": "Header",
-  "label": "Small text",
-  "text": "GAMES · BENGALURU"
- },
- {
   "key": "Header::NEWS",
   "group": "Header",
   "label": "Text",

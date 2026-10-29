@@ -6,20 +6,21 @@ import React, { createContext, useCallback, useContext, useEffect, useRef, useSt
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-    Home, Newspaper, Gamepad2, BookOpen, Clapperboard, Mail, Users, Building2, Briefcase, Send, Phone, Globe, Type, Search, ChevronDown, Sun, Moon,
+    Home, Newspaper, Gamepad2, BookOpen, Clapperboard, Mail, Users, Building2, Briefcase, Send, Phone, Globe, Type, Search, ChevronDown, Sun, Moon, Inbox, ClipboardList, RefreshCw, Paperclip,
     Save, LogOut, Download, UploadCloud, Plus, Trash2, ArrowUp, ArrowDown, Loader2, Check, X, Image as ImageIcon, Film,
 } from "lucide-react";
 import pageTexts from "@/content/page-texts.json";
 import cmsSnapshot from "@/cms-data.json";
-import { getSiteContent, saveSiteContent, uploadAsset, logoutAdmin } from "@/app/actions/adminActions";
+import { getSiteContent, saveSiteContent, uploadAsset, logoutAdmin, getSubmissions, deleteSubmission } from "@/app/actions/adminActions";
 
 /* ---------- what can be edited, per tab. Labels are the words the website itself shows. ---------- */
-type F = { key: string; label: string; type: "text" | "textarea" | "lines" | "tags" | "number" | "select" | "image" | "video" | "rows"; options?: string[]; hint?: string;
+type F = { key: string; label: string; type: "text" | "toggle" | "textarea" | "lines" | "tags" | "number" | "select" | "image" | "video" | "rows"; options?: string[]; hint?: string;
     itemFields?: F[]; blank?: () => any; addLabel?: string; itemLabel?: (it: any) => string };
 type Block =
     | { kind: "object"; path: string; title: string; fields: F[] }
     | { kind: "lines"; path: string; title: string; hint?: string }
     | { kind: "pagetext"; groups?: string[]; title?: string }
+    | { kind: "submissions"; which: "general" | "applications" }
     | { kind: "list"; path: string; title: string; addLabel: string; fields: F[]; blank: () => any; label: (it: any) => string; fixed?: boolean };
 
 /* the application form's fields are named after the sentence the visitor reads, so the client sees the same words */
@@ -84,6 +85,8 @@ const PK_LABELS: [string, string, string][] = [
 const PK_LABEL_FIELDS: F[] = PK_LABELS.map(([key, where, text]) => ({ key, label: `${where} \u2192 \u201c${text.length > 60 ? text.slice(0, 57) + "\u2026" : text}\u201d`, type: text.length > 70 ? "textarea" as const : "text" as const }));
 
 const TABS: { id: string; label: string; icon: any; blocks: Block[] }[] = [
+    { id: "inquiries", label: "Inquiries", icon: Inbox, blocks: [{ kind: "submissions", which: "general" }] },
+    { id: "applications", label: "Applications", icon: ClipboardList, blocks: [{ kind: "submissions", which: "applications" }] },
     { id: "hero", label: "Home", icon: Home, blocks: [
         { kind: "object", path: "hero", title: "Hero", fields: [
             { key: "line1", label: "Headline, line 1", type: "text" }, { key: "line2", label: "Headline, line 2", type: "text" },
@@ -109,6 +112,9 @@ const TABS: { id: string; label: string; icon: any; blocks: Block[] }[] = [
           fields: [{ key: "title", label: "Title", type: "text" }, { key: "text", label: "Text", type: "textarea" }] },
         { kind: "object", path: "philosophy", title: "Handbook line (bottom of the section)", fields: [{ key: "doc", label: "From the studio handbook", type: "textarea" }] }] },
     { id: "games", label: "Games", icon: Gamepad2, blocks: [
+        { kind: "object", path: "gamesPage", title: "Game cards: picture area", fields: [
+            { key: "showComingSoon", label: "Show \u201cComing soon\u201d instead of the pictures", type: "toggle", hint: "Off shows each game\u2019s key art on its card." },
+            { key: "comingSoonText", label: "Coming soon text", type: "text" }] },
         { kind: "list", path: "games", title: "Games", addLabel: "Add game", label: g => g.title || "New game",
           blank: () => ({ id: "game-" + Date.now().toString(36), title: "", code: "", status: "In development", cardCaption: "", tags: [], image: "",
             factsheet: [{ label: "Developer", value: "Gattabara Games" }, { label: "Based in", value: "Bengaluru, India" }, { label: "Genre", value: "" }, { label: "Players", value: "" },
@@ -256,8 +262,8 @@ function Upload({ kind, value, onChange }: { kind: "image" | "video"; value: str
     };
     return (
         <div className="border border-dashed border-gray-200 rounded-2xl p-4 bg-gray-50/50">
-            <div className="flex gap-4 items-start">
-                <div className="w-40 aspect-video bg-white border border-gray-100 rounded-lg overflow-hidden flex items-center justify-center shrink-0">
+            <div className="flex flex-col sm:flex-row gap-4 items-start">
+                <div className="w-full sm:w-40 aspect-video bg-white border border-gray-100 rounded-lg overflow-hidden flex items-center justify-center shrink-0">
                     {value ? (kind === "image" ? <img src={value} alt="" className="w-full h-full object-contain" /> : <video src={value} className="w-full h-full object-cover" muted preload="metadata" />)
                         : (kind === "image" ? <ImageIcon className="text-gray-300" /> : <Film className="text-gray-300" />)}
                 </div>
@@ -316,6 +322,65 @@ function ConfirmHost({ children }: { children: React.ReactNode }) {
     );
 }
 
+/* ---------- form submissions (Contact page and Pitch us application), read from the inquiries table ---------- */
+type Subs = { rows: any[]; loading: boolean; error: string; loaded: boolean };
+const SubsCtx = createContext<{ subs: Subs; reload: () => void; remove: (id: any) => Promise<string | null> }>({ subs: { rows: [], loading: false, error: "", loaded: false }, reload: () => {}, remove: async () => null });
+const isApplication = (r: any) => !!r?.data?.fullData;
+const nice = (k: string) => k.replace(/([A-Z])/g, " $1").replace(/^./, (c) => c.toUpperCase()).replace(/\bUrl\b/, "URL");
+const when = (r: any) => { const d = new Date(r.created_at || r.date); return isNaN(+d) ? "" : d.toLocaleString("en-GB", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }); };
+const SKIP = new Set(["name", "email", "message", "fullData", "isCaptchaVerified", "kind"]);
+
+function Value({ k, v }: { k: string; v: any }) {
+    if (k === "attachedFiles" && Array.isArray(v)) return <div className="flex flex-col gap-1.5 mt-1">{v.map((f: any, i: number) => (
+        <a key={i} href={f.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[13px] text-[#1A2E35] underline underline-offset-4 hover:opacity-70"><Paperclip size={13} /><span className="max-w-[260px] truncate">{f.name}</span></a>))}</div>;
+    if (typeof v === "boolean") return <>{v ? "Yes" : "No"}</>;
+    if (Array.isArray(v)) return <>{v.join(", ")}</>;
+    if (typeof v === "string" && /^https?:\/\//i.test(v)) return <a href={v} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 break-all">{v}</a>;
+    return <>{String(v)}</>;
+}
+
+function SubmissionsView({ which }: { which: "general" | "applications" }) {
+    const { subs, reload, remove } = useContext(SubsCtx);
+    const ask = useContext(ConfirmCtx);
+    const [open, setOpen] = useState<any>(null);
+    const [err, setErr] = useState("");
+    const list = subs.rows.filter((r) => (which === "applications") === isApplication(r));
+    const title = which === "applications" ? "Studio application submissions" : "General contact inquiries";
+    return (
+        <section className="bg-white border border-gray-100 rounded-[24px] shadow-sm overflow-hidden">
+            <div className="flex items-center justify-between gap-4 p-8 pb-4">
+                <h3 className="text-xl font-bold">{title} <span className="text-gray-300 font-normal text-base">({list.length})</span></h3>
+                <button type="button" onClick={reload} disabled={subs.loading} className="inline-flex items-center gap-2 border border-gray-200 text-gray-700 text-[13px] font-semibold px-4 py-2 rounded-lg hover:bg-gray-50 disabled:opacity-60"><RefreshCw size={14} className={subs.loading ? "animate-spin" : ""} /> Refresh</button>
+            </div>
+            {(subs.error || err) && <div className="mx-8 mb-4 rounded-xl border border-amber-200 bg-amber-50 text-amber-800 text-sm px-5 py-3">{err || subs.error}</div>}
+            {subs.loading && !subs.loaded ? <div className="p-16 text-center text-gray-400"><Loader2 className="animate-spin mx-auto" /></div>
+              : list.length === 0 ? <div className="p-16 text-center border-t border-gray-100"><Inbox size={44} className="mx-auto text-gray-200 mb-3" /><p className="text-gray-400">No submissions yet.</p></div>
+              : (<div className="overflow-x-auto"><table className="w-full text-left border-collapse">
+                <thead><tr className="bg-gray-50 border-t border-b border-gray-100">
+                    {["Date & time", "Name", "Email", which === "applications" ? "Game / project" : "Inquiry type", ""].map((h, i) => <th key={i} className="px-6 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-widest whitespace-nowrap">{h}</th>)}</tr></thead>
+                <tbody>{list.map((r) => { const d = r.data || {}; const full = d.fullData || {}; const isOpen = open === r.id; return (
+                    <React.Fragment key={r.id}>
+                        <tr onClick={() => setOpen(isOpen ? null : r.id)} className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors">
+                            <td className="px-6 py-4 text-[13px] text-gray-400 font-mono whitespace-nowrap">{when(r)}</td>
+                            <td className="px-6 py-4 text-[15px] font-bold text-gray-900">{r.name}</td>
+                            <td className="px-6 py-4 text-[14px] text-gray-600"><a href={`mailto:${r.email}`} onClick={(e) => e.stopPropagation()} className="hover:underline">{r.email}</a></td>
+                            <td className="px-6 py-4 text-[14px] text-gray-600">{which === "applications" ? full.gameTitle || "" : d.inquiryType || d.type || ""}</td>
+                            <td className="px-6 py-4 text-right whitespace-nowrap"><button type="button" aria-label="Delete" title="Delete" onClick={async (e) => { e.stopPropagation(); if (await ask({ title: "Delete this submission?", message: `The submission from \u201c${r.name}\u201d will be permanently deleted. This can\u2019t be undone.`, confirmLabel: "Delete" })) setErr((await remove(r.id)) || ""); }} className="p-2 text-gray-300 hover:text-red-500"><Trash2 size={16} /></button></td>
+                        </tr>
+                        {isOpen && (<tr><td colSpan={5} className="px-6 pb-6 pt-3 bg-gray-50 border-b border-gray-100">
+                            {r.message && r.message.trim() && which === "general" && <div className="bg-white rounded-xl p-5 border border-gray-100 mb-4"><p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Message</p><p className="text-gray-700 text-[15px] leading-relaxed whitespace-pre-wrap">{r.message}</p></div>}
+                            <div className="bg-white rounded-xl p-5 border border-gray-100"><p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">{which === "applications" ? "Application details" : "Details"}</p>
+                                <div className="grid gap-x-8 gap-y-5 md:grid-cols-2 lg:grid-cols-3">
+                                    {Object.entries(which === "applications" ? full : d).filter(([k, v]) => !SKIP.has(k) && v !== null && v !== undefined && v !== "" && !(Array.isArray(v) && v.length === 0)).map(([k, v]) => (
+                                        <div key={k} className="flex flex-col gap-1"><span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">{nice(k)}</span><span className="text-[14px] text-gray-900 font-medium break-words"><Value k={k} v={v} /></span></div>))}
+                                    <div className="flex flex-col gap-1"><span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Email</span><span className="text-[14px] text-gray-900 font-medium break-all">{r.email}</span></div>
+                                </div></div>
+                        </td></tr>)}
+                    </React.Fragment>); })}</tbody></table></div>)}
+        </section>
+    );
+}
+
 /* a list of items, each with its own fields. Used for top-level lists and for lists inside an item (factsheet, features). */
 function ListEditor({ heading, items, fields, blank, labelOf, addLabel, onChange, fixed, compact }: { heading: React.ReactNode; items: any[]; fields: F[]; blank: () => any; labelOf: (it: any) => string; addLabel: string; onChange: (v: any[]) => void; fixed?: boolean; compact?: boolean }) {
     const box = useRef<HTMLDivElement>(null); const added = useRef(false); const ask = useContext(ConfirmCtx);
@@ -358,22 +423,22 @@ function ListEditor({ heading, items, fields, blank, labelOf, addLabel, onChange
                         <button type="button" onClick={() => move(i, 1)} disabled={i === items.length - 1} className="p-1.5 text-gray-400 hover:text-gray-900 disabled:opacity-30" aria-label="Move down"><ArrowDown size={15} /></button>
                         <button type="button" onClick={async () => { if (await ask({ title: "Remove this item?", message: `\u201c${labelOf(it)}\u201d will be removed from this list. You can still change your mind until you press Save All Changes.`, confirmLabel: "Remove" })) remove(i); }} className="p-1.5 text-gray-400 hover:text-red-500" aria-label="Remove"><Trash2 size={15} /></button></div>);
                     if (inline) return (
-                        <div key={i} className="flex items-center gap-3 scroll-mt-28">
+                        <div key={i} className="flex items-center gap-2 sm:gap-3 scroll-mt-28 min-w-0">
                             <span className="w-6 text-[12px] text-gray-300 shrink-0">{String(i + 1).padStart(2, "0")}</span>
-                            <div className="grid flex-1 gap-3 md:[grid-template-columns:var(--cols)]" style={{ ["--cols" as any]: `repeat(${fields.length}, minmax(0, 1fr))` }}>
+                            <div className="grid flex-1 min-w-0 gap-3 md:[grid-template-columns:var(--cols)]" style={{ ["--cols" as any]: `repeat(${fields.length}, minmax(0, 1fr))` }}>
                                 {fields.map((f, n) => <Control key={f.key} f={f} label={f.label} variant={n === 0 ? "key" : "value"} value={it[f.key]} onChange={(v) => set(i, f.key, v)} />)}
                             </div>
                             {tools}
                         </div>);
                     const expanded = isOpen(i);
                     return (
-                    <div key={i} className={`border rounded-2xl scroll-mt-28 transition-colors ${expanded ? "border-gray-200 bg-white" : "border-gray-100 bg-gray-50/40 hover:bg-gray-50"} ${compact ? "p-4" : "px-5 py-4"}`}>
+                    <div key={i} className={`border rounded-2xl scroll-mt-28 transition-colors ${expanded ? "border-gray-200 bg-white" : "border-gray-100 bg-gray-50/40 hover:bg-gray-50"} ${compact ? "p-3 sm:p-4" : "px-3 sm:px-5 py-4"}`}>
                         <div className="flex items-center justify-between gap-3">
                             {collapsible
                                 ? <button type="button" onClick={() => toggle(i)} aria-expanded={expanded} className="flex-1 min-w-0 flex items-center gap-3 text-left py-1.5">
                                     <ChevronDown size={22} className={`shrink-0 text-gray-400 transition-transform ${expanded ? "" : "-rotate-90"}`} />
-                                    <span className="min-w-[2.2rem] text-[26px] leading-none font-extrabold text-[#1A2E35]/35 shrink-0 tabular-nums">{i + 1}.</span>
-                                    <span className="font-extrabold text-[22px] leading-tight text-gray-900 truncate">{labelOf(it) || "Untitled"}</span></button>
+                                    <span className="min-w-[1.6rem] sm:min-w-[2.2rem] text-[20px] sm:text-[26px] leading-none font-extrabold text-[#1A2E35]/35 shrink-0 tabular-nums">{i + 1}.</span>
+                                    <span className="font-extrabold text-[17px] sm:text-[22px] leading-tight text-gray-900 truncate">{labelOf(it) || "Untitled"}</span></button>
                                 : <p className="font-bold text-[16px] text-gray-900 truncate pr-4"><span className="text-[#1A2E35]/35 font-extrabold mr-2">{i + 1}.</span>{labelOf(it)}</p>}
                             {tools}
                         </div>
@@ -386,7 +451,7 @@ function ListEditor({ heading, items, fields, blank, labelOf, addLabel, onChange
     );
 }
 
-const SHORT = ["text", "number", "select"];
+const SHORT = ["text", "number", "select", "toggle"];
 const isWide = (f: F) => !SHORT.includes(f.type);
 
 /* the bare input for a field type (no label) */
@@ -394,6 +459,7 @@ function Control({ f, value, onChange, label, variant }: { f: F; value: any; onC
     const v = variant ?? (isTitle(f) ? "key" : undefined);
     const cls = v === "key" ? keyCls : v === "value" ? valCls : inputCls;
     const aria = label ? { "aria-label": label, placeholder: label } : {};
+    if (f.type === "toggle") return <label className="inline-flex items-center gap-3 cursor-pointer select-none px-1 py-2"><input type="checkbox" className="w-5 h-5 accent-[#1A2E35]" checked={!!value} onChange={(e) => onChange(e.target.checked)} /><span className="text-[14px] text-gray-700">{value ? "On" : "Off"}</span></label>;
     if (f.type === "textarea") return <textarea rows={3} className={inputCls} value={value ?? ""} onChange={(e) => onChange(e.target.value)} />;
     if (f.type === "lines") return <textarea rows={Math.max(3, (value || []).length + 1)} className={inputCls} value={(value || []).join("\n")} onChange={(e) => onChange(e.target.value.split("\n"))} onBlur={(e) => onChange(e.target.value.split("\n").map((s) => s.trim()).filter(Boolean))} />;
     if (f.type === "tags") return <input className={inputCls} value={Array.isArray(value) ? value.join(", ") : value ?? ""} onChange={(e) => onChange(e.target.value.split(",").map((s) => s.replace(/^\s+/, "")))} onBlur={(e) => onChange(e.target.value.split(",").map((s) => s.trim()).filter(Boolean))} />;
@@ -416,7 +482,7 @@ function PageText({ content, update, groups: only, title }: { content: any; upda
     (pageTexts as any[]).forEach((e) => { if (only && !only.includes(e.group)) return; if (!q || (texts[e.key] ?? e.text).toLowerCase().includes(q.toLowerCase()) || e.group.toLowerCase().includes(q.toLowerCase())) (groups[e.group] = groups[e.group] || []).push(e); });
     const set = (e: any, v: string) => { const n = { ...texts }; if (v === e.text) delete n[e.key]; else n[e.key] = v; update("texts", n); };
     return (
-        <section className="bg-white border border-gray-100 rounded-[24px] shadow-sm p-8">
+        <section className="bg-white border border-gray-100 rounded-[24px] shadow-sm p-4 sm:p-8">
             <h3 className="text-xl font-bold mb-2">{title || "All other text on the website"}</h3>
             <p className="text-gray-400 text-sm mb-6">Headings, buttons, labels and small print, grouped by the section they appear in. Each box shows the text exactly as it reads on the site; change it and save.</p>
             <div className="relative mb-6"><Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" /><input className={inputBase + " bg-gray-50 border-gray-100 text-gray-900 pl-11"} placeholder="Search the text\u2026" value={q} onChange={(e) => setQ(e.target.value)} /></div>
@@ -436,7 +502,8 @@ function PageText({ content, update, groups: only, title }: { content: any; upda
 }
 
 function BlockView({ b, content, update }: { b: Block; content: any; update: (path: string, v: any) => void }) {
-    const card = "bg-white border border-gray-100 rounded-[24px] shadow-sm p-8";
+    const card = "bg-white border border-gray-100 rounded-[24px] shadow-sm p-4 sm:p-8";
+    if (b.kind === "submissions") return <SubmissionsView which={b.which} />;
     if (b.kind === "pagetext") return <PageText content={content} update={update} groups={b.groups} title={b.title} />;
     if (b.kind === "object") {
         const obj = getAt(content, b.path) || {};
@@ -465,6 +532,18 @@ export default function Dashboard() {
     const [dirty, setDirty] = useState(false);
     const [toast, setToast] = useState<{ ok: boolean; text: string } | null>(null);
     const importRef = useRef<HTMLInputElement>(null);
+    const [subs, setSubs] = useState<Subs>({ rows: [], loading: true, error: "", loaded: false });
+    const reloadSubs = useCallback(async () => {
+        setSubs((x) => ({ ...x, loading: true }));
+        const r: any = await getSubmissions();
+        setSubs({ rows: r.ok ? r.rows : [], loading: false, error: r.ok ? "" : r.error || "", loaded: true });
+    }, []);
+    const removeSub = useCallback(async (id: any) => {
+        const r: any = await deleteSubmission(id);
+        if (r.ok) { setSubs((x) => ({ ...x, rows: x.rows.filter((q) => q.id !== id) })); return null; }
+        return r.error || "Delete failed";
+    }, []);
+    useEffect(() => { reloadSubs(); }, [reloadSubs]);
     const [dark, setDark] = useState(false);
     useEffect(() => { setDark(localStorage.getItem("gg_admin_theme") === "dark"); }, []);
     useEffect(() => { document.documentElement.classList.toggle("admin-dark", dark); return () => document.documentElement.classList.remove("admin-dark"); }, [dark]);
@@ -504,28 +583,29 @@ export default function Dashboard() {
 
     return (
         <ConfirmHost>
-        <div className="admin-portal min-h-screen bg-[#F8FAFC] text-gray-900 font-sans pb-24">
+        <SubsCtx.Provider value={{ subs, reload: reloadSubs, remove: removeSub }}>
+        <div className="admin-portal min-h-screen overflow-x-hidden bg-[#F8FAFC] text-gray-900 font-sans pb-24">
             <header className="bg-white border-b border-gray-100 sticky top-0 z-30 shadow-sm">
-                <div className="max-w-[1100px] mx-auto px-4 h-[70px] flex items-center justify-between">
-                    <div className="flex items-center gap-3"><div className="w-9 h-9 rounded-xl bg-[#1A2E35] text-white flex items-center justify-center"><Home size={18} /></div><span className="text-[20px] font-bold font-serif">Admin Portal</span>
-                        {dirty && <span className="ml-2 text-[11px] font-bold uppercase tracking-widest text-amber-500">Unsaved changes</span>}</div>
-                    <div className="flex items-center gap-2">
+                <div className="max-w-[1100px] mx-auto px-3 sm:px-4 min-h-[60px] sm:h-[70px] flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 sm:gap-3 min-w-0"><div className="w-9 h-9 shrink-0 rounded-xl bg-[#1A2E35] text-white flex items-center justify-center"><Home size={18} /></div><span className="text-[15px] sm:text-[20px] font-bold font-serif leading-tight">Admin <span className="hidden min-[400px]:inline">Portal</span></span>
+                        {dirty && <><span className="sm:hidden w-2 h-2 rounded-full bg-amber-500 shrink-0" title="Unsaved changes" /><span className="hidden sm:inline ml-2 text-[11px] font-bold uppercase tracking-widest text-amber-500">Unsaved changes</span></>}</div>
+                    <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                         <button type="button" onClick={toggleTheme} aria-label={dark ? "Switch to light theme" : "Switch to dark theme"} title={dark ? "Light theme" : "Dark theme"} className="p-2.5 text-gray-500 border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-gray-900">{dark ? <Sun size={17} /> : <Moon size={17} />}</button>
                         <a href="/" target="_blank" className="hidden sm:inline-flex text-[13px] text-gray-500 border border-gray-200 rounded-lg px-4 py-2 hover:bg-gray-50">View site</a>
-                        <button type="button" onClick={exportJson} className="inline-flex items-center gap-2 text-[13px] text-gray-600 border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-50"><Download size={15} /> Export</button>
+                        <button type="button" onClick={exportJson} className="inline-flex items-center gap-2 text-[13px] text-gray-600 border border-gray-200 rounded-lg px-2.5 sm:px-3 py-2.5 sm:py-2 hover:bg-gray-50" aria-label="Export"><Download size={15} /> <span className="hidden sm:inline">Export</span></button>
                         <button type="button" onClick={() => importRef.current?.click()} className="hidden sm:inline-flex items-center gap-2 text-[13px] text-gray-600 border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-50"><UploadCloud size={15} /> Import</button>
                         <input ref={importRef} type="file" hidden accept="application/json,.json" onChange={(e) => { importJson(e.target.files?.[0]); e.target.value = ""; }} />
-                        <button type="button" onClick={save} disabled={saving} className="inline-flex items-center gap-2 bg-[#1A2E35] text-white text-[13px] font-semibold rounded-lg px-4 py-2.5 hover:opacity-90 disabled:opacity-60">{saving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />} Save All Changes</button>
+                        <button type="button" onClick={save} disabled={saving} className="inline-flex items-center gap-2 bg-[#1A2E35] text-white text-[13px] font-semibold rounded-lg px-3 sm:px-4 py-2.5 hover:opacity-90 disabled:opacity-60 whitespace-nowrap">{saving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />} <span className="sm:hidden">Save</span><span className="hidden sm:inline">Save All Changes</span></button>
                         <button type="button" onClick={logout} aria-label="Log out" className="p-2.5 text-gray-500 bg-gray-50 rounded-lg hover:text-gray-900"><LogOut size={17} /></button>
                     </div>
                 </div>
             </header>
 
-            <main className="max-w-[1100px] mx-auto px-4 mt-8">
+            <main className="max-w-[1100px] mx-auto px-3 sm:px-4 mt-5 sm:mt-8">
                 {!canSave && (<div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 text-amber-800 text-sm px-5 py-4">This copy of the site cannot save to disk (read-only hosting). You can still edit, then press <b>Export</b> and replace <code>src/content/site-content.json</code> in the project.</div>)}
-                <nav className="bg-white border border-gray-100 rounded-2xl shadow-sm p-2 flex flex-wrap gap-1 mb-8">
+                <nav className="bg-white border border-gray-100 rounded-2xl shadow-sm p-1.5 sm:p-2 flex flex-nowrap sm:flex-wrap gap-1 mb-5 sm:mb-8 overflow-x-auto sm:overflow-visible [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                     {TABS.map((t) => { const I = t.icon; const on = t.id === tab; return (
-                        <button key={t.id} type="button" onClick={() => setTab(t.id)} className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13.5px] font-semibold transition-colors ${on ? "bg-[#1A2E35] text-white" : "text-gray-500 hover:bg-gray-50"}`}><I size={16} /> {t.label}</button>); })}
+                        <button key={t.id} type="button" onClick={() => setTab(t.id)} className={`inline-flex shrink-0 whitespace-nowrap items-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl text-[13px] sm:text-[13.5px] font-semibold transition-colors ${on ? "bg-[#1A2E35] text-white" : "text-gray-500 hover:bg-gray-50"}`}><I size={16} /> {t.label}{(t.id === "inquiries" || t.id === "applications") && subs.loaded && <span className={`ml-1 text-[11px] font-bold px-1.5 py-0.5 rounded-full ${on ? "bg-white/20" : "bg-gray-100 text-gray-500"}`}>{subs.rows.filter((r) => (t.id === "applications") === isApplication(r)).length}</span>}</button>); })}
                 </nav>
                 <div className="space-y-6">{cur.blocks.map((b, i) => <BlockView key={cur.id + i} b={b} content={content} update={update} />)}</div>
             </main>
@@ -535,6 +615,7 @@ export default function Dashboard() {
                     {toast.ok ? <Check size={18} className="mt-0.5 shrink-0" /> : <X size={18} className="mt-0.5 shrink-0" />}<span className="flex-1">{toast.text}</span></motion.div>)}
             </AnimatePresence>
         </div>
+        </SubsCtx.Provider>
         </ConfirmHost>
     );
 }

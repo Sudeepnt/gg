@@ -28,7 +28,7 @@ export async function saveInquiry(inquiry) {
 /* used by the Contact form in app.js */
 window.__ggSave = async (kind, d) => {
   try {
-    await saveInquiry({ name: d.name, email: d.email, message: `${d.type_label}\n${d.message}`, kind, type: d.type, company: d.company, project: d.message });
+    await saveInquiry({ name: d.name, email: d.email, message: d.message, kind, inquiryType: d.type_label, company: d.company });
     return { ok: true };
   } catch (e) { console.error('Inquiry save failed:', e); return { ok: false }; }
 };

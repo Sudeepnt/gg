@@ -12,7 +12,8 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 const CONTENT_FILE = path.join(process.cwd(), "src/content/site-content.json");
 const PASSWORD = process.env.ADMIN_PASSWORD || "gg5656";
-const SECRET = process.env.ADMIN_SECRET || "gg-admin-secret-change-me";
+/* signing secret for the login cookie: ADMIN_SECRET if set, otherwise a server-only secret that already exists, so it can't be derived from the public code */
+const SECRET = process.env.ADMIN_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY || "gg-admin-secret-change-me";
 const COOKIE = "gg_admin";
 const token = () => crypto.createHmac("sha256", SECRET).update(PASSWORD).digest("hex");
 const canWrite = () => !process.env.VERCEL && process.env.NODE_ENV !== "production";
@@ -75,5 +76,42 @@ export async function uploadAsset(formData: FormData) {
     return { ok: true, url: `${base}/${key}` };
   } catch (e: any) {
     return { ok: false, error: e.message || "Upload failed" };
+  }
+}
+
+/* ---------- form submissions (Contact + Pitch us) ----------
+   They live in the same Supabase `inquiries` table the previous site used, so earlier submissions show up here too.
+   Reading and deleting happen on the server, behind the admin login. Set SUPABASE_SERVICE_ROLE_KEY (server only) so the table
+   can be locked down in Supabase; without it the public anon key is used, exactly like the old admin did. */
+function sb() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return null;
+  return { url: url.replace(/\/$/, ""), headers: { apikey: key, Authorization: `Bearer ${key}` } };
+}
+
+export async function getSubmissions() {
+  try {
+    await requireAdmin();
+    const c = sb();
+    if (!c) return { ok: false as const, notConfigured: true, error: "Form storage (Supabase) is not configured on this server, so submissions can't be listed here." };
+    const r = await fetch(`${c.url}/rest/v1/inquiries?select=*&order=created_at.desc&limit=500`, { headers: c.headers, cache: "no-store" });
+    if (!r.ok) throw new Error(`Could not load submissions (${r.status}). ${(await r.text()).slice(0, 160)}`);
+    return { ok: true as const, rows: (await r.json()) as any[] };
+  } catch (e: any) {
+    return { ok: false as const, error: e.message || "Could not load submissions" };
+  }
+}
+
+export async function deleteSubmission(id: string | number) {
+  try {
+    await requireAdmin();
+    const c = sb();
+    if (!c) throw new Error("Form storage (Supabase) is not configured on this server.");
+    const r = await fetch(`${c.url}/rest/v1/inquiries?id=eq.${encodeURIComponent(String(id))}`, { method: "DELETE", headers: { ...c.headers, Prefer: "return=minimal" } });
+    if (!r.ok) throw new Error(`Could not delete (${r.status}). ${(await r.text()).slice(0, 160)}`);
+    return { ok: true };
+  } catch (e: any) {
+    return { ok: false, error: e.message || "Delete failed" };
   }
 }
