@@ -5,7 +5,9 @@ import { parse } from 'node-html-parser';
 
 export const EXCLUDE = ['#gl', '#svc', '#spx', '#jobs', '#cli', '#ldr', '#fmlist', '#msgbody', '.vals', '.mvv .v', '.mvv .lead', '#doc', '.msg > .big', '#kvcatch', '.kv-sub',
   '#kvlb', '#kvpk', '#csub', '#tn', 'button[data-open]', '#kvsb', '#kvhud', '#shot', '#clk', '#pitch', '#mail', '.wbar', '#dpbody', '#dpbc', '#mstat', '#mnav', '#mdoc', '.fsm > div:first-child', '#ctsub', '#cttabs', '#toast', '#slotv', '#slotn',
-  '#rsec', '#rno', '#pka', '#pkt', '#nl', '.sc', '#ptc', '.kv-th', '#kvsegs', '#kvn', '#kvtot', '#kvtc', '#kvstate', '#ldn', '#bios', '#panelContact', '.mail'];
+  '#rsec', '#rno', '#pka', '#pkt', '#nl', '.sc', '#ptc', '.kv-th', '#kvsegs', '#kvn', '#kvtot', '#kvtc', '#kvstate', '#ldn', '#bios', '#panelContact', '.mail',
+  /* retired: the boot screen was removed, and the old hero montage's coordinates, clock and canvas label are hidden behind the stories carousel */
+  '#ld', '.kv-meta', '#kv', '#stpk'];
 const ATTRS = [['aria-label', 'Screen-reader label'], ['title', 'Tooltip'], ['placeholder', 'Hint inside the box'], ['alt', 'Image description'], ['data-name', 'Section name (window bar and side rail)']];
 const SKIP_TAGS = new Set(['script', 'style', 'svg', 'canvas', 'noscript', 'textarea', 'option', 'select']);
 export const norm = t => String(t).replace(/\s+/g, ' ').trim();
@@ -48,7 +50,7 @@ export function walk(html, visit) {
      Collected first and applied after, so a renamed section never changes the group (and key) of the entries inside it. */
   /* attributes the script rewrites itself are edited under "All other text" (uiStrings.js) or their own tab, never twice */
   const ATTR_SKIP = new Set();
-  ['#kvpp', '#panelContact', '#pitch', '#toast'].forEach(sel => { try { root.querySelectorAll(sel).forEach(e => { ATTR_SKIP.add(e); e.querySelectorAll('*').forEach(c => ATTR_SKIP.add(c)); }); } catch { /* ignore */ } });
+  ['#kvpp', '#panelContact', '#pitch', '#toast', '#kv', '#kvsegs', '#stpk'].forEach(sel => { try { root.querySelectorAll(sel).forEach(e => { ATTR_SKIP.add(e); e.querySelectorAll('*').forEach(c => ATTR_SKIP.add(c)); }); } catch { /* ignore */ } });
   const found = [];
   const walkEls = node => {
     for (const ch of node.childNodes) {

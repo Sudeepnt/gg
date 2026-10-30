@@ -1474,6 +1474,7 @@ body.stories .kv-copy .row,body.stories .kv-copy .row *{pointer-events:auto}
 @media (max-width:700px){.kv{--fr:8px}.st-top{left:16px;right:16px;bottom:16px;flex-wrap:wrap;row-gap:12px;font-size:10px;letter-spacing:.12em}.st-top .st-sb{display:block;flex:1 1 0}.st-top .pk{margin-left:auto}.st-bars{flex:1 1 100%;order:5;height:3px;min-width:0}}
 
 .gc.nopk{cursor:default}
+.gc.nopk .more{display:none}   /* no arrow on a card that does not open */
 
 /* no dark layers on the carousel video: legibility comes from a soft text shadow instead */
 body.stories .kv-copy,body.stories .st-top{text-shadow:0 1px 14px rgba(0,0,0,.55),0 0 2px rgba(0,0,0,.35)}

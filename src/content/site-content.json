@@ -770,48 +770,6 @@
       }
     ]
   },
-  "heroCaptions": [
-    {
-      "label": "Pen Fight",
-      "sub": "Original IP · In development"
-    },
-    {
-      "label": "Auto Rush",
-      "sub": "Original IP · In development"
-    },
-    {
-      "label": "Pen Fight × Auto Rush",
-      "sub": "Two worlds in production"
-    },
-    {
-      "label": "Classified 01",
-      "sub": "Sealed · Flagship"
-    },
-    {
-      "label": "The slate",
-      "sub": "Four titles · One standard"
-    },
-    {
-      "label": "Classified 02",
-      "sub": "Sealed · A comedy with teeth"
-    },
-    {
-      "label": "GG Productions",
-      "sub": "Global roster · On call"
-    },
-    {
-      "label": "Roster × Flagship",
-      "sub": "Services feed the slate"
-    },
-    {
-      "label": "Pen Fight",
-      "sub": "Close-up"
-    },
-    {
-      "label": "Gattabara Games",
-      "sub": "Bengaluru · For the world"
-    }
-  ],
   "texts": {},
   "philosophy": {
     "mission": "Summon worlds that eat reality.",
@@ -1225,12 +1183,6 @@
   "clientsPage": {
     "ctaTitle": "Your studio",
     "ctaText": "Start a brief →"
-  },
-  "heroHud": {
-    "play": "PLAY",
-    "pause": "PAUSE",
-    "clip": "CLIP",
-    "pressKit": "Press kit →"
   },
   "networkCall": {
     "ring": "Incoming call…",

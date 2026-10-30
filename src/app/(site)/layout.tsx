@@ -10,11 +10,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const title = S.title || "Gattabara Games — We summon worlds that eat reality";
   const description = S.description || "Gattabara Games is a video game company and creative studio in Bengaluru, India.";
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://gattabaragames.com"),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.gattabaragames.com"),
     title,
     description,
     icons: { icon: "/logos/logo1black.png", apple: "/logos/logo1black.png" },
-    alternates: { types: { "text/plain": [{ url: "/llms.txt", title: "llms.txt" }] } },
+    alternates: { canonical: "/", types: { "text/plain": [{ url: "/llms.txt", title: "llms.txt" }] } },
     openGraph: { type: "website", title: S.shareTitle || "Gattabara Games", description: S.shareDescription || description, images: ["/logos/logo1black.png"] },
   };
 }

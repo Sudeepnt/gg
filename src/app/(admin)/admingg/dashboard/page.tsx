@@ -15,7 +15,7 @@ import cmsSnapshot from "@/cms-data.json";
 import { getSiteContent, saveSiteContent, uploadAsset, logoutAdmin, getSubmissions, deleteSubmission, restorePreviousContent, getUploadUrl, getPosterUploadUrl } from "@/app/actions/adminActions";
 
 /* ---------- what can be edited, per tab. Labels are the words the website itself shows. ---------- */
-type F = { key: string; label: string; type: "text" | "toggle" | "textarea" | "lines" | "tags" | "number" | "select" | "image" | "video" | "rows"; options?: string[] | "games"; hint?: string;
+type F = { key: string; label: string; type: "text" | "toggle" | "textarea" | "lines" | "tags" | "number" | "select" | "image" | "video" | "rows"; options?: string[] | "disciplines" | "tiers"; hint?: string;
     itemFields?: F[]; blank?: () => any; addLabel?: string; itemLabel?: (it: any) => string };
 type Block =
     | { kind: "object"; path: string; title: string; fields: F[] }
@@ -26,7 +26,7 @@ type Block =
     | { kind: "list"; path: string; title: string; addLabel: string; fields: F[]; blank: () => any; label: (it: any) => string; fixed?: boolean };
 
 /* the application form's fields are named after the sentence the visitor reads, so the client sees the same words */
-const FORM_ORDER = ["studioName", "studioWebsite", "yourName", "email", "country", "gameTitle", "collaboration", "collabCoDev", "collabCoFunding", "collabPublishing", "selectPlaceholder", "description", "totalBudget", "budgetAsk", "platforms", "platformOptions", "genre", "compTitle", "materials", "chooseFile", "dragDrop", "alertFiles", "alertSize", "materialsLinks", "multiplayer", "launchWindow", "estimatedPrice", "teamSize", "additionalNotes", "howHeard", "notRobot", "alertRobot", "captchaNote", "captchaAction", "captchaBrand", "captchaPrivacy", "captchaTerms", "formAria", "closeForm", "submit", "submitting", "submitted", "finalizing", "errorFallback", "tryAgain", "sendingTitle", "failTitle", "successTitle", "successMessage", "successButton"];
+const FORM_ORDER = ["studioName", "studioWebsite", "yourName", "email", "country", "gameTitle", "collaboration", "collabCoDev", "collabCoFunding", "collabPublishing", "selectPlaceholder", "description", "totalBudget", "budgetAsk", "platforms", "platformOptions", "genre", "compTitle", "materials", "chooseFile", "dragDrop", "alertFiles", "alertSize", "materialsLinks", "multiplayer", "launchWindow", "estimatedPrice", "teamSize", "additionalNotes", "howHeard", "notRobot", "alertRobot", "captchaNote", "captchaAction", "captchaBrand", "captchaPrivacy", "captchaTerms", "formAria", "closeForm", "submit", "submitting", "submitted", "finalizing", "tryAgain", "sendingTitle", "failTitle", "successTitle", "successMessage", "successButton"];
 const FORM_LABELS = (cmsSnapshot as any).form.labels as Record<string, string>;
 const FORM_SORTED = FORM_ORDER.flatMap((k) => [k, k + "Hint", k + "Desc"]).filter((k) => k in FORM_LABELS);
 const FORM_LABEL_FIELDS: F[] = FORM_SORTED.map((k) => [k, FORM_LABELS[k]] as [string, string]).map(([k, v]) => ({ key: k, label: String(v).length > 90 ? String(v).slice(0, 87) + "\u2026" : String(v), type: String(v).length > 70 ? "textarea" as const : "text" as const }));
@@ -86,28 +86,21 @@ const PK_LABELS: [string, string, string][] = [
 ];
 const PK_LABEL_FIELDS: F[] = PK_LABELS.map(([key, where, text]) => ({ key, label: `${where} \u2192 \u201c${text.length > 60 ? text.slice(0, 57) + "\u2026" : text}\u201d`, type: text.length > 70 ? "textarea" as const : "text" as const }));
 
-const TABS: { id: string; label: string; icon: any; blocks: Block[] }[] = [
+type Tab = { id: string; label: string; icon: any; blocks: Block[] };
+const RAW: Tab[] = [
     { id: "inquiries", label: "Inquiries", icon: Inbox, blocks: [{ kind: "submissions", which: "general" }] },
     { id: "applications", label: "Applications", icon: ClipboardList, blocks: [{ kind: "submissions", which: "applications" }] },
     { id: "hero", label: "Home", icon: Home, blocks: [
         { kind: "object", path: "hero", title: "Hero", fields: [
             { key: "line1", label: "Headline, line 1", type: "text" }, { key: "line2", label: "Headline, line 2", type: "text" },
             { key: "sub", label: "Text under the headline", type: "textarea" }] },
-        { kind: "object", path: "heroHud", title: "Hero: small labels on the screen", fields: [
-            { key: "play", label: "PLAY (state shown while playing)", type: "text" }, { key: "pause", label: "PAUSE (state shown when paused)", type: "text" },
-            { key: "clip", label: "CLIP (before the clip number)", type: "text" }, { key: "pressKit", label: "Press kit \u2192 (button on game captions)", type: "text" }] },
-        { kind: "list", path: "heroSlides", title: "Home carousel \u2192 slides (in this order)", addLabel: "Add slide", label: x => (x.title || "New slide") + (x.caption ? " \u00b7 " + x.caption : ""),
+        { kind: "list", path: "heroSlides", title: "Carousel slides", addLabel: "Add slide", label: x => (x.title || "New slide") + (x.caption ? " \u00b7 " + x.caption : ""),
           blank: () => ({ title: "", caption: "", pc: "", mobile: "" }),
           fields: [
             { key: "title", label: "Name shown on the slide (white tag)", type: "text", hint: "Free text, independent of the Games section." },
             { key: "caption", label: "Small text next to the name", type: "text" },
             { key: "pc", label: "PC video (16:9, about 7 seconds)", type: "video", hint: "Plays on computers and tablets." },
-            { key: "mobile", label: "Mobile video (9:16, about 7 seconds)", type: "video", hint: "Plays on phones. Leave empty to use the PC video." }] },
-        { kind: "object", path: "reels", title: "Showreel", fields: [
-            { key: "main", label: "Reel (plays behind the hero and in GG Productions \u2192 Animation)", type: "video" },
-            { key: "second", label: "Second reel (GG Productions \u2192 Art, optional)", type: "video", hint: "Leave empty to reuse the first reel." }] },
-        { kind: "list", path: "heroCaptions", title: "Captions under the hero (they rotate)", addLabel: "", fixed: true, label: c => c.label || "Caption", blank: () => ({ label: "", sub: "" }),
-          fields: [{ key: "label", label: "Caption (white tag)", type: "text" }, { key: "sub", label: "Caption text", type: "text" }] }] },
+            { key: "mobile", label: "Mobile video (9:16, about 7 seconds)", type: "video", hint: "Plays on phones. Leave empty to use the PC video." }] }] },
     { id: "news", label: "News", icon: Newspaper, blocks: [
         { kind: "list", path: "news", title: "News", addLabel: "Add news item", label: n => n.title || "New item",
           blank: () => ({ date: new Date().toISOString().slice(0, 10).replace(/-/g, "."), category: "STUDIO", title: "", body: "" }),
@@ -163,7 +156,7 @@ const TABS: { id: string; label: string; icon: any; blocks: Block[] }[] = [
             { key: "promoMain", label: "Promo graphics \u2192 Main capsule \u00b7 1232\u00d7706", type: "image" },
             { key: "promoVertical", label: "Promo graphics \u2192 Vertical capsule \u00b7 748\u00d7896", type: "image" },
             { key: "promoSmall", label: "Promo graphics \u2192 Small capsule \u00b7 462\u00d7174", type: "image", hint: "Leave a capsule empty to use the generated one." },
-            { key: "summary", label: "Summary (for search engines and the Machine view)", type: "textarea" }] },
+            { key: "summary", label: "Summary (for search engines and the Machine view)", type: "textarea", hint: "Not shown for sealed games: their details stay withheld." }] },
         { kind: "object", path: "pressKit", title: "Press kit (all games)", fields: [{ key: "about", label: "About the developer", type: "textarea" },
             { key: "studioLogo", label: "About the developer \u2192 Logo (white)", type: "image" }, { key: "studioLogoBlack", label: "About the developer \u2192 Logo (black)", type: "image" }] },
         { kind: "list", path: "pressKit.contact", title: "Press kit \u2192 Contact", addLabel: "Add row", label: r => r.label || "New row", blank: () => ({ label: "", value: "" }),
@@ -181,11 +174,10 @@ const TABS: { id: string; label: string; icon: any; blocks: Block[] }[] = [
         { kind: "lines", path: "network.tiers", title: "Quality tiers", hint: "One per line" },
         { kind: "list", path: "network.people", title: "Global roster (sample)", addLabel: "Add person", label: p => `${p.role || "New person"} \u00b7 ${p.city || ""}`, blank: () => ({ role: "", city: "", lat: 0, lon: 0, discipline: "", tier: "", experience: "" }),
           fields: [{ key: "role", label: "Role", type: "text" }, { key: "city", label: "City", type: "text" }, { key: "lat", label: "Latitude", type: "number" }, { key: "lon", label: "Longitude", type: "number" },
-            { key: "discipline", label: "Discipline", type: "text" }, { key: "tier", label: "Quality tier", type: "text" }, { key: "experience", label: "Experience", type: "text", hint: "e.g. 9 yrs" }] },
+            { key: "discipline", label: "Discipline", type: "select", options: "disciplines", hint: "Pick from the Disciplines list above." }, { key: "tier", label: "Quality tier", type: "select", options: "tiers", hint: "Pick from the Quality tiers list above." }, { key: "experience", label: "Experience", type: "text", hint: "e.g. 9 yrs" }] },
         { kind: "object", path: "networkCall", title: "Roster call window: status lines", fields: [
             { key: "idle", label: "Before the call (idle)", type: "text" }, { key: "ring", label: "While the call rings", type: "text" }, { key: "connected", label: "When connected", type: "text" }, { key: "missed", label: "When missed", type: "text" }, { key: "ended", label: "When the call ends", type: "text" },
-            { key: "onCall", label: "Roster list: available", type: "text" }, { key: "standby", label: "Roster list: not available", type: "text" }] },
-        { kind: "pagetext", groups: ["Network", "Network roster window"], title: "Other text in the Network section" }] },
+            { key: "onCall", label: "Roster list: available", type: "text" }, { key: "standby", label: "Roster list: not available", type: "text" }] }] },
     { id: "message", label: "Message", icon: Mail, blocks: [
         { kind: "object", path: "letter", title: "From the founding partners", fields: [
             { key: "big", label: "Big line", type: "text" }, { key: "to", label: "Opening line", type: "text" }] },
@@ -203,8 +195,7 @@ const TABS: { id: string; label: string; icon: any; blocks: Block[] }[] = [
     { id: "clients", label: "Clients", icon: Building2, blocks: [
         { kind: "list", path: "clients", title: "Clients", addLabel: "Add client", label: c => c.name || "New client", blank: () => ({ name: "", logo: "" }),
           fields: [{ key: "logo", label: "Logo", type: "image" }, { key: "name", label: "Name", type: "text" }] },
-        { kind: "object", path: "clientsPage", title: "Last tile (call to action)", fields: [{ key: "ctaTitle", label: "Title", type: "text" }, { key: "ctaText", label: "Link text", type: "text" }] },
-        { kind: "pagetext", groups: ["Clients"], title: "Other text in the Clients section" }] },
+        { kind: "object", path: "clientsPage", title: "Last tile (call to action)", fields: [{ key: "ctaTitle", label: "Title", type: "text" }, { key: "ctaText", label: "Link text", type: "text" }] }] },
     { id: "recruit", label: "Recruit", icon: Briefcase, blocks: [
         { kind: "list", path: "jobs", title: "Jobs", addLabel: "Add job", label: j => j.role || "New job", blank: () => ({ role: "", type: "Contract", location: "Remote" }),
           fields: [{ key: "role", label: "Role", type: "text" }, { key: "type", label: "Type", type: "text", hint: "e.g. Contract, Full-time" }, { key: "location", label: "Location", type: "text" }] }] },
@@ -269,9 +260,23 @@ const TABS: { id: string; label: string; icon: any; blocks: Block[] }[] = [
     { id: "texts", label: "All other text", icon: Type, blocks: [{ kind: "pagetext" }, { kind: "uitext", title: "Pop-ups, loading screen, Machine view and other wording the page builds itself" }] },
 ];
 
-/* each tab ends with the section's remaining headings, buttons and labels, so nothing has to be hunted for in another tab */
-const TAB_GROUPS: Record<string, string[]> = { hero: ["Top"], news: ["News"], philosophy: ["Philosophy"], production: ["GG Productions"], message: ["Message"], leadership: ["Leadership"], recruit: ["Recruit"], contact: ["Contact"] };
-TABS.forEach((t) => { const g = TAB_GROUPS[t.id]; if (g) t.blocks.push({ kind: "pagetext", groups: g, title: "Other text in this section" }); });
+/* The admin follows the website: one tab per section, in page order. Each tab ends with that section's remaining headings, buttons and labels
+   (the "Other text" box), so nothing has to be hunted for in another tab. Headings are grouped by the section's data-name. */
+const raw = (id: string) => RAW.find((t) => t.id === id)!.blocks;
+const more = (groups: string[], title: string): Block => ({ kind: "pagetext", groups, title });
+const SITE_WIDE = ["Header", "Menu", "Footer", "Loading screen", "Machine view", "Other"];
+const TABS: Tab[] = [
+    RAW[0], RAW[1],
+    { id: "hero", label: "Home", icon: Home, blocks: [...raw("hero"), more(["Top"], "Other text in the Home section")] },
+    { id: "news", label: "News", icon: Newspaper, blocks: [...raw("news"), more(["News"], "Other text in the News section")] },
+    { id: "games", label: "Games", icon: Gamepad2, blocks: raw("games") },
+    { id: "business", label: "Business", icon: Building2, blocks: [...raw("philosophy"), ...raw("message"), ...raw("leadership"), more(["Business"], "Other text in the Business section")] },
+    { id: "production", label: "GG Productions", icon: Clapperboard, blocks: [...raw("production"), ...raw("clients"), ...raw("network"), more(["GG Productions", "Network roster window"], "Other text in the GG Productions section")] },
+    { id: "recruit", label: "Recruit", icon: Users, blocks: [...raw("recruit"), more(["Recruit"], "Other text in the Recruit section")] },
+    { id: "contact", label: "Contact & pitch", icon: Phone, blocks: [...raw("contact"), ...raw("pitch"), more(["Contact"], "Other text in the Contact section")] },
+    { id: "legal", label: "Privacy & site", icon: Shield, blocks: [...raw("privacy"), ...raw("site")] },
+    { id: "texts", label: "Header, menu & footer", icon: Type, blocks: [more(SITE_WIDE, "Header, menu, footer and other site-wide text"), { kind: "uitext", title: "Pop-ups, loading screen, Machine view and other wording the page builds itself" }] },
+];
 
 /* ---------- small helpers ---------- */
 const getAt = (o: any, p: string) => p.split(".").reduce((a, k) => (a == null ? a : a[k]), o);
@@ -378,8 +383,9 @@ function Upload({ kind, value, onChange }: { kind: "image" | "video"; value: str
 
 /* ---------- centered confirmation popup (replaces the browser's confirm()) ---------- */
 type AskOpts = { title?: string; message: string; confirmLabel?: string; danger?: boolean };
-/* titles of the games in the Games tab, for the carousel's "Game" dropdown */
-const GamesCtx = createContext<string[]>([]);
+/* the roster's lists (Disciplines, Quality tiers), so a person's discipline and tier are picked from them instead of typed:
+   the site matches people to these lists by exact name, so a typo or a renamed tier would silently put someone in the wrong group */
+const ListsCtx = createContext<{ disciplines: string[]; tiers: string[] }>({ disciplines: [], tiers: [] });
 const ConfirmCtx = createContext<(o: AskOpts) => Promise<boolean>>(async () => false);
 
 function ConfirmHost({ children }: { children: React.ReactNode }) {
@@ -550,7 +556,7 @@ const isWide = (f: F) => !SHORT.includes(f.type);
 
 /* the bare input for a field type (no label) */
 function Control({ f, value, onChange, label, variant }: { f: F; value: any; onChange: (v: any) => void; label?: string; variant?: "key" | "value" }) {
-    const gameTitles = useContext(GamesCtx);
+    const lists = useContext(ListsCtx);
     const v = variant ?? (isTitle(f) ? "key" : undefined);
     const cls = v === "key" ? keyCls : v === "value" ? valCls : inputCls;
     const aria = label ? { "aria-label": label, placeholder: label } : {};
@@ -559,8 +565,8 @@ function Control({ f, value, onChange, label, variant }: { f: F; value: any; onC
     if (f.type === "lines") return <textarea rows={Math.max(3, (value || []).length + 1)} className={inputCls} value={(value || []).join("\n")} onChange={(e) => onChange(e.target.value.split("\n"))} onBlur={(e) => onChange(e.target.value.split("\n").map((s) => s.trim()).filter(Boolean))} />;
     if (f.type === "tags") return <input className={inputCls} value={Array.isArray(value) ? value.join(", ") : value ?? ""} onChange={(e) => onChange(e.target.value.split(",").map((s) => s.replace(/^\s+/, "")))} onBlur={(e) => onChange(e.target.value.split(",").map((s) => s.trim()).filter(Boolean))} />;
     if (f.type === "number") return <input type="number" className={cls} value={value ?? 0} onChange={(e) => onChange(Number(e.target.value))} {...aria} />;
-    if (f.type === "select") { const opts = f.options === "games" ? ["", ...gameTitles] : f.options!; const shown = value && !opts.includes(value) ? [...opts, value] : opts;
-        return <select className={cls} value={value ?? ""} onChange={(e) => onChange(e.target.value)} {...aria}>{shown.map((o) => <option key={o} value={o}>{o === "" ? "\u2014 none (no press kit link) \u2014" : o}</option>)}</select>; }
+    if (f.type === "select") { const opts = f.options === "disciplines" ? lists.disciplines : f.options === "tiers" ? lists.tiers : f.options!; const shown = value && !opts.includes(value) ? [...opts, value] : (!value && typeof f.options === "string") ? ["", ...opts] : opts;
+        return <select className={cls} value={value ?? ""} onChange={(e) => onChange(e.target.value)} {...aria}>{shown.map((o) => <option key={o} value={o}>{o === "" ? "\u2014 choose \u2014" : o}</option>)}</select>; }
     if (f.type === "image" || f.type === "video") return <Upload kind={f.type} value={value || ""} onChange={onChange} />;
     return <input className={cls} value={value ?? ""} onChange={(e) => onChange(e.target.value)} {...aria} />;
 }
@@ -699,7 +705,7 @@ export default function Dashboard() {
 
     return (
         <ConfirmHost>
-        <GamesCtx.Provider value={((content?.games as any[]) || []).map((g) => g.title).filter(Boolean)}>
+        <ListsCtx.Provider value={{ disciplines: (content?.network?.disciplines as string[]) || [], tiers: (content?.network?.tiers as string[]) || [] }}>
         <SubsCtx.Provider value={{ subs, reload: reloadSubs, remove: removeSub }}>
         <div className="admin-portal min-h-screen overflow-x-hidden bg-[#F8FAFC] text-gray-900 font-sans pb-24">
             <header className="bg-white border-b border-gray-100 sticky top-0 z-30 shadow-sm">
@@ -734,7 +740,7 @@ export default function Dashboard() {
             </AnimatePresence>
         </div>
         </SubsCtx.Provider>
-        </GamesCtx.Provider>
+        </ListsCtx.Provider>
         </ConfirmHost>
     );
 }

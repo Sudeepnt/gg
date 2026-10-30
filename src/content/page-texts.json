@@ -1,17 +1,5 @@
 [
  {
-  "key": "Loading screen::GATTABARA GAMES",
-  "group": "Loading screen",
-  "label": "Text",
-  "text": "GATTABARA GAMES"
- },
- {
-  "key": "Loading screen::BENGALURU · IN",
-  "group": "Loading screen",
-  "label": "Text",
-  "text": "BENGALURU · IN"
- },
- {
   "key": "Header::NEWS",
   "group": "Header",
   "label": "Text",
@@ -138,18 +126,6 @@
   "text": "VIEW"
  },
  {
-  "key": "Top::12.9716° N",
-  "group": "Top",
-  "label": "Text",
-  "text": "12.9716° N"
- },
- {
-  "key": "Top::77.5946° E",
-  "group": "Top",
-  "label": "Text",
-  "text": "77.5946° E"
- },
- {
   "key": "Top::Games",
   "group": "Top",
   "label": "Text",
@@ -166,12 +142,6 @@
   "group": "Top",
   "label": "Text",
   "text": "Game services"
- },
- {
-  "key": "Top::Press kit →",
-  "group": "Top",
-  "label": "Link / button",
-  "text": "Press kit →"
  },
  {
   "key": "News::News",
@@ -828,20 +798,6 @@
   "label": "Section name (window bar and side rail)",
   "text": "TOP",
   "attr": "data-name"
- },
- {
-  "key": "Top::[aria-label] Montage of Gattabara Games key visuals",
-  "group": "Top",
-  "label": "Screen-reader label",
-  "text": "Montage of Gattabara Games key visuals",
-  "attr": "aria-label"
- },
- {
-  "key": "Top::[aria-label] Montage clips",
-  "group": "Top",
-  "label": "Screen-reader label",
-  "text": "Montage clips",
-  "attr": "aria-label"
  },
  {
   "key": "Top::[aria-label] Previous story",
