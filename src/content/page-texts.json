@@ -12,6 +12,12 @@
   "text": "BENGALURU · IN"
  },
  {
+  "key": "Header::NEWS",
+  "group": "Header",
+  "label": "Text",
+  "text": "NEWS"
+ },
+ {
   "key": "Header::GAMES",
   "group": "Header",
   "label": "Text",
@@ -34,12 +40,6 @@
   "group": "Header",
   "label": "Text",
   "text": "RECRUIT"
- },
- {
-  "key": "Header::NEWS",
-  "group": "Header",
-  "label": "Text",
-  "text": "NEWS"
  },
  {
   "key": "Header::HUMAN",
@@ -168,10 +168,58 @@
   "text": "Game services"
  },
  {
-  "key": "Top::Press kit ↗",
+  "key": "Top::Press kit →",
   "group": "Top",
   "label": "Link / button",
-  "text": "Press kit ↗"
+  "text": "Press kit →"
+ },
+ {
+  "key": "News::News",
+  "group": "News",
+  "label": "Heading",
+  "text": "News"
+ },
+ {
+  "key": "News::Studio updates",
+  "group": "News",
+  "label": "Paragraph",
+  "text": "Studio updates"
+ },
+ {
+  "key": "News::All",
+  "group": "News",
+  "label": "Link / button",
+  "text": "All"
+ },
+ {
+  "key": "News::Games",
+  "group": "News",
+  "label": "Link / button",
+  "text": "Games"
+ },
+ {
+  "key": "News::Studio",
+  "group": "News",
+  "label": "Link / button",
+  "text": "Studio"
+ },
+ {
+  "key": "News::Productions",
+  "group": "News",
+  "label": "Link / button",
+  "text": "Productions"
+ },
+ {
+  "key": "News::Recruit",
+  "group": "News",
+  "label": "Link / button",
+  "text": "Recruit"
+ },
+ {
+  "key": "News::View all news",
+  "group": "News",
+  "label": "Text",
+  "text": "View all news"
  },
  {
   "key": "Games::Games",
@@ -336,10 +384,10 @@
   "text": "A lean partner for studios with limited budgets and ambitious goals. We add the talent your project needs across art, tech, design and production, with clear milestones and transparent delivery. You keep creative control."
  },
  {
-  "key": "GG Productions::▶ Play reel",
+  "key": "GG Productions::► Play reel",
   "group": "GG Productions",
   "label": "Link / button",
-  "text": "▶ Play reel"
+  "text": "► Play reel"
  },
  {
   "key": "GG Productions::Animation",
@@ -354,10 +402,10 @@
   "text": "Art"
  },
  {
-  "key": "GG Productions::※ Reel shown is a placeholder sample.",
+  "key": "GG Productions::* Reel shown is a placeholder sample.",
   "group": "GG Productions",
   "label": "Paragraph",
-  "text": "※ Reel shown is a placeholder sample."
+  "text": "* Reel shown is a placeholder sample."
  },
  {
   "key": "GG Productions::STEP 01",
@@ -546,64 +594,16 @@
   "text": "Entry"
  },
  {
-  "key": "Recruit::※ Listings shown are samples.",
+  "key": "Recruit::* Listings shown are samples.",
   "group": "Recruit",
   "label": "Paragraph",
-  "text": "※ Listings shown are samples."
+  "text": "* Listings shown are samples."
  },
  {
   "key": "Contact::Contact",
   "group": "Contact",
   "label": "Heading",
   "text": "Contact"
- },
- {
-  "key": "News::News",
-  "group": "News",
-  "label": "Heading",
-  "text": "News"
- },
- {
-  "key": "News::Studio updates",
-  "group": "News",
-  "label": "Paragraph",
-  "text": "Studio updates"
- },
- {
-  "key": "News::All",
-  "group": "News",
-  "label": "Link / button",
-  "text": "All"
- },
- {
-  "key": "News::Games",
-  "group": "News",
-  "label": "Link / button",
-  "text": "Games"
- },
- {
-  "key": "News::Studio",
-  "group": "News",
-  "label": "Link / button",
-  "text": "Studio"
- },
- {
-  "key": "News::Productions",
-  "group": "News",
-  "label": "Link / button",
-  "text": "Productions"
- },
- {
-  "key": "News::Recruit",
-  "group": "News",
-  "label": "Link / button",
-  "text": "Recruit"
- },
- {
-  "key": "News::View all news",
-  "group": "News",
-  "label": "Text",
-  "text": "View all news"
  },
  {
   "key": "Footer::GAMES",
@@ -864,6 +864,20 @@
   "attr": "aria-label"
  },
  {
+  "key": "News::[data-name] NEWS",
+  "group": "News",
+  "label": "Section name (window bar and side rail)",
+  "text": "NEWS",
+  "attr": "data-name"
+ },
+ {
+  "key": "News::[aria-label] Filter news",
+  "group": "News",
+  "label": "Screen-reader label",
+  "text": "Filter news",
+  "attr": "aria-label"
+ },
+ {
   "key": "Games::[data-name] GAMES",
   "group": "Games",
   "label": "Section name (window bar and side rail)",
@@ -938,20 +952,6 @@
   "group": "Contact",
   "label": "Screen-reader label",
   "text": "Contact or pitch a game",
-  "attr": "aria-label"
- },
- {
-  "key": "News::[data-name] NEWS",
-  "group": "News",
-  "label": "Section name (window bar and side rail)",
-  "text": "NEWS",
-  "attr": "data-name"
- },
- {
-  "key": "News::[aria-label] Filter news",
-  "group": "News",
-  "label": "Screen-reader label",
-  "text": "Filter news",
   "attr": "aria-label"
  },
  {

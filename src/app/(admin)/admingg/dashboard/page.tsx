@@ -74,7 +74,7 @@ const PK_LABELS: [string, string, string][] = [
   ["cap_main", "Media: capsule name", "Main capsule"],
   ["cap_vertical", "Media: capsule name", "Vertical capsule"],
   ["cap_small", "Media: capsule name", "Small capsule"],
-  ["note", "Media: note", "※ Images are key visuals from our halftone renderer until final in-game captures are released."],
+  ["note", "Media: note", "* Images are key visuals from our halftone renderer until final in-game captures are released."],
   ["dlPng", "Media: download button", "↓ PNG"],
   ["dlFile", "Media: download button for uploaded files", "↓ File"],
   ["about", "Heading", "About the developer"],
@@ -95,7 +95,7 @@ const TABS: { id: string; label: string; icon: any; blocks: Block[] }[] = [
             { key: "sub", label: "Text under the headline", type: "textarea" }] },
         { kind: "object", path: "heroHud", title: "Hero: small labels on the screen", fields: [
             { key: "play", label: "PLAY (state shown while playing)", type: "text" }, { key: "pause", label: "PAUSE (state shown when paused)", type: "text" },
-            { key: "clip", label: "CLIP (before the clip number)", type: "text" }, { key: "pressKit", label: "Press kit \u2197 (button on game captions)", type: "text" }] },
+            { key: "clip", label: "CLIP (before the clip number)", type: "text" }, { key: "pressKit", label: "Press kit \u2192 (button on game captions)", type: "text" }] },
         { kind: "list", path: "heroSlides", title: "Home carousel \u2192 slides (in this order)", addLabel: "Add slide", label: x => (x.title || "New slide") + (x.caption ? " \u00b7 " + x.caption : ""),
           blank: () => ({ title: "", caption: "", pc: "", mobile: "" }),
           fields: [

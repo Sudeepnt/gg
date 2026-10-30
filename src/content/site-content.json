@@ -1212,7 +1212,7 @@
     "cap_main": "Main capsule",
     "cap_vertical": "Vertical capsule",
     "cap_small": "Small capsule",
-    "note": "※ Images are key visuals from our halftone renderer until final in-game captures are released.",
+    "note": "* Images are key visuals from our halftone renderer until final in-game captures are released.",
     "dlPng": "↓ PNG",
     "dlFile": "↓ File",
     "about": "About the developer",
@@ -1230,7 +1230,7 @@
     "play": "PLAY",
     "pause": "PAUSE",
     "clip": "CLIP",
-    "pressKit": "Press kit ↗"
+    "pressKit": "Press kit →"
   },
   "networkCall": {
     "ring": "Incoming call…",
@@ -1305,7 +1305,7 @@
       },
       {
         "title": "Who we share it with",
-        "body": "We share personal data only with service providers who run the site for us (\"processors\"), under contract and only for that purpose:\n\n- **Vercel Inc.**: hosts and delivers the website.\n- **Supabase**: database and file storage for the messages, pitches and attachments you submit.\n- **Cloudflare, Inc.**: delivers images and videos, and stores the site's media files.\n- **Google Fonts**: the site loads its typefaces from Google's servers, which means your IP address is sent to Google when a page loads.\n- **Our email and office tools**: used to read and reply to what you send us.\n\nWe may also disclose data where the law or a court requires it, to protect our rights, or as part of a merger, sale or restructuring of the business, in which case the new owner must honour this policy. We do not share your data with advertisers or data brokers."
+        "body": "We share personal data only with service providers who run the site for us (\"processors\"), under contract and only for that purpose:\n\n- **Vercel Inc.**: hosts and delivers the website.\n- **Supabase**: database and file storage for the messages, pitches and attachments you submit.\n- **Cloudflare, Inc.**: delivers images and videos, and stores the site's media files.\n- **Our email and office tools**: used to read and reply to what you send us.\n\nWe may also disclose data where the law or a court requires it, to protect our rights, or as part of a merger, sale or restructuring of the business, in which case the new owner must honour this policy. We do not share your data with advertisers or data brokers."
       },
       {
         "title": "International transfers",

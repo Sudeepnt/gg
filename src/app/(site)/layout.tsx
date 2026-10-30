@@ -30,13 +30,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=DotGothic16&display=swap"
-        />
+        {/* the headline font and the body font start loading with the HTML */}
+        <link rel="preload" as="font" type="font/woff2" href="/fonts/BarlowCondensed-800-latin.woff2" crossOrigin="" />
+        <link rel="preload" as="font" type="font/woff2" href="/fonts/AnkaCoder-Regular.woff2" crossOrigin="" />
+        <link rel="preload" as="font" type="font/woff2" href="/fonts/Barlow-500-latin.woff2" crossOrigin="" />
       </head>
       <body>
         {children}

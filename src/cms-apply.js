@@ -185,7 +185,7 @@ function applyHeroStories(games, slides) {
     lb.textContent = (g.title || '').toUpperCase();
     sb.textContent = g.cardCaption || '';
     pk.hidden = !g.pk;
-    pk.textContent = tx('Press kit ↗');
+    pk.textContent = tx('Press kit →');
     /* play the slide on the idle video and only swap once its first frame is painted, so the previous clip stays up meanwhile (no flash of another game) */
     const old = v, tgt = first ? v : (vids[0] === v ? vids[1] : vids[0]), tok = ++swapTok;
     if (src && !same(tgt.getAttribute('src'), src)) { tgt.src = src; tgt.load(); }
