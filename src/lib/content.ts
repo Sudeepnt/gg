@@ -47,7 +47,8 @@ export async function readRow(revalidate = 0): Promise<Row | null> {
 const MEDIA_BASE = (process.env.MEDIA_BASE_URL || "https://gg-media.gattabaragames.workers.dev").replace(/\/$/, "");
 const R2_BASE = (process.env.CLOUDFLARE_R2_PUBLIC_BASE_URL || "").replace(/\/$/, "");
 function viaWorker(v: any): any {
-  if (typeof v === "string") return R2_BASE && v.startsWith(R2_BASE + "/") ? MEDIA_BASE + v.slice(R2_BASE.length) : v;
+  /* the Worker serves only applications/site/ (see cloudflare/media-worker.js); every other file stays on r2.dev */
+  if (typeof v === "string") return R2_BASE && v.startsWith(R2_BASE + "/applications/site/") ? MEDIA_BASE + v.slice(R2_BASE.length) : v;
   if (Array.isArray(v)) return v.map(viaWorker);
   if (isObj(v)) { const o: Record<string, any> = {}; for (const k of Object.keys(v)) o[k] = viaWorker(v[k]); return o; }
   return v;
