@@ -167,7 +167,7 @@ function applyHeroStories(games, slides) {
   const bars = $('#stbars'), lb = $('#stlb'), sb = $('#stsb'), pk = $('#stpk');
   bars.innerHTML = list.map(() => '<span><i></i></span>').join('');
   const fills = [...bars.querySelectorAll('i')];
-  let cur = -1, held = false, inView = true, ready = -1;   /* ready: index of the slide loaded into the idle video */
+  let cur = -1, swapTok = 0, held = false, inView = true, ready = -1;   /* ready: index of the slide loaded into the idle video */
   const covered = () => !!document.querySelector('#dp.open, #machine.open, #fm.open, #modal:not([hidden])');
   const sync = () => {
     const run = inView && !covered() && !document.hidden && !held;
@@ -187,14 +187,23 @@ function applyHeroStories(games, slides) {
     sb.textContent = g.cardCaption || '';
     pk.hidden = !g.pk;
     pk.textContent = tx('Press kit ↗');
-    if (ready === cur) {
-      const idle = vids[0] === v ? vids[1] : vids[0];
-      v.pause(); v.classList.remove('on'); v = idle;
-    } else if (src && !same(v.getAttribute('src'), src)) { v.src = src; }
-    if (!(first && !v.paused)) v.currentTime = 0;   /* the adopted first video is already playing: do not restart it */
-    v.classList.add('on');
-    v.play().catch(() => {});
+    /* play the slide on the idle video and only swap once its first frame is painted, so the previous clip stays up meanwhile (no flash of another game) */
+    const old = v, tgt = first ? v : (vids[0] === v ? vids[1] : vids[0]), tok = ++swapTok;
+    if (src && !same(tgt.getAttribute('src'), src)) { tgt.src = src; tgt.load(); }
+    v = tgt;
+    if (!(first && !tgt.paused)) { try { tgt.currentTime = 0; } catch {} }
+    let done = false;
+    const reveal = () => {
+      if (done || tok !== swapTok) return;
+      done = true;
+      tgt.style.zIndex = 1; tgt.classList.add('on');
+      if (old !== tgt) { old.style.zIndex = 0; old.classList.remove('on'); old.pause(); }
+    };
     sync();
+    const pl = tgt.play();
+    if (pl && pl.then) pl.then(() => (tgt.requestVideoFrameCallback ? tgt.requestVideoFrameCallback(reveal) : reveal())).catch(() => {});
+    tgt.addEventListener('playing', reveal, { once: true });
+    setTimeout(reveal, 900);
     prepare((cur + 1) % list.length);
   };
   const onTime = e => { if (e.target === v && cur >= 0 && v.duration) fills[cur].style.width = (v.currentTime / v.duration * 100) + '%'; };
