@@ -1,4 +1,5 @@
 import {tx} from './tx.js';
+import {LAND_B64} from './world-land.js';
 /* Gattabara Games — all behaviour and editable content. See README.md for the map. */
 /* Next's router patches window.history and re-renders the page on any URL change, which wipes the DOM this script built; use the browser's own methods */
 const nativeHist={replaceState:(...a)=>History.prototype.replaceState.apply(history,a),pushState:(...a)=>History.prototype.pushState.apply(history,a)};
@@ -434,13 +435,17 @@ let PPL=[['Combat designer','Kraków',50.06,19.94,'Combat',2,'9 yrs'],['Combat a
 if(GGC&&GGC.network){const N=GGC.network;if(Array.isArray(N.disciplines)&&N.disciplines.length)DISC=N.disciplines.slice();if(Array.isArray(N.tiers)&&N.tiers.length)TIER=N.tiers.slice();
   if(Array.isArray(N.people))PPL=N.people.map(p=>[p.role||'',p.city||'',+p.lat||0,+p.lon||0,p.discipline||DISC[0],Math.max(0,TIER.indexOf(p.tier)),p.experience||''])}
 (function(){const cv=$('#globe'),x=cv.getContext('2d');let W=0,vis=false,ring=0;const N=innerWidth<760?700:1300,pts=[];for(let i=0;i<N;i++){const y=1-(i/(N-1))*2,rr=Math.sqrt(1-y*y),th=i*2.399963;pts.push([Math.cos(th)*rr,y,Math.sin(th)*rr])}
+  /* world map: a denser dot lattice, kept only where the land mask says land */
+  const LM=Uint8Array.from(atob(LAND_B64),c=>c.charCodeAt(0)),land=[];
+  {const NL=innerWidth<760?2800:5600;for(let i=0;i<NL;i++){const y=1-(i/(NL-1))*2,rr=Math.sqrt(1-y*y),th=i*2.399963,px=Math.cos(th)*rr,pz=Math.sin(th)*rr;const la=Math.asin(y)*180/Math.PI;let lo=Math.atan2(pz,-px)*180/Math.PI-180;if(lo<-180)lo+=360;const r=Math.min(179,Math.max(0,Math.floor(90-la))),c=Math.min(359,Math.max(0,Math.floor(lo+180))),k=r*360+c;if(LM[k>>3]>>(k&7)&1)land.push([px,y,pz])}}
   const ll=(la,lo)=>{const p=(90-la)*Math.PI/180,t=(lo+180)*Math.PI/180;return[-Math.sin(p)*Math.cos(t),Math.cos(p),Math.sin(p)*Math.sin(t)]};const blr=ll(12.97,77.59);const cities=PPL.filter(p=>p[1]!=='Bengaluru').map(p=>ll(p[2],p[3]));
   function rs(){const d=Math.min(2,devicePixelRatio||1);W=cv.clientWidth;cv.width=cv.height=Math.max(1,W*d);x.setTransform(d,0,0,d,0,0)}rs();addEventListener('resize',rs);new IntersectionObserver(e=>{vis=e[0].isIntersecting;if(vis&&!W)rs()}).observe(cv);
   G.ringGlobe=()=>ring=performance.now();
   (function f(t){requestAnimationFrame(f);if(!vis||!W)return;const R=W*.42,cx=W/2,cy=W/2,a=(RM?0:t*.00012)+3.7,ti=.35;x.clearRect(0,0,W,W);
     const rot=v=>{const X=v[0]*Math.cos(a)-v[2]*Math.sin(a),Z=v[0]*Math.sin(a)+v[2]*Math.cos(a),Y=v[1];return[X,Y*Math.cos(ti)-Z*Math.sin(ti),Y*Math.sin(ti)+Z*Math.cos(ti)]};
     x.strokeStyle='rgba(243,243,240,.3)';x.lineWidth=1;x.beginPath();x.arc(cx,cy,R,0,7);x.stroke();x.strokeStyle='rgba(243,243,240,.2)';x.setLineDash([2,6]);x.beginPath();x.arc(cx,cy,R*1.1,t*.0003,t*.0003+5.5);x.stroke();x.setLineDash([]);
-    for(const p of pts){const q=rot(p);if(q[2]<-.1)continue;x.fillStyle=`rgba(243,243,240,${.1+.55*Math.max(0,q[2])})`;x.fillRect(cx+q[0]*R-.8,cy-q[1]*R-.8,1.6,1.6)}
+    for(const p of pts){const q=rot(p);if(q[2]<-.1)continue;x.fillStyle=`rgba(243,243,240,${.04+.2*Math.max(0,q[2])})`;x.fillRect(cx+q[0]*R-.6,cy-q[1]*R-.6,1.2,1.2)}
+    for(const p of land){const q=rot(p);if(q[2]<-.05)continue;x.fillStyle=`rgba(243,243,240,${.22+.68*Math.max(0,q[2])})`;x.fillRect(cx+q[0]*R-.9,cy-q[1]*R-.9,1.8,1.8)}
     const b=rot(blr);const boost=ring?Math.max(0,1-(performance.now()-ring)/8000):0;
     cities.forEach((c,i)=>{const e=rot(c);if(e[2]<-.2&&b[2]<-.2)return;const mx=(b[0]+e[0])/2,my=(b[1]+e[1])/2,mz=(b[2]+e[2])/2;const ml=Math.hypot(mx,my,mz)||1,lift=1.2+Math.hypot(b[0]-e[0],b[1]-e[1],b[2]-e[2])*.25;const m=[mx/ml*lift,my/ml*lift];
       x.strokeStyle=`rgba(243,243,240,${.16+boost*.5})`;x.beginPath();x.moveTo(cx+b[0]*R,cy-b[1]*R);x.quadraticCurveTo(cx+m[0]*R,cy-m[1]*R,cx+e[0]*R,cy-e[1]*R);x.stroke();
