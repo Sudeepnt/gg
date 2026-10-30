@@ -1479,3 +1479,10 @@ body.stories .reg{display:none}
 /* the carousel video is in the page from the first paint: keep the generated montage out of the way until it fails */
 .kv.hv #kv,.kv.hv .kv-fb{visibility:hidden}
 .kv.hv .kv-st{inset:var(--fr);border-radius:clamp(14px,1.6vw,24px);overflow:hidden}
+
+/* phones: the window stack made every section its own huge GPU layer (will-change + backface) and blended fixed rails over the moving page; Android Chrome dropped tiles while scrolling, showing white/black/grey flashes. Keep the stack, drop the layer promotion and blending. */
+@media (max-width:760px){
+.win{will-change:auto;backface-visibility:visible;-webkit-backface-visibility:visible}
+.wrail,.rail-l,.rail-r{mix-blend-mode:normal}
+.mq .t{will-change:auto}
+}
