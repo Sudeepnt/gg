@@ -4,13 +4,28 @@ import { tx } from './tx.js';
 
 const $ = s => document.querySelector(s);
 
-/* The CMS stores the original 33 MB 1080p upload on r2.dev, which is slow and uncached. For that known file we serve lean
-   720p copies (index up front, so playback starts straight away) from the site itself; any other CMS URL is used as is. */
+/* The CMS stores the original 33 MB 1080p upload on r2.dev, which is slow. For that known file we play a lean 720p copy that sits next to
+   it in the same Cloudflare R2 bucket (never on Vercel: no media is ever stored with the site). Any other CMS URL is used as is. */
 const LEAN = {
-  '1774408082516-GG_Website_Showreel-(1)-(1).mp4': { full: '/reels/showreel-720.mp4', hero: '/reels/showreel-hero-720.mp4', poster: '/reels/showreel-poster.jpg' },
+  '1774408082516-GG_Website_Showreel-(1)-(1).mp4': { full: 'applications/site/videos/showreel-720.mp4', poster: 'applications/site/images/showreel-poster.jpg' },
 };
-const lean = (url, kind) => { const k = url && Object.keys(LEAN).find(n => url.includes(n)); return k ? LEAN[k][kind] : (kind === 'poster' ? '' : url); };
+const lean = (url, kind) => {
+  const k = url && Object.keys(LEAN).find(n => url.includes(n));
+  if (!k) return kind === 'poster' ? '' : url;
+  try { return new URL(url).origin + '/' + LEAN[k][kind]; } catch { return kind === 'poster' ? '' : url; }
+};
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* if the media Worker ever fails, play the same file straight from the bucket's r2.dev address */
+const mediaHosts = () => siteContent()?.mediaHosts;
+function mediaFallback(el) {
+  const mh = mediaHosts(), src = el.getAttribute('src') || '';
+  if (!mh || !src.startsWith(mh.worker + '/')) return false;
+  el.src = mh.origin + src.slice(mh.worker.length);
+  el.load();
+  el.play().catch(() => {});
+  return true;
+}
 
 function applyClients(list) {
   const wrap = $('#cli'), cta = wrap && wrap.querySelector('.cl.cta');
@@ -42,6 +57,7 @@ function applyReel(url, url2) {
   Object.assign(v, { muted: true, loop: true, playsInline: true, preload: 'metadata', poster: lean(url, 'poster') });
   v.className = 'rv-video';
   v.src = reels.anim;
+  v.addEventListener('error', () => mediaFallback(v));
   const ctl = document.createElement('div');
   ctl.className = 'rv-ctl';
   ctl.innerHTML = `<div class="rv-row"><button type="button" class="rv-btn" data-a="play" aria-label="${tx('Pause reel')}">${svg('pause')}</button><button type="button" class="rv-btn" data-a="mute" aria-label="${tx('Unmute reel')}">${svg('mute')}</button><button type="button" class="rv-btn" data-a="full" aria-label="${tx('Full screen')}">${svg('full')}</button></div><div class="rv-bar" role="progressbar" aria-label="${tx('Reel progress')}"><i></i></div>`;
@@ -111,64 +127,91 @@ function applyReel(url, url2) {
   icons();
 }
 
-/* Hero: an Instagram-stories style carousel. One slide per game, each a short clip (the CMS gives every game a PC video and a
-   mobile video; until they are uploaded every slide plays the 7-second cut of the showreel). Tap the left or right edge to go
-   back or forward, press and hold to pause. While it runs, body.stories keeps the generated WebGL montage idle. */
-const REEL7 = { pc: '/reels/showreel-7s.mp4', mobile: '/reels/showreel-7s-mobile.mp4' };
-function applyHeroStories(games, url) {
+/* Hero: an Instagram-stories style carousel, edited in the CMS (Home -> "Home carousel -> slides"). Every slide has a PC video and a
+   mobile video, an optional game (for the Press kit button) and a caption. Tap the left or right edge to go back or forward, press
+   and hold to pause. Two video elements take turns so the next slide is already loaded when it starts. While it runs,
+   body.stories keeps the generated WebGL montage idle. */
+function applyHeroStories(games, slides) {
   const st = $('.kv-st'), box = $('#stories');
-  if (!st || !box || $('#herovid')) return;
-  /* one slide per clip: every game's "Home carousel" clips (PC + mobile video); with none set, the sample showreel cut plays */
+  if (!st || !box || window.__ggStories) return;
+  window.__ggStories = true;
   const mq = window.matchMedia('(max-width: 700px)');
-  let list = [];
-  (games || []).forEach((g, i) => (g.heroClips || []).forEach(c => {
-    if (c.pc || c.mobile) list.push({ title: g.title, cardCaption: c.caption || g.cardCaption, pc: c.pc, mobile: c.mobile, i, pk: !g.noPressKit });
-  }));
-  const pos = i => Number(games[i]?.heroOrder) || 999;           /* "Home carousel position" in the CMS; ties keep the Games order */
-  list = list.map((x, k) => [x, k]).sort((a, b) => pos(a[0].i) - pos(b[0].i) || a[1] - b[1]).map(x => x[0]);
-  if (!list.length && url) list = [{ title: 'Gattabara Games', pc: REEL7.pc, mobile: REEL7.mobile, pk: false }];
+  const gi = name => (games || []).findIndex(g => (g.title || '').trim().toLowerCase() === String(name || '').trim().toLowerCase());
+  let list = (slides || []).filter(x => x && (x.pc || x.mobile)).map(x => {
+    const i = x.game ? gi(x.game) : -1;
+    return { title: x.title || (i >= 0 ? games[i].title : x.game) || '', cardCaption: x.caption || '', pc: x.pc, mobile: x.mobile, i, pk: i >= 0 && !games[i].noPressKit };
+  });
   if (!list.length) return;                    /* nothing to play: keep the generated montage */
   const srcOf = g => (mq.matches ? (g.mobile || g.pc) : (g.pc || g.mobile));
+  const same = (a, b) => !!a && !!b && a.split('/').pop() === b.split('/').pop();
 
-  const v = document.createElement('video');
-  v.id = 'herovid';
-  Object.assign(v, { muted: true, playsInline: true, preload: 'auto', poster: '' });
-  v.setAttribute('aria-hidden', 'true');
-  st.insertBefore(v, $('#kv').nextSibling);
+  const mk = id => {
+    const e = document.createElement('video');
+    if (id) e.id = id;
+    e.className = 'herovid';
+    Object.assign(e, { muted: true, playsInline: true, preload: 'auto' });
+    e.setAttribute('aria-hidden', 'true');
+    return e;
+  };
+  /* the first slide's <video> is already in the page (server-rendered, started downloading with the HTML): adopt it instead of making a new one */
+  const pre = document.getElementById('herovid');
+  const vids = [pre || mk('herovid'), mk()];
+  let v = vids[0];
+  vids.forEach(e => { if (!e.isConnected) st.insertBefore(e, $('#kv').nextSibling); });
+  if (pre) { pre.classList.add('herovid'); pre.removeAttribute('autoplay'); }
+  if (pre && pre.error) mediaFallback(pre);       /* it may have failed before this script ran */
   const bars = $('#stbars'), lb = $('#stlb'), sb = $('#stsb'), pk = $('#stpk');
   bars.innerHTML = list.map(() => '<span><i></i></span>').join('');
   const fills = [...bars.querySelectorAll('i')];
-  let cur = -1, held = false, inView = true;
+  let cur = -1, held = false, inView = true, ready = -1;   /* ready: index of the slide loaded into the idle video */
   const covered = () => !!document.querySelector('#dp.open, #machine.open, #fm.open, #modal:not([hidden])');
   const sync = () => {
     const run = inView && !covered() && !document.hidden && !held;
     if (run && v.paused) v.play().catch(() => {}); else if (!run && !v.paused) v.pause();
   };
-  const show = i => {
+  const prepare = k => {                       /* load slide k into the idle video, ahead of time */
+    const idle = vids[0] === v ? vids[1] : vids[0], src = srcOf(list[k]);
+    if (!src) return;
+    if (!same(idle.getAttribute('src'), src)) { idle.src = src; idle.load(); }
+    ready = k;
+  };
+  const show = (i, first) => {
     cur = (i + list.length) % list.length;
-    const g = list[cur];
+    const g = list[cur], src = srcOf(g);
     fills.forEach((f, k) => { f.style.width = k < cur ? '100%' : '0'; });
     lb.textContent = (g.title || '').toUpperCase();
     sb.textContent = g.cardCaption || '';
     pk.hidden = !g.pk;
     pk.textContent = tx('Press kit ↗');
-    const src = srcOf(g);
-    if (src && !v.src.endsWith(src)) v.src = src; else v.currentTime = 0;
+    if (ready === cur) {
+      const idle = vids[0] === v ? vids[1] : vids[0];
+      v.pause(); v.classList.remove('on'); v = idle;
+    } else if (src && !same(v.getAttribute('src'), src)) { v.src = src; }
+    if (!(first && !v.paused)) v.currentTime = 0;   /* the adopted first video is already playing: do not restart it */
+    v.classList.add('on');
     v.play().catch(() => {});
     sync();
+    prepare((cur + 1) % list.length);
   };
-  v.addEventListener('timeupdate', () => { if (cur >= 0 && v.duration) fills[cur].style.width = (v.currentTime / v.duration * 100) + '%'; });
-  v.addEventListener('ended', () => show(cur + 1));
-  v.addEventListener('error', () => { if (cur < 0) { document.body.classList.remove('reelwait'); box.hidden = true; document.body.classList.remove('stories'); } else show(cur + 1); });
-  v.addEventListener('playing', () => { document.body.classList.add('reelhero'); document.body.classList.remove('reelwait'); }, { once: true });
-  mq.addEventListener('change', () => { if (cur >= 0) { v.src = srcOf(list[cur]); sync(); } });
+  const onTime = e => { if (e.target === v && cur >= 0 && v.duration) fills[cur].style.width = (v.currentTime / v.duration * 100) + '%'; };
+  vids.forEach(e => {
+    e.addEventListener('timeupdate', onTime);
+    e.addEventListener('ended', ev => { if (ev.target === v) show(cur + 1); });
+    e.addEventListener('error', ev => {
+      if (mediaFallback(ev.target)) return;
+      if (ev.target !== v) return;
+      if (cur < 0) { document.body.classList.remove('reelwait', 'stories'); document.querySelector('.kv')?.classList.remove('hv'); box.hidden = true; } else if (list.length > 1) show(cur + 1);
+    });
+    e.addEventListener('playing', () => { document.body.classList.add('reelhero'); document.body.classList.remove('reelwait'); }, { once: true });
+  });
+  mq.addEventListener('change', () => { if (cur >= 0) { v.src = srcOf(list[cur]); v.currentTime = 0; sync(); prepare((cur + 1) % list.length); } });
 
   /* tap an edge: previous / next. Press and hold anywhere on an edge: pause until released. */
   [[$('#stprev'), -1], [$('#stnext'), 1]].forEach(([el, d]) => {
+    let t0 = 0, timer = 0, long = false;
     el.addEventListener('contextmenu', e => e.preventDefault());
     el.addEventListener('mousedown', e => e.preventDefault());   /* no focus ring, no text selection */
     el.addEventListener('dragstart', e => e.preventDefault());
-    let t0 = 0, timer = 0, long = false;
     el.addEventListener('pointerdown', () => { t0 = Date.now(); long = false; timer = setTimeout(() => { long = true; held = true; sync(); }, 220); });
     const up = () => { clearTimeout(timer); if (held) { held = false; sync(); } };
     el.addEventListener('pointerup', () => { const was = long; up(); if (!was && Date.now() - t0 < 600) show(cur + d); });
@@ -178,7 +221,7 @@ function applyHeroStories(games, url) {
     if (!inView || covered() || /INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName || '')) return;
     if (e.key === 'ArrowRight') show(cur + 1); else if (e.key === 'ArrowLeft') show(cur - 1);
   });
-  pk.addEventListener('click', e => { e.stopPropagation(); document.querySelector(`.gc[data-i="${list[cur].i}"]`)?.click(); });
+  pk.addEventListener('click', e => { e.stopPropagation(); const i = list[cur].i; if (i >= 0) document.querySelector(`.gc[data-i="${i}"]`)?.click(); });
 
   new IntersectionObserver(([e]) => { inView = e.isIntersecting; sync(); }, { threshold: 0.05 }).observe(st);
   const mo = new MutationObserver(sync);
@@ -186,9 +229,8 @@ function applyHeroStories(games, url) {
   document.addEventListener('visibilitychange', sync);
   box.hidden = false;
   document.body.classList.add('stories');
-  const giveUp = () => document.body.classList.remove('reelwait');
-  setTimeout(() => { if (!document.body.classList.contains('reelhero')) giveUp(); }, 12000);
-  show(0);
+  setTimeout(() => { if (!document.body.classList.contains('reelhero')) document.body.classList.remove('reelwait'); }, 12000);
+  show(0, true);
 }
 
 function applyContact(email) {
@@ -198,7 +240,7 @@ function applyContact(email) {
 
 loadCMS().then(cms => {
   applyClients(clientsOf(cms));
-  applyHeroStories(siteContent()?.games, cms.home?.playReelVideo);
+  applyHeroStories(siteContent()?.games, siteContent()?.heroSlides);
   applyReel(cms.home?.playReelVideo, cms.home?.playReelVideo2);
   applyContact(cms.contact?.email || cms.home?.socials?.email);
 });

@@ -5,3 +5,9 @@ out
 .DS_Store
 next-env.d.ts
 *.tsbuildinfo
+
+# media never goes to Vercel (free plan): videos live in the Cloudflare R2 bucket, uploaded from /admingg
+public/**/*.mp4
+public/**/*.mov
+public/**/*.webm
+public/**/*.m4v

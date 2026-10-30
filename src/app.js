@@ -8,7 +8,7 @@ const HASH0=(location.hash||'').slice(1);let landing=!!HASH0;
 /* editable site content (src/content/site-content.json, edited from /admingg). The arrays below are the fallback. */
 const GGC=(()=>{try{return JSON.parse(document.getElementById('gg-content').textContent)}catch(e){return null}})();
 /* a showreel is configured: keep the generated WebGL montage hidden (and idle) until the video is really playing */
-if(GGC&&GGC.reels&&GGC.reels.main)document.body.classList.add('reelwait');
+if(GGC&&GGC.reels&&GGC.reels.main&&!document.body.classList.contains('reelhero'))document.body.classList.add('reelwait');
 const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches,FINE=matchMedia('(pointer:fine)').matches;
 const S={get(k,d){try{const v=localStorage.getItem('ggj_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('ggj_'+k,JSON.stringify(v))}catch(e){}}};

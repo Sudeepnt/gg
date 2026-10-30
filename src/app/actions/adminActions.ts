@@ -187,3 +187,19 @@ export async function getUploadUrl(name: string, type: string, kind: "image" | "
     return { ok: false, error: e.message || "Could not prepare the upload" };
   }
 }
+
+/* the still picture shown while a carousel video starts: the admin captures the video's first frame in the browser and sends it here.
+   It is stored next to the video as "<video name>-poster.jpg", which is where the website looks for it. */
+export async function getPosterUploadUrl(videoUrl: string) {
+  try {
+    await requireAdmin();
+    const base = process.env.CLOUDFLARE_R2_PUBLIC_BASE_URL?.replace(/\/$/, "");
+    if (!base) throw new Error("Cloudflare R2 public URL is not configured.");
+    if (!videoUrl.startsWith(base + "/applications/site/videos/")) throw new Error("That video is not in the media bucket.");
+    const key = decodeURIComponent(videoUrl.slice(base.length + 1)).replace(/\.[A-Za-z0-9]+$/, "") + "-poster.jpg";
+    const uploadUrl = await getSignedUrl(r2(), new PutObjectCommand({ Bucket: process.env.CLOUDFLARE_R2_BUCKET_NAME || "gg-content", Key: key, ContentType: "image/jpeg", CacheControl: "public, max-age=31536000, immutable" }), { expiresIn: 900 });
+    return { ok: true, uploadUrl };
+  } catch (e: any) {
+    return { ok: false, error: e.message || "Could not prepare the poster upload" };
+  }
+}

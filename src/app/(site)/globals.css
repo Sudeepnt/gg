@@ -234,7 +234,7 @@ section{position:relative}
 @media (max-width:640px){.kv{--pk:76px}}
 .kv-st{position:absolute;inset:0 0 var(--pk) 0;overflow:hidden}
 #kv{position:absolute;inset:0;width:100%;height:100%;display:block}
-#herovid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.62);background:#000;pointer-events:none}
+#herovid,.herovid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.62);background:#000;pointer-events:none}
 body.reelhero #kv,body.reelhero .kv-fb,body.reelhero #kvvid,body.reelhero .kv-hud{display:none}
 .kv-fb{position:absolute;inset:0;display:none;color:#F3F3F0}
 .kv-fb svg{position:absolute;right:4%;top:10%;width:60%;height:80%}
@@ -1406,7 +1406,7 @@ body{font-size:14px;line-height:1.75}
 
 /* while the showreel loads: no flash of the generated WebGL montage */
 body.reelwait #kv,body.reelwait .kv-fb,body.reelwait #kvvid,body.reelwait .kv-hud{visibility:hidden}
-body.reelwait .kv-st{background:#000}
+body.reelwait .kv-st{background-color:#000}
 
 /* footer particle wordmark: never selectable / highlightable */
 #fwm,#fwm *,#fwm canvas{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
@@ -1430,9 +1430,11 @@ footer .brand .gglockup{height:44px}
 
 /* Hero story carousel: a padded rounded card, progress bars on top, tap the left / right edge to change story */
 .kv{--pk:0px;--fr:clamp(10px,1.5vw,22px)}
-body.stories .kv-st{inset:var(--fr);border-radius:clamp(14px,1.6vw,24px);background:#000;isolation:isolate}
+body.stories .kv-st{inset:var(--fr);border-radius:clamp(14px,1.6vw,24px);background-color:#000;isolation:isolate}
 body.stories .kv-hud,body.stories .kv-cap,body.stories .kv-tl,body.stories .kv-meta{display:none}
-body.stories #herovid{filter:none}
+body.stories #herovid,body.stories .herovid{filter:none}
+.herovid{opacity:0;transition:opacity .2s}
+.herovid.on{opacity:1}
 body.stories .kv-st .sl{display:none}
 body.stories .kv-st::after{display:none}
 body.stories .kv-copy{pointer-events:none;z-index:3}
@@ -1470,3 +1472,7 @@ body.stories .reg{display:none}
 
 .kv-catch .pcbr{display:none}
 @media (min-width:901px){.kv-catch .pcbr{display:inline}}
+
+/* the carousel video is in the page from the first paint: keep the generated montage out of the way until it fails */
+.kv.hv #kv,.kv.hv .kv-fb{visibility:hidden}
+.kv.hv .kv-st{inset:var(--fr);border-radius:clamp(14px,1.6vw,24px);overflow:hidden}

@@ -12,8 +12,10 @@ export default function Boot() {
     (async () => {
       w.Lenis = (await import("lenis")).default;
       await import("../../inquiries.js");
+      /* the carousel videos start downloading right away, in parallel with the rest of the page script */
+      const cms = import("../../cms-apply.js");
       await import("../../app.js");
-      await import("../../cms-apply.js");
+      await cms;
       await import("../../pitch.js");
       await import("../../footer-particles.js");
     })();

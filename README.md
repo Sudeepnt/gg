@@ -15,7 +15,7 @@ npm run build && npm start
 Open **/admingg** and log in (default password `gg5656`; set `ADMIN_PASSWORD` and `ADMIN_SECRET` to change it).
 Every tab uses the same words as the website. Lists (news, games, people, clients, jobs, factsheet rows, features...)
 have **Add**, **Remove** and reorder. **All other text** covers every remaining heading, button and label, grouped by section.
-Images and videos upload to the Cloudflare R2 bucket.
+Images and videos upload to the Cloudflare R2 bucket. **Never put videos or other big media in this repo or in `public/`** (Vercel free plan): `.gitignore` blocks video files there, and the site only plays R2 URLs. Carousel videos get a small poster picture made automatically at upload (`<video name>-poster.jpg` next to the video) that the server embeds in the page so the hero shows something on the very first paint.
 
 Content is stored in **Supabase**, table `cms_settings` (a table that only allows row 1): the live content is `data.site` and the version before
 the last save is `data.site_backup` (the **Restore previous** button puts it back). All other keys in that row belong to the previous site and are preserved.

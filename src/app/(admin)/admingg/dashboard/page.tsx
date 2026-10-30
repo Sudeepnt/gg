@@ -12,10 +12,10 @@ import {
 import pageTexts from "@/content/page-texts.json";
 import { UI_STRINGS } from "@/content/uiStrings.js";
 import cmsSnapshot from "@/cms-data.json";
-import { getSiteContent, saveSiteContent, uploadAsset, logoutAdmin, getSubmissions, deleteSubmission, restorePreviousContent, getUploadUrl } from "@/app/actions/adminActions";
+import { getSiteContent, saveSiteContent, uploadAsset, logoutAdmin, getSubmissions, deleteSubmission, restorePreviousContent, getUploadUrl, getPosterUploadUrl } from "@/app/actions/adminActions";
 
 /* ---------- what can be edited, per tab. Labels are the words the website itself shows. ---------- */
-type F = { key: string; label: string; type: "text" | "toggle" | "textarea" | "lines" | "tags" | "number" | "select" | "image" | "video" | "rows"; options?: string[]; hint?: string;
+type F = { key: string; label: string; type: "text" | "toggle" | "textarea" | "lines" | "tags" | "number" | "select" | "image" | "video" | "rows"; options?: string[] | "games"; hint?: string;
     itemFields?: F[]; blank?: () => any; addLabel?: string; itemLabel?: (it: any) => string };
 type Block =
     | { kind: "object"; path: string; title: string; fields: F[] }
@@ -96,6 +96,14 @@ const TABS: { id: string; label: string; icon: any; blocks: Block[] }[] = [
         { kind: "object", path: "heroHud", title: "Hero: small labels on the screen", fields: [
             { key: "play", label: "PLAY (state shown while playing)", type: "text" }, { key: "pause", label: "PAUSE (state shown when paused)", type: "text" },
             { key: "clip", label: "CLIP (before the clip number)", type: "text" }, { key: "pressKit", label: "Press kit \u2197 (button on game captions)", type: "text" }] },
+        { kind: "list", path: "heroSlides", title: "Home carousel \u2192 slides (in this order)", addLabel: "Add slide", label: x => (x.title || x.game || "New slide") + (x.caption ? " \u00b7 " + x.caption : ""),
+          blank: () => ({ game: "", title: "", caption: "", pc: "", mobile: "" }),
+          fields: [
+            { key: "game", label: "Game (links the Press kit button; pick \u201cnone\u201d for a slide like the showreel)", type: "select", options: "games" },
+            { key: "title", label: "Name shown on the slide (white tag)", type: "text", hint: "Leave empty to use the game\u2019s name." },
+            { key: "caption", label: "Small text next to the name", type: "text" },
+            { key: "pc", label: "PC video (16:9, about 7 seconds)", type: "video", hint: "Plays on computers and tablets." },
+            { key: "mobile", label: "Mobile video (9:16, about 7 seconds)", type: "video", hint: "Plays on phones. Leave empty to use the PC video." }] },
         { kind: "object", path: "reels", title: "Showreel", fields: [
             { key: "main", label: "Reel (plays behind the hero and in GG Productions \u2192 Animation)", type: "video" },
             { key: "second", label: "Second reel (GG Productions \u2192 Art, optional)", type: "video", hint: "Leave empty to reuse the first reel." }] },
@@ -122,7 +130,7 @@ const TABS: { id: string; label: string; icon: any; blocks: Block[] }[] = [
             factsheet: [{ label: "Developer", value: "Gattabara Games" }, { label: "Based in", value: "Bengaluru, India" }, { label: "Genre", value: "" }, { label: "Players", value: "" },
               { label: "Platforms", value: "To be announced" }, { label: "Release date", value: "To be announced" }, { label: "Status", value: "In development" },
               { label: "Website", value: "gattabaragames.com" }, { label: "Press contact", value: "info@gattabaragames.com" }],
-            shortDescription: "", description: [], features: [], heroClips: [], heroOrder: "", noPressKit: false, trailer: "", trailerPoster: "", logoBlack: "", logoWhite: "",
+            shortDescription: "", description: [], features: [], noPressKit: false, trailer: "", trailerPoster: "", logoBlack: "", logoWhite: "",
             screenshots: [1, 2, 3, 4, 5, 6].map((n) => ({ caption: `Frame 0${n}`, image: "" })), promoMain: "", promoVertical: "", promoSmall: "", sealedText: "", summary: "" }),
           fields: [
             { key: "title", label: "Title", type: "text" },
@@ -130,11 +138,7 @@ const TABS: { id: string; label: string; icon: any; blocks: Block[] }[] = [
             { key: "cardCaption", label: "Line under the title (Games card)", type: "text" },
             { key: "code", label: "Press kit code (shown after \u201cPRESS KIT\u201d)", type: "text" },
             { key: "image", label: "Key art", type: "image" },
-            { key: "noPressKit", label: "Hide the press kit for now", type: "toggle", hint: "On: the game card is not clickable and the home carousel shows no Press kit button." },
-            { key: "heroOrder", label: "Home carousel \u2192 position (1 = first)", type: "number", hint: "Order of this game\u2019s clips in the home carousel. Leave empty to put them last, in Games order." },
-            { key: "heroClips", label: "Home carousel \u2192 clips for this game", type: "rows", addLabel: "Add clip", blank: () => ({ caption: "", pc: "", mobile: "" }), itemLabel: r => r.caption || "New clip",
-              hint: "Each clip is one slide of the home-page carousel (about 7 seconds). Give a PC video (wide, 16:9) and a mobile video (tall, 9:16). If no game has clips, the sample showreel cut plays.",
-              itemFields: [{ key: "caption", label: "Caption shown under the game name", type: "text" }, { key: "pc", label: "PC video (16:9)", type: "video" }, { key: "mobile", label: "Mobile video (9:16)", type: "video" }] },
+            { key: "noPressKit", label: "Hide the press kit for now", type: "toggle", hint: "On: the game card is not clickable and its home-carousel slides show no Press kit button." },
             { key: "tags", label: "Tags (comma separated)", type: "tags" },
             { key: "factsheet", label: "Factsheet", type: "rows", addLabel: "Add row", blank: () => ({ label: "", value: "" }), itemLabel: r => r.label || "New row",
               itemFields: [{ key: "label", label: "Label", type: "text" }, { key: "value", label: "Value", type: "text" }] },
@@ -271,6 +275,33 @@ function putWithProgress(url: string, file: File, onProgress: (pct: number) => v
     });
 }
 
+/* first frame of a video file, as a small JPEG: the website shows it instantly while the video itself starts */
+function captureFrame(file: File): Promise<Blob | null> {
+    return new Promise((resolve) => {
+        const url = URL.createObjectURL(file), v = document.createElement("video");
+        const done = (b: Blob | null) => { URL.revokeObjectURL(url); resolve(b); };
+        v.muted = true; v.playsInline = true; v.preload = "auto"; v.src = url;
+        v.onerror = () => done(null);
+        v.onloadeddata = () => { v.currentTime = Math.min(0.3, (v.duration || 1) / 2); };
+        v.onseeked = () => {
+            try {
+                const w = Math.min(960, v.videoWidth || 960), h = Math.round(w * (v.videoHeight || 540) / (v.videoWidth || 960));
+                const c = document.createElement("canvas"); c.width = w; c.height = h;
+                c.getContext("2d")!.drawImage(v, 0, 0, w, h);
+                c.toBlob((b) => done(b), "image/jpeg", 0.6);
+            } catch { done(null); }
+        };
+        setTimeout(() => done(null), 15000);
+    });
+}
+async function uploadPoster(file: File, videoUrl: string) {
+    try {
+        const blob = await captureFrame(file); if (!blob) return;
+        const sig: any = await getPosterUploadUrl(videoUrl); if (!sig.ok) return;
+        await fetch(sig.uploadUrl, { method: "PUT", body: blob, headers: { "Content-Type": "image/jpeg" } });
+    } catch { /* the poster is a nicety: the video works without it */ }
+}
+
 function Upload({ kind, value, onChange }: { kind: "image" | "video"; value: string; onChange: (v: string) => void }) {
     const [busy, setBusy] = useState(false); const [pct, setPct] = useState(0); const [err, setErr] = useState(""); const [done, setDone] = useState(false); const [over, setOver] = useState(false); const ref = useRef<HTMLInputElement>(null);
     const pick = async (file?: File) => {
@@ -278,7 +309,7 @@ function Upload({ kind, value, onChange }: { kind: "image" | "video"; value: str
         try {
             const sig: any = await getUploadUrl(file.name, file.type, kind, file.size);
             if (!sig.ok) throw new Error(sig.error);
-            try { await putWithProgress(sig.uploadUrl, file, setPct); onChange(sig.publicUrl); setDone(true); }
+            try { await putWithProgress(sig.uploadUrl, file, setPct); if (kind === "video") await uploadPoster(file, sig.publicUrl); onChange(sig.publicUrl); setDone(true); }
             catch (e: any) {
                 if (e.message !== "blocked") throw e;
                 if (file.size > 4 * 1024 * 1024) throw new Error("The upload was blocked by Cloudflare. Add the CORS rule from cloudflare/r2-cors.json to the R2 bucket (see README), then try again.");
@@ -318,6 +349,8 @@ function Upload({ kind, value, onChange }: { kind: "image" | "video"; value: str
 
 /* ---------- centered confirmation popup (replaces the browser's confirm()) ---------- */
 type AskOpts = { title?: string; message: string; confirmLabel?: string; danger?: boolean };
+/* titles of the games in the Games tab, for the carousel's "Game" dropdown */
+const GamesCtx = createContext<string[]>([]);
 const ConfirmCtx = createContext<(o: AskOpts) => Promise<boolean>>(async () => false);
 
 function ConfirmHost({ children }: { children: React.ReactNode }) {
@@ -488,6 +521,7 @@ const isWide = (f: F) => !SHORT.includes(f.type);
 
 /* the bare input for a field type (no label) */
 function Control({ f, value, onChange, label, variant }: { f: F; value: any; onChange: (v: any) => void; label?: string; variant?: "key" | "value" }) {
+    const gameTitles = useContext(GamesCtx);
     const v = variant ?? (isTitle(f) ? "key" : undefined);
     const cls = v === "key" ? keyCls : v === "value" ? valCls : inputCls;
     const aria = label ? { "aria-label": label, placeholder: label } : {};
@@ -496,7 +530,8 @@ function Control({ f, value, onChange, label, variant }: { f: F; value: any; onC
     if (f.type === "lines") return <textarea rows={Math.max(3, (value || []).length + 1)} className={inputCls} value={(value || []).join("\n")} onChange={(e) => onChange(e.target.value.split("\n"))} onBlur={(e) => onChange(e.target.value.split("\n").map((s) => s.trim()).filter(Boolean))} />;
     if (f.type === "tags") return <input className={inputCls} value={Array.isArray(value) ? value.join(", ") : value ?? ""} onChange={(e) => onChange(e.target.value.split(",").map((s) => s.replace(/^\s+/, "")))} onBlur={(e) => onChange(e.target.value.split(",").map((s) => s.trim()).filter(Boolean))} />;
     if (f.type === "number") return <input type="number" className={cls} value={value ?? 0} onChange={(e) => onChange(Number(e.target.value))} {...aria} />;
-    if (f.type === "select") return <select className={cls} value={value ?? ""} onChange={(e) => onChange(e.target.value)} {...aria}>{f.options!.map((o) => <option key={o}>{o}</option>)}</select>;
+    if (f.type === "select") { const opts = f.options === "games" ? ["", ...gameTitles] : f.options!; const shown = value && !opts.includes(value) ? [...opts, value] : opts;
+        return <select className={cls} value={value ?? ""} onChange={(e) => onChange(e.target.value)} {...aria}>{shown.map((o) => <option key={o} value={o}>{o === "" ? "\u2014 none (no press kit link) \u2014" : o}</option>)}</select>; }
     if (f.type === "image" || f.type === "video") return <Upload kind={f.type} value={value || ""} onChange={onChange} />;
     return <input className={cls} value={value ?? ""} onChange={(e) => onChange(e.target.value)} {...aria} />;
 }
@@ -635,6 +670,7 @@ export default function Dashboard() {
 
     return (
         <ConfirmHost>
+        <GamesCtx.Provider value={((content?.games as any[]) || []).map((g) => g.title).filter(Boolean)}>
         <SubsCtx.Provider value={{ subs, reload: reloadSubs, remove: removeSub }}>
         <div className="admin-portal min-h-screen overflow-x-hidden bg-[#F8FAFC] text-gray-900 font-sans pb-24">
             <header className="bg-white border-b border-gray-100 sticky top-0 z-30 shadow-sm">
@@ -669,6 +705,7 @@ export default function Dashboard() {
             </AnimatePresence>
         </div>
         </SubsCtx.Provider>
+        </GamesCtx.Provider>
         </ConfirmHost>
     );
 }
