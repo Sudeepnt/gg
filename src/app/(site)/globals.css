@@ -1434,8 +1434,7 @@ body.stories .kv-st{inset:var(--fr);border-radius:clamp(14px,1.6vw,24px);backgro
 body.stories .kv-hud,body.stories .kv-cap,body.stories .kv-tl,body.stories .kv-meta{display:none}
 body.stories #herovid{filter:none}
 body.stories .kv-st .sl{display:none}
-body.stories .kv-st::after{background:linear-gradient(90deg,rgba(10,10,10,.55) 0%,rgba(10,10,10,.2) 36%,rgba(10,10,10,0) 60%),linear-gradient(0deg,rgba(10,10,10,.5) 0%,rgba(10,10,10,0) 22%)}
-@media (max-width:900px){body.stories .kv-st::after{background:linear-gradient(0deg,rgba(10,10,10,.8) 0%,rgba(10,10,10,.4) 40%,rgba(10,10,10,0) 70%)}}
+body.stories .kv-st::after{display:none}
 body.stories .kv-copy{pointer-events:none;z-index:3}
 body.stories .kv-copy .row,body.stories .kv-copy .row *{pointer-events:auto}
 .stories{position:absolute;inset:0;z-index:2}
@@ -1463,3 +1462,11 @@ body.stories .kv-copy .row,body.stories .kv-copy .row *{pointer-events:auto}
 @media (max-width:700px){.kv{--fr:8px}.st-top{left:16px;right:16px;bottom:16px;flex-wrap:wrap;row-gap:12px;font-size:10px;letter-spacing:.12em}.st-top .st-sb{display:block;flex:1 1 0}.st-top .pk{margin-left:auto}.st-bars{flex:1 1 100%;order:5;height:3px;min-width:0}}
 
 .gc.nopk{cursor:default}
+
+/* no dark layers on the carousel video: legibility comes from a soft text shadow instead */
+body.stories .kv-copy,body.stories .st-top{text-shadow:0 1px 14px rgba(0,0,0,.55),0 0 2px rgba(0,0,0,.35)}
+body.stories .st-bars span{box-shadow:0 0 6px rgba(0,0,0,.25)}
+body.stories .reg{display:none}
+
+.kv-catch .pcbr{display:none}
+@media (min-width:901px){.kv-catch .pcbr{display:inline}}

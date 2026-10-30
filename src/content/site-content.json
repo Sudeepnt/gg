@@ -562,6 +562,78 @@
       ],
       "noPressKit": true,
       "heroOrder": 2
+    },
+    {
+      "id": "gattabara",
+      "title": "Gattabara",
+      "code": "GATTABARA",
+      "status": "In development",
+      "cardCaption": "Details soon",
+      "tags": [
+        "Gattabara"
+      ],
+      "factsheet": [
+        {
+          "label": "Developer",
+          "value": "Gattabara Games"
+        },
+        {
+          "label": "Based in",
+          "value": "Bengaluru, India"
+        },
+        {
+          "label": "Status",
+          "value": "In development"
+        }
+      ],
+      "shortDescription": "",
+      "description": [],
+      "features": [],
+      "sealedText": "",
+      "summary": "",
+      "image": "",
+      "screenshots": [
+        {
+          "caption": "Frame 01",
+          "image": ""
+        },
+        {
+          "caption": "Frame 02",
+          "image": ""
+        },
+        {
+          "caption": "Frame 03",
+          "image": ""
+        },
+        {
+          "caption": "Frame 04",
+          "image": ""
+        },
+        {
+          "caption": "Frame 05",
+          "image": ""
+        },
+        {
+          "caption": "Frame 06",
+          "image": ""
+        }
+      ],
+      "trailer": "",
+      "trailerPoster": "",
+      "logoBlack": "",
+      "logoWhite": "",
+      "promoMain": "",
+      "promoVertical": "",
+      "promoSmall": "",
+      "heroClips": [
+        {
+          "caption": "Gameplay",
+          "pc": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-gattabara-pc.mp4",
+          "mobile": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-gattabara-mobile.mp4"
+        }
+      ],
+      "noPressKit": true,
+      "heroOrder": 4
     }
   ],
   "pressKit": {

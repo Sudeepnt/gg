@@ -89,6 +89,8 @@ if(GGC){const DEF=GAMES.slice();const arr=a=>Array.isArray(a)?a:[];
   /* text blocks that live in the page markup */
   const T=(sel,txt)=>{const e=document.querySelector(sel);if(e&&txt!=null)e.textContent=txt};
   const H=GGC.hero;if(H){const l=document.querySelectorAll('#kvcatch .l > span');if(l[0])l[0].textContent=H.line1||'';if(l[1])l[1].textContent=H.line2||'';T('.kv-sub',H.sub)}
+  /* desktop: the first line breaks before its last word ("We summon" / "worlds"), so the headline reads on three lines; phones wrap on their own */
+  {const f=document.querySelector('#kvcatch .l > span');if(f){const w=f.textContent.trim().split(' ');if(w.length>1){const last=w.pop();f.textContent='';f.append(w.join(' '),Object.assign(document.createElement('br'),{className:'pcbr'}),' '+last)}}}
   const P=GGC.philosophy;if(P){T('.mvv .mv:nth-child(1) .v',P.mission);T('.mvv .mv:nth-child(2) .v',P.vision);T('.mvv .mv:nth-child(3) .lead',P.valuesIntro);T('#doc',P.doc);
     const vb=document.querySelector('.vals');if(vb&&Array.isArray(P.values))vb.innerHTML=P.values.map((v,k)=>`<div class="val rv ${['','d1','d2','d3'][k%4]}"><span class="n">${String(k+1).padStart(2,'0')}</span><h3>${esc0(v.title)}</h3><p>${esc0(v.text)}</p></div>`).join('')}
   const Lt=GGC.letter;if(Lt){T('.msg .big',Lt.big);const body=document.getElementById('msgbody');
