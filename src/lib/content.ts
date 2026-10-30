@@ -16,10 +16,29 @@ export const BACKUP_KEY = "site_backup";
 export const bundledContent = bundled as Record<string, any>;
 
 const isObj = (v: unknown): v is Record<string, any> => !!v && typeof v === "object" && !Array.isArray(v);
+/* Lists replace each other, except the games: a saved list from before the home-carousel fields existed keeps working.
+   Per game, fields the saved copy never had (heroClips, heroOrder, noPressKit) come from the bundled game with the same id,
+   and bundled games that have carousel clips and are missing from the saved list are added. Once the admin saves, the saved
+   copy has those fields and always wins. */
+const CAROUSEL_FIELDS = ["heroClips", "heroOrder", "noPressKit"];
+function mergeGames(base: any[], over: any[]): any[] {
+  const byId = new Map(base.map((g) => [g?.id, g]));
+  const out = over.map((g) => {
+    const b = byId.get(g?.id);
+    if (!b || !isObj(g)) return g;
+    const c = { ...g };
+    for (const f of CAROUSEL_FIELDS) if (c[f] === undefined && b[f] !== undefined) c[f] = b[f];
+    return c;
+  });
+  const have = new Set(over.map((g) => g?.id));
+  for (const b of base) if (!have.has(b?.id) && Array.isArray(b?.heroClips) && b.heroClips.length) out.push(b);
+  return out;
+}
 export function mergeContent(base: any, over: any): any {
   if (!isObj(base) || !isObj(over)) return over === undefined ? base : over;
   const out: Record<string, any> = { ...base };
-  for (const k of Object.keys(over)) out[k] = isObj(base[k]) && isObj(over[k]) ? mergeContent(base[k], over[k]) : over[k];
+  for (const k of Object.keys(over)) out[k] = isObj(base[k]) && isObj(over[k]) ? mergeContent(base[k], over[k])
+    : k === "games" && Array.isArray(base[k]) && Array.isArray(over[k]) ? mergeGames(base[k], over[k]) : over[k];
   return out;
 }
 
