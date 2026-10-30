@@ -12,12 +12,6 @@
   "text": "BENGALURU · IN"
  },
  {
-  "key": "Header::NEWS",
-  "group": "Header",
-  "label": "Text",
-  "text": "NEWS"
- },
- {
   "key": "Header::GAMES",
   "group": "Header",
   "label": "Text",
@@ -40,6 +34,12 @@
   "group": "Header",
   "label": "Text",
   "text": "RECRUIT"
+ },
+ {
+  "key": "Header::NEWS",
+  "group": "Header",
+  "label": "Text",
+  "text": "NEWS"
  },
  {
   "key": "Header::HUMAN",
@@ -150,70 +150,28 @@
   "text": "77.5946° E"
  },
  {
-  "key": "Top::Explore games",
+  "key": "Top::Games",
   "group": "Top",
   "label": "Text",
-  "text": "Explore games"
+  "text": "Games"
  },
  {
-  "key": "Top::Pitch us a game",
+  "key": "Top::Pitch us",
   "group": "Top",
   "label": "Text",
-  "text": "Pitch us a game"
+  "text": "Pitch us"
+ },
+ {
+  "key": "Top::Game services",
+  "group": "Top",
+  "label": "Text",
+  "text": "Game services"
  },
  {
   "key": "Top::Press kit ↗",
   "group": "Top",
   "label": "Link / button",
   "text": "Press kit ↗"
- },
- {
-  "key": "News::News",
-  "group": "News",
-  "label": "Heading",
-  "text": "News"
- },
- {
-  "key": "News::Studio updates",
-  "group": "News",
-  "label": "Paragraph",
-  "text": "Studio updates"
- },
- {
-  "key": "News::All",
-  "group": "News",
-  "label": "Link / button",
-  "text": "All"
- },
- {
-  "key": "News::Games",
-  "group": "News",
-  "label": "Link / button",
-  "text": "Games"
- },
- {
-  "key": "News::Studio",
-  "group": "News",
-  "label": "Link / button",
-  "text": "Studio"
- },
- {
-  "key": "News::Productions",
-  "group": "News",
-  "label": "Link / button",
-  "text": "Productions"
- },
- {
-  "key": "News::Recruit",
-  "group": "News",
-  "label": "Link / button",
-  "text": "Recruit"
- },
- {
-  "key": "News::View all news",
-  "group": "News",
-  "label": "Text",
-  "text": "View all news"
  },
  {
   "key": "Games::Games",
@@ -600,6 +558,54 @@
   "text": "Contact"
  },
  {
+  "key": "News::News",
+  "group": "News",
+  "label": "Heading",
+  "text": "News"
+ },
+ {
+  "key": "News::Studio updates",
+  "group": "News",
+  "label": "Paragraph",
+  "text": "Studio updates"
+ },
+ {
+  "key": "News::All",
+  "group": "News",
+  "label": "Link / button",
+  "text": "All"
+ },
+ {
+  "key": "News::Games",
+  "group": "News",
+  "label": "Link / button",
+  "text": "Games"
+ },
+ {
+  "key": "News::Studio",
+  "group": "News",
+  "label": "Link / button",
+  "text": "Studio"
+ },
+ {
+  "key": "News::Productions",
+  "group": "News",
+  "label": "Link / button",
+  "text": "Productions"
+ },
+ {
+  "key": "News::Recruit",
+  "group": "News",
+  "label": "Link / button",
+  "text": "Recruit"
+ },
+ {
+  "key": "News::View all news",
+  "group": "News",
+  "label": "Text",
+  "text": "View all news"
+ },
+ {
   "key": "Footer::GAMES",
   "group": "Footer",
   "label": "Heading",
@@ -858,20 +864,6 @@
   "attr": "aria-label"
  },
  {
-  "key": "News::[data-name] NEWS",
-  "group": "News",
-  "label": "Section name (window bar and side rail)",
-  "text": "NEWS",
-  "attr": "data-name"
- },
- {
-  "key": "News::[aria-label] Filter news",
-  "group": "News",
-  "label": "Screen-reader label",
-  "text": "Filter news",
-  "attr": "aria-label"
- },
- {
   "key": "Games::[data-name] GAMES",
   "group": "Games",
   "label": "Section name (window bar and side rail)",
@@ -946,6 +938,20 @@
   "group": "Contact",
   "label": "Screen-reader label",
   "text": "Contact or pitch a game",
+  "attr": "aria-label"
+ },
+ {
+  "key": "News::[data-name] NEWS",
+  "group": "News",
+  "label": "Section name (window bar and side rail)",
+  "text": "NEWS",
+  "attr": "data-name"
+ },
+ {
+  "key": "News::[aria-label] Filter news",
+  "group": "News",
+  "label": "Screen-reader label",
+  "text": "Filter news",
   "attr": "aria-label"
  },
  {
