@@ -27,7 +27,7 @@ export default async function PrivacyPolicy() {
       <header className="lg-top">
         <a href="/" className="lg-brand" aria-label="Gattabara Games, back to the home page">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logos/gg-lockup-white.png" alt="Gattabara Games" width={1451} height={295} />
+          <img src="/logos/gg-mark.png" alt="Gattabara Games" width={1275} height={746} />
         </a>
         <a href="/" className="lg-back">{P.backLink || "← Back to site"}</a>
       </header>
