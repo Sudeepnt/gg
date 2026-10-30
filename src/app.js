@@ -77,9 +77,9 @@ if(GGC){const DEF=GAMES.slice();const arr=a=>Array.isArray(a)?a:[];
   if(arr(GGC.news).length||GGC.news)NEWS=arr(GGC.news).map(n=>[n.date||'',n.category||'',n.title||'',n.body||'']);
   if(GGC.games)GAMES=arr(GGC.games).map((g,k)=>{const d=DEF.find(x=>x.id===g.id)||{};const sealed=/seal/i.test(g.status||'');
     const shots=Array.isArray(g.screenshots)?g.screenshots:arr(g.screenshotCaptions).map(c=>({caption:c,image:''}));
-    return {...d,id:g.id||('game-'+(k+1)),t:g.title||'Untitled',code:g.code||('GG-'+(k+1)),st:g.status||'In development',cat:sealed?'sealed':'dev',sealed:sealed?1:undefined,
+    return {...d,id:g.id||('game-'+(k+1)),t:g.title||'Untitled',code:g.code||('GG-'+(k+1)),st:g.status||'In development',cat:sealed?'sealed':/co-?dev/i.test(g.status||'')?'codev':'dev',sealed:sealed?1:undefined,
       spec:g.cardCaption||'',short:g.shortDescription||'',intro:g.summary||g.shortDescription||'',desc:arr(g.description),tags:arr(g.tags),
-      feat:arr(g.features).map(f=>[f.title||'',f.text||'']),shots:shots.map(x=>x.caption||''),shotImgs:shots.map(x=>x.image||''),trailer:g.trailer||'',trailerPoster:g.trailerPoster||'',logoBlack:g.logoBlack||'',logoWhite:g.logoWhite||'',promo:{main:g.promoMain||'',vertical:g.promoVertical||'',small:g.promoSmall||''},heroPc:g.heroVideoPc||'',heroMobile:g.heroVideoMobile||'',intel:g.sealedText||'',image:g.image||'',
+      feat:arr(g.features).map(f=>[f.title||'',f.text||'']),shots:shots.map(x=>x.caption||''),shotImgs:shots.map(x=>x.image||''),trailer:g.trailer||'',trailerPoster:g.trailerPoster||'',logoBlack:g.logoBlack||'',logoWhite:g.logoWhite||'',promo:{main:g.promoMain||'',vertical:g.promoVertical||'',small:g.promoSmall||''},nopk:g.noPressKit?1:undefined,intel:g.sealedText||'',image:g.image||'',
       catch:d.catch||[g.title||'',''],fact:arr(g.factsheet).map(r=>[r.label||'',r.value||''])}});
   if(GGC.production){SVC=arr(GGC.production.services).map(v=>[v.title||'',v.description||'',arr(v.tags),v.quote||undefined].filter((x,i2)=>i2<3||x));
     SK=arr(GGC.production.specialties).map(v=>[v.name||'',Math.max(0,Math.min(100,+v.score||0)),v.description||''])}
@@ -284,7 +284,7 @@ function doc(){const m=$('#doc');const r=m.getBoundingClientRect();const p=Math.
 
 /* ================= GAMES ================= */
 $('#gl').innerHTML=GAMES.map((g,i)=>`<button class="gc rv ${i%2?'d1':''}" type="button" data-i="${i}" data-cat="${g.cat}"><span class="im">${GP.showComingSoon!==false?`<span class="soon" aria-label="${esc0(GP.comingSoonText||'Coming Soon...')}"><span class="o" aria-hidden="true">${esc0(GP.comingSoonText||'Coming Soon...')}</span><span class="f" aria-hidden="true">${esc0(GP.comingSoonText||'Coming Soon...')}</span></span>`:thumb(i)?`<img src="${thumb(i)}" alt="Key visual for ${g.t}">`:`<span class="ph" style="color:#F3F3F0">${fbArt(i)}</span>`}<span class="st"><span class="tag f">${g.st}</span></span><span class="no" aria-hidden="true">0${i+1}</span></span><span class="tx"><h3>${g.t}</h3><span class="cp">${g.spec}</span><span class="more"><span class="ci">${ARW}</span></span></span></button>`).join('');
-$$('.gc').forEach(c=>c.onclick=()=>openDp(+c.dataset.i));
+$$('.gc').forEach(c=>{c.onclick=()=>openDp(+c.dataset.i);if(GAMES[+c.dataset.i]?.nopk)c.classList.add('nopk')});
 $$('#games .tab').forEach(b=>b.onclick=()=>{const f=b.dataset.g;$$('#games .tab').forEach(x=>x.setAttribute('aria-pressed',x===b));$$('.gc').forEach(c=>c.classList.toggle('hide',f!=='all'&&c.dataset.cat!==f))});
 $('#mq1').innerHTML=('<span>Gattabara Games</span><span>Original IP</span><span>Co-owned IP</span><span>GG Productions</span>').repeat(3);
 
@@ -338,7 +338,7 @@ async function pkDownload(i,what){const g=GAMES[i],sl=slug(g.t);
     await add('studio/gattabara-games-logo-white.png',await pickBlob(PKSTUDIO.white,async()=>new Blob([])));await add('studio/gattabara-games-logo-black.png',await pickBlob(PKSTUDIO.black,async()=>new Blob([])));
     return saveFile(`${sl}-press-kit.zip`,zip(F))}
   }catch(e){toast('Could not prepare that file')}}
-function openDp(i,push=true){const g=GAMES[i];dpLast=dpLast||document.activeElement;$('#dpbc').textContent=g.t.toUpperCase();
+function openDp(i,push=true){const g=GAMES[i];if(!g||g.nopk)return;dpLast=dpLast||document.activeElement;$('#dpbc').textContent=g.t.toUpperCase();
   const others=GAMES.map((o,j)=>j).filter(j=>j!==i).slice(0,3);const sealed=!!g.sealed,opened=!!sealedState[g.id];
   const R=v=>sealed?`<span class="rd${opened?' open':''}" data-v="${pl('withheld','Withheld until reveal')}">${opened?pl('withheld','Withheld until reveal'):'█'.repeat(Math.max(6,Math.min(16,String(v).length)))}</span>`:esc(v);
   const fact=g.fact||[];

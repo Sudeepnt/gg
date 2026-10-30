@@ -1432,23 +1432,34 @@ footer .brand .gglockup{height:44px}
 .kv{--pk:0px;--fr:clamp(10px,1.5vw,22px)}
 body.stories .kv-st{inset:var(--fr);border-radius:clamp(14px,1.6vw,24px);background:#000;isolation:isolate}
 body.stories .kv-hud,body.stories .kv-cap,body.stories .kv-tl,body.stories .kv-meta{display:none}
-body.stories #herovid{filter:brightness(.7)}
+body.stories #herovid{filter:none}
+body.stories .kv-st .sl{display:none}
+body.stories .kv-st::after{background:linear-gradient(90deg,rgba(10,10,10,.55) 0%,rgba(10,10,10,.2) 36%,rgba(10,10,10,0) 60%),linear-gradient(0deg,rgba(10,10,10,.5) 0%,rgba(10,10,10,0) 22%)}
+@media (max-width:900px){body.stories .kv-st::after{background:linear-gradient(0deg,rgba(10,10,10,.8) 0%,rgba(10,10,10,.4) 40%,rgba(10,10,10,0) 70%)}}
 body.stories .kv-copy{pointer-events:none;z-index:3}
 body.stories .kv-copy .row,body.stories .kv-copy .row *{pointer-events:auto}
 .stories{position:absolute;inset:0;z-index:2}
 .stories[hidden]{display:none}
-.st-bars{position:absolute;z-index:4;left:14px;right:14px;top:12px;display:flex;gap:5px;pointer-events:none}
+.st-bars{flex:1 1 0;min-width:40px;display:flex;gap:5px;pointer-events:none}
 .st-bars span{flex:1;height:3px;border-radius:3px;background:rgba(243,243,240,.3);overflow:hidden}
 .st-bars i{display:block;height:100%;width:0;background:#F3F3F0}
-.st-top{position:absolute;z-index:4;left:16px;right:16px;top:26px;display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#C9C9C6;pointer-events:none}
+.st-top{position:absolute;z-index:4;left:24px;right:24px;bottom:18px;display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#C9C9C6;pointer-events:none}
 .st-lb{color:#0A0A0A;background:#F3F3F0;padding:2px 8px}
-.st-sb{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.st-top .pk{margin-left:auto;pointer-events:auto;font-family:var(--mono);border:1px solid rgba(243,243,240,.4);padding:4px 9px;text-transform:uppercase;letter-spacing:.14em;white-space:nowrap}
+.st-sb{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st-top .pk{pointer-events:auto;font-family:var(--mono);border:1px solid rgba(243,243,240,.4);padding:4px 9px;text-transform:uppercase;letter-spacing:.14em;white-space:nowrap}
 .st-top .pk:hover{background:#F3F3F0;color:#0A0A0A}
 .st-z{position:absolute;top:56px;bottom:0;width:min(26%,360px);z-index:2;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .st-z.l{left:0}.st-z.r{right:0}
+.st-z,.st-z:focus,.st-z:focus-visible,.st-z:active{outline:0;box-shadow:none;border:0;background:transparent;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.stories,.stories *{-webkit-user-select:none;user-select:none}
+.st-z::selection{background:transparent}
 .rv-row{flex-wrap:wrap;justify-content:center}
-.scr:fullscreen{background:#000;display:grid;place-items:center}
-.scr:fullscreen .rv-video{object-fit:contain}
-.scr:-webkit-full-screen{background:#000}
-@media (max-width:700px){.kv{--fr:8px}.st-top .pk{display:none}.st-sb{display:none}}
+.rv-pop{position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.6);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:clamp(12px,4vw,48px);animation:rvpop .25s ease}
+@keyframes rvpop{from{opacity:0}to{opacity:1}}
+.rv-pop-box{width:min(100%,1100px);aspect-ratio:16/9;max-height:calc(100svh - 150px);background:#000;border:1px solid rgba(255,255,255,.1);box-shadow:0 20px 80px rgba(0,0,0,.6);overflow:hidden}
+.rv-pop-vid{width:100%;height:100%;object-fit:contain;display:block;cursor:pointer;background:#000}
+.rv-pop-ctl{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}
+.rv-pop .rv-bar{width:min(26%,300px);min-width:140px}
+@media (max-width:700px){.kv{--fr:8px}.st-top{left:16px;right:16px;bottom:16px;flex-wrap:wrap;row-gap:12px;font-size:10px;letter-spacing:.12em}.st-top .st-sb{display:block;flex:1 1 0}.st-top .pk{margin-left:auto}.st-bars{flex:1 1 100%;order:5;height:3px;min-width:0}}
+
+.gc.nopk{cursor:default}

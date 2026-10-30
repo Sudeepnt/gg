@@ -23,12 +23,13 @@ function applyClients(list) {
 
 /* GG Productions monitor: "Animation" plays the main reel (same as the hero), "Art" plays the second CMS reel
    (home.playReelVideo2, falling back to the main one). No native controls: it autoplays muted
-   while on screen, with the old site's round play/pause, volume and full-screen buttons plus a thin progress line as an overlay. */
+   while on screen, with the old site's round play/pause, volume and full-view (popup) buttons plus a thin progress line as an overlay. */
 const IC = {
   play: '<polygon points="6 3 20 12 6 21 6 3" fill="currentColor"/>',
   pause: '<rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/>',
   vol: '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>',
   full: '<path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/>',
+  close: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
   mute: '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/>',
 };
 const svg = n => `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]}</svg>`;
@@ -60,14 +61,42 @@ function applyReel(url, url2) {
   const toggle = () => { userPaused = !v.paused; if (v.paused) v.play().catch(() => {}); else v.pause(); };
   bPlay.onclick = e => { e.stopPropagation(); toggle(); };
   bMute.onclick = e => { e.stopPropagation(); v.muted = !v.muted; icons(); };
-  /* full screen: the monitor itself where the browser allows it (keeps our own controls), the video's native player on iPhone */
+  /* full view: like the old site, the reel opens as a popup over a dimmed, blurred page (not browser full screen) */
   ctl.querySelector('[data-a=full]').onclick = e => {
     e.stopPropagation();
-    const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
-    if (fsEl) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
-    const req = scr.requestFullscreen || scr.webkitRequestFullscreen;
-    if (req) req.call(scr); else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();
-    if (v.paused) { userPaused = false; v.play().catch(() => {}); }
+    if (document.querySelector('.rv-pop')) return;
+    const wasPlaying = !v.paused;
+    v.pause(); userPaused = true;
+    const pop = document.createElement('div');
+    pop.className = 'rv-pop';
+    pop.setAttribute('data-lenis-prevent', '');
+    pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-modal', 'true'); pop.setAttribute('aria-label', tx('Reel'));
+    pop.innerHTML = `<div class="rv-pop-box"><video class="rv-pop-vid" playsinline loop></video></div><div class="rv-pop-ctl"><div class="rv-row"><button type="button" class="rv-btn" data-a="play">${svg('pause')}</button><button type="button" class="rv-btn" data-a="close" aria-label="${tx('Close')}">${svg('close')}</button><button type="button" class="rv-btn" data-a="mute">${svg('mute')}</button></div><div class="rv-bar"><i></i></div></div>`;
+    const pv = pop.querySelector('video');
+    pv.src = v.currentSrc || v.src; pv.muted = v.muted; pv.poster = v.poster;
+    pv.addEventListener('loadedmetadata', () => { try { pv.currentTime = v.currentTime; } catch {} }, { once: true });
+    document.body.appendChild(pop);
+    const oPlay = pop.querySelector('[data-a=play]'), oMute = pop.querySelector('[data-a=mute]'), oBar = pop.querySelector('.rv-bar'), oFill = oBar.firstChild;
+    const oIcons = () => { oPlay.innerHTML = svg(pv.paused ? 'play' : 'pause'); oMute.innerHTML = svg(pv.muted ? 'mute' : 'vol'); };
+    const oToggle = () => { if (pv.paused) pv.play().catch(() => {}); else pv.pause(); };
+    const close = () => {
+      document.removeEventListener('keydown', onKey);
+      try { v.currentTime = pv.currentTime; } catch {}
+      v.muted = pv.muted; pop.remove(); document.body.style.overflow = prevOverflow;
+      userPaused = !wasPlaying; icons(); sync();
+    };
+    const onKey = ev => { if (ev.key === 'Escape') close(); else if (ev.key === ' ') { ev.preventDefault(); oToggle(); } };
+    const prevOverflow = document.body.style.overflow; document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', onKey);
+    oPlay.onclick = ev => { ev.stopPropagation(); oToggle(); };
+    oMute.onclick = ev => { ev.stopPropagation(); pv.muted = !pv.muted; oIcons(); };
+    pop.querySelector('[data-a=close]').onclick = ev => { ev.stopPropagation(); close(); };
+    pv.addEventListener('click', oToggle);
+    pop.addEventListener('click', ev => { if (ev.target === pop) close(); });
+    ['play', 'pause', 'volumechange'].forEach(n => pv.addEventListener(n, oIcons));
+    pv.addEventListener('timeupdate', () => { oFill.style.width = (pv.duration ? pv.currentTime / pv.duration * 100 : 0) + '%'; });
+    oBar.addEventListener('click', ev => { ev.stopPropagation(); const r = oBar.getBoundingClientRect(); if (pv.duration) pv.currentTime = (ev.clientX - r.left) / r.width * pv.duration; });
+    pv.play().catch(() => {}); oIcons();
   };
   v.addEventListener('click', toggle);
   ['play', 'pause', 'volumechange'].forEach(ev => v.addEventListener(ev, icons));
@@ -89,17 +118,21 @@ const REEL7 = { pc: '/reels/showreel-7s.mp4', mobile: '/reels/showreel-7s-mobile
 function applyHeroStories(games, url) {
   const st = $('.kv-st'), box = $('#stories');
   if (!st || !box || $('#herovid')) return;
-  const list = (games && games.length ? games : [{ title: 'Gattabara Games' }]);
+  /* one slide per clip: every game's "Home carousel" clips (PC + mobile video); with none set, the sample showreel cut plays */
   const mq = window.matchMedia('(max-width: 700px)');
-  const srcOf = g => {
-    const own = mq.matches ? (g.heroVideoMobile || g.heroVideoPc) : (g.heroVideoPc || g.heroVideoMobile);
-    return own || (url ? (mq.matches ? REEL7.mobile : REEL7.pc) : '');
-  };
-  if (!list.some(srcOf)) return;               /* nothing to play: keep the generated montage */
+  let list = [];
+  (games || []).forEach((g, i) => (g.heroClips || []).forEach(c => {
+    if (c.pc || c.mobile) list.push({ title: g.title, cardCaption: c.caption || g.cardCaption, pc: c.pc, mobile: c.mobile, i, pk: !g.noPressKit });
+  }));
+  const pos = i => Number(games[i]?.heroOrder) || 999;           /* "Home carousel position" in the CMS; ties keep the Games order */
+  list = list.map((x, k) => [x, k]).sort((a, b) => pos(a[0].i) - pos(b[0].i) || a[1] - b[1]).map(x => x[0]);
+  if (!list.length && url) list = [{ title: 'Gattabara Games', pc: REEL7.pc, mobile: REEL7.mobile, pk: false }];
+  if (!list.length) return;                    /* nothing to play: keep the generated montage */
+  const srcOf = g => (mq.matches ? (g.mobile || g.pc) : (g.pc || g.mobile));
 
   const v = document.createElement('video');
   v.id = 'herovid';
-  Object.assign(v, { muted: true, playsInline: true, preload: 'auto', poster: url ? lean(url, 'poster') : '' });
+  Object.assign(v, { muted: true, playsInline: true, preload: 'auto', poster: '' });
   v.setAttribute('aria-hidden', 'true');
   st.insertBefore(v, $('#kv').nextSibling);
   const bars = $('#stbars'), lb = $('#stlb'), sb = $('#stsb'), pk = $('#stpk');
@@ -117,7 +150,7 @@ function applyHeroStories(games, url) {
     fills.forEach((f, k) => { f.style.width = k < cur ? '100%' : '0'; });
     lb.textContent = (g.title || '').toUpperCase();
     sb.textContent = g.cardCaption || '';
-    pk.hidden = !document.querySelector(`.gc[data-i="${cur}"]`);
+    pk.hidden = !g.pk;
     pk.textContent = tx('Press kit ↗');
     const src = srcOf(g);
     if (src && !v.src.endsWith(src)) v.src = src; else v.currentTime = 0;
@@ -132,6 +165,9 @@ function applyHeroStories(games, url) {
 
   /* tap an edge: previous / next. Press and hold anywhere on an edge: pause until released. */
   [[$('#stprev'), -1], [$('#stnext'), 1]].forEach(([el, d]) => {
+    el.addEventListener('contextmenu', e => e.preventDefault());
+    el.addEventListener('mousedown', e => e.preventDefault());   /* no focus ring, no text selection */
+    el.addEventListener('dragstart', e => e.preventDefault());
     let t0 = 0, timer = 0, long = false;
     el.addEventListener('pointerdown', () => { t0 = Date.now(); long = false; timer = setTimeout(() => { long = true; held = true; sync(); }, 220); });
     const up = () => { clearTimeout(timer); if (held) { held = false; sync(); } };
@@ -142,7 +178,7 @@ function applyHeroStories(games, url) {
     if (!inView || covered() || /INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName || '')) return;
     if (e.key === 'ArrowRight') show(cur + 1); else if (e.key === 'ArrowLeft') show(cur - 1);
   });
-  pk.addEventListener('click', e => { e.stopPropagation(); document.querySelector(`.gc[data-i="${cur}"]`)?.click(); });
+  pk.addEventListener('click', e => { e.stopPropagation(); document.querySelector(`.gc[data-i="${list[cur].i}"]`)?.click(); });
 
   new IntersectionObserver(([e]) => { inView = e.isIntersecting; sync(); }, { threshold: 0.05 }).observe(st);
   const mo = new MutationObserver(sync);

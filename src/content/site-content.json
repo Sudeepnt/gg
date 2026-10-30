@@ -156,8 +156,15 @@
       "promoMain": "",
       "promoVertical": "",
       "promoSmall": "",
-      "heroVideoPc": "",
-      "heroVideoMobile": ""
+      "heroClips": [
+        {
+          "caption": "Gameplay",
+          "pc": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-penfight-pc.mp4",
+          "mobile": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-penfight-mobile.mp4"
+        }
+      ],
+      "noPressKit": false,
+      "heroOrder": 3
     },
     {
       "id": "auto-rush",
@@ -266,8 +273,9 @@
       "promoMain": "",
       "promoVertical": "",
       "promoSmall": "",
-      "heroVideoPc": "",
-      "heroVideoMobile": ""
+      "heroClips": [],
+      "noPressKit": false,
+      "heroOrder": ""
     },
     {
       "id": "classified-01",
@@ -331,8 +339,9 @@
       "promoMain": "",
       "promoVertical": "",
       "promoSmall": "",
-      "heroVideoPc": "",
-      "heroVideoMobile": ""
+      "heroClips": [],
+      "noPressKit": false,
+      "heroOrder": ""
     },
     {
       "id": "classified-02",
@@ -396,8 +405,163 @@
       "promoMain": "",
       "promoVertical": "",
       "promoSmall": "",
-      "heroVideoPc": "",
-      "heroVideoMobile": ""
+      "heroClips": [],
+      "noPressKit": false,
+      "heroOrder": ""
+    },
+    {
+      "id": "project-v",
+      "title": "Project V",
+      "code": "PROJECT-V",
+      "status": "In development",
+      "cardCaption": "Details soon",
+      "tags": [
+        "Project V"
+      ],
+      "factsheet": [
+        {
+          "label": "Developer",
+          "value": "Gattabara Games"
+        },
+        {
+          "label": "Based in",
+          "value": "Bengaluru, India"
+        },
+        {
+          "label": "Status",
+          "value": "In development"
+        }
+      ],
+      "shortDescription": "",
+      "description": [],
+      "features": [],
+      "sealedText": "",
+      "summary": "",
+      "image": "",
+      "screenshots": [
+        {
+          "caption": "Frame 01",
+          "image": ""
+        },
+        {
+          "caption": "Frame 02",
+          "image": ""
+        },
+        {
+          "caption": "Frame 03",
+          "image": ""
+        },
+        {
+          "caption": "Frame 04",
+          "image": ""
+        },
+        {
+          "caption": "Frame 05",
+          "image": ""
+        },
+        {
+          "caption": "Frame 06",
+          "image": ""
+        }
+      ],
+      "trailer": "",
+      "trailerPoster": "",
+      "logoBlack": "",
+      "logoWhite": "",
+      "promoMain": "",
+      "promoVertical": "",
+      "promoSmall": "",
+      "heroClips": [
+        {
+          "caption": "Environment",
+          "pc": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-church-pc.mp4",
+          "mobile": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-church-mobile.mp4"
+        },
+        {
+          "caption": "Character 01",
+          "pc": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-character-pc.mp4",
+          "mobile": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-character-mobile.mp4"
+        },
+        {
+          "caption": "Character 02",
+          "pc": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-character2-pc.mp4",
+          "mobile": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-character2-mobile.mp4"
+        }
+      ],
+      "noPressKit": true,
+      "heroOrder": 1
+    },
+    {
+      "id": "puk-puk",
+      "title": "Puk Puk",
+      "code": "PUK-PUK",
+      "status": "In development",
+      "cardCaption": "Details soon",
+      "tags": [
+        "Puk Puk"
+      ],
+      "factsheet": [
+        {
+          "label": "Developer",
+          "value": "Gattabara Games"
+        },
+        {
+          "label": "Based in",
+          "value": "Bengaluru, India"
+        },
+        {
+          "label": "Status",
+          "value": "In development"
+        }
+      ],
+      "shortDescription": "",
+      "description": [],
+      "features": [],
+      "sealedText": "",
+      "summary": "",
+      "image": "",
+      "screenshots": [
+        {
+          "caption": "Frame 01",
+          "image": ""
+        },
+        {
+          "caption": "Frame 02",
+          "image": ""
+        },
+        {
+          "caption": "Frame 03",
+          "image": ""
+        },
+        {
+          "caption": "Frame 04",
+          "image": ""
+        },
+        {
+          "caption": "Frame 05",
+          "image": ""
+        },
+        {
+          "caption": "Frame 06",
+          "image": ""
+        }
+      ],
+      "trailer": "",
+      "trailerPoster": "",
+      "logoBlack": "",
+      "logoWhite": "",
+      "promoMain": "",
+      "promoVertical": "",
+      "promoSmall": "",
+      "heroClips": [
+        {
+          "caption": "Gameplay",
+          "pc": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-pukpuk-pc.mp4",
+          "mobile": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-pukpuk-mobile.mp4"
+        }
+      ],
+      "noPressKit": true,
+      "heroOrder": 2
     }
   ],
   "pressKit": {

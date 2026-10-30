@@ -174,16 +174,10 @@
   "text": "Pitch us a game"
  },
  {
-  "key": "Top::NEWS",
+  "key": "Top::Press kit ↗",
   "group": "Top",
-  "label": "Text",
-  "text": "NEWS"
- },
- {
-  "key": "Top::View all",
-  "group": "Top",
-  "label": "Text",
-  "text": "View all"
+  "label": "Link / button",
+  "text": "Press kit ↗"
  },
  {
   "key": "News::News",
@@ -292,6 +286,12 @@
   "group": "Games",
   "label": "Link / button",
   "text": "In development"
+ },
+ {
+  "key": "Games::In co-development",
+  "group": "Games",
+  "label": "Link / button",
+  "text": "In co-development"
  },
  {
   "key": "Games::Sealed",
@@ -877,6 +877,20 @@
   "group": "Top",
   "label": "Screen-reader label",
   "text": "Montage clips",
+  "attr": "aria-label"
+ },
+ {
+  "key": "Top::[aria-label] Previous story",
+  "group": "Top",
+  "label": "Screen-reader label",
+  "text": "Previous story",
+  "attr": "aria-label"
+ },
+ {
+  "key": "Top::[aria-label] Next story",
+  "group": "Top",
+  "label": "Screen-reader label",
+  "text": "Next story",
   "attr": "aria-label"
  },
  {
