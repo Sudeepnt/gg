@@ -1486,3 +1486,11 @@ body.stories .reg{display:none}
 .wrail,.rail-l,.rail-r{mix-blend-mode:normal}
 .mq .t{will-change:auto}
 }
+
+/* ---------- GG PRODUCTIONS: network (black panel) and clients live inside this one section ---------- */
+.prod-net{background:var(--bg);color:var(--fg);padding:clamp(28px,4.5vw,72px);margin-top:clamp(64px,8vw,110px)}
+.pn-h{display:grid;gap:8px;margin-bottom:clamp(28px,3.5vw,48px)}
+.pn-k{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.pn-h h3{font-family:var(--cond);font-weight:800;font-size:clamp(28px,3.4vw,46px);line-height:1;text-transform:uppercase}
+.prod-cli{margin-top:clamp(64px,8vw,110px)}
+.prod-cli .lead{margin-bottom:clamp(28px,3vw,44px)}
