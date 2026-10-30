@@ -1,5 +1,6 @@
 import {tx} from './tx.js';
 import {LAND_B64} from './world-land.js';
+import {PLATFORM_ICONS} from './platform-icons.js';
 /* Gattabara Games — all behaviour and editable content. See README.md for the map. */
 /* Next's router patches window.history and re-renders the page on any URL change, which wipes the DOM this script built; use the browser's own methods */
 const nativeHist={replaceState:(...a)=>History.prototype.replaceState.apply(history,a),pushState:(...a)=>History.prototype.pushState.apply(history,a)};
@@ -78,7 +79,7 @@ if(GGC){const DEF=GAMES.slice();const arr=a=>Array.isArray(a)?a:[];
   if(arr(GGC.news).length||GGC.news)NEWS=arr(GGC.news).map(n=>[n.date||'',n.category||'',n.title||'',n.body||'']);
   if(GGC.games)GAMES=arr(GGC.games).map((g,k)=>{const d=DEF.find(x=>x.id===g.id)||{};const sealed=/seal/i.test(g.status||'');
     const shots=Array.isArray(g.screenshots)?g.screenshots:arr(g.screenshotCaptions).map(c=>({caption:c,image:''}));
-    return {...d,id:g.id||('game-'+(k+1)),t:g.title||'Untitled',code:g.code||('GG-'+(k+1)),st:g.status||'In development',cat:sealed?'sealed':'dev',codev:!sealed&&/co-?dev/i.test(g.status||'')?1:undefined,collab:arr(g.collaboratingWith).map(c=>String(c&&c.name!=null?c.name:c||'').trim()).filter(Boolean),sealed:sealed?1:undefined,
+    return {...d,id:g.id||('game-'+(k+1)),t:g.title||'Untitled',code:g.code||('GG-'+(k+1)),st:g.status||'In development',cat:sealed?'sealed':'dev',codev:!sealed&&/co-?dev/i.test(g.status||'')?1:undefined,plats:arr(g.platformLinks).map(p=>({n:String(p&&p.platform||''),u:String(p&&p.url||'').trim()})).filter(p=>PLATFORM_ICONS[p.n]),collab:arr(g.collaboratingWith).map(c=>String(c&&c.name!=null?c.name:c||'').trim()).filter(Boolean),sealed:sealed?1:undefined,
       spec:g.cardCaption||'',short:g.shortDescription||'',intro:g.summary||g.shortDescription||'',desc:arr(g.description),tags:arr(g.tags),
       feat:arr(g.features).map(f=>[f.title||'',f.text||'']),shots:shots.map(x=>x.caption||''),shotImgs:shots.map(x=>x.image||''),trailer:g.trailer||'',trailerPoster:g.trailerPoster||'',logoBlack:g.logoBlack||'',logoWhite:g.logoWhite||'',promo:{main:g.promoMain||'',vertical:g.promoVertical||'',small:g.promoSmall||''},nopk:g.noPressKit?1:undefined,intel:g.sealedText||'',image:g.image||'',
       catch:d.catch||[g.title||'',''],fact:arr(g.factsheet).map(r=>[r.label||'',r.value||''])}});
@@ -286,7 +287,24 @@ const NW0=$('#nwallt').textContent;$('#nwall').onclick=()=>{nall=!nall;$('#nwall
 function doc(){const m=$('#doc');const r=m.getBoundingClientRect();const p=Math.max(0,Math.min(1,(innerHeight*.85-r.top)/(r.height+innerHeight*.3)));const ws=m.querySelectorAll('.w');const n=Math.floor(p*ws.length*1.1);ws.forEach((w,i)=>w.classList.toggle('on',RM||i<n))}
 
 /* ================= GAMES ================= */
-$('#gl').innerHTML=GAMES.map((g,i)=>`<button class="gc rv ${i%2?'d1':''}" type="button" data-i="${i}" data-cat="${g.cat}"><span class="im">${GP.showComingSoon!==false?`<span class="soon" aria-label="${esc0(GP.comingSoonText||'Coming Soon...')}"><span class="o" aria-hidden="true">${esc0(GP.comingSoonText||'Coming Soon...')}</span><span class="f" aria-hidden="true">${esc0(GP.comingSoonText||'Coming Soon...')}</span></span>`:thumb(i)?`<img src="${thumb(i)}" alt="Key visual for ${g.t}">`:`<span class="ph" style="color:#F3F3F0">${fbArt(i)}</span>`}<span class="st"><span class="tag f">${g.codev?tx('In development'):g.st}</span></span>${g.codev?`<span class="cdb">${esc0(tx('Co-development'))}</span>`:''}<span class="no" aria-hidden="true">0${i+1}</span></span><span class="tx"><h3>${g.t}</h3><span class="cp">${g.spec}</span>${g.codev&&g.collab&&g.collab.length?`<span class="cp cw">${esc0(tx('With'))} ${g.collab.map(esc0).join(', ')}</span>`:''}<span class="more"><span class="ci">${ARW}</span></span></span></button>`).join('');
+/* platform logos under a game (card and press kit). A logo with a link opens it in a new tab; without a link it is just shown. */
+const safeUrl=u=>/^https?:\/\//i.test(u)?u:'';
+function platHTML(g,link){const L=(g.plats||[]);if(!L.length)return'';
+  return `<span class="plats">${L.map(p=>{const ic=PLATFORM_ICONS[p.n],u=safeUrl(p.u),svg=`<svg viewBox="${ic.vb}" fill="currentColor" aria-hidden="true"><path d="${ic.d}"/></svg>`;
+    if(!u)return `<span class="pi" role="img" aria-label="${esc0(p.n)}" title="${esc0(p.n)}">${svg}</span>`;
+    return link?`<a class="pi on" href="${esc0(u)}" target="_blank" rel="noopener noreferrer" aria-label="${esc0(p.n)}" title="${esc0(p.n)}">${svg}</a>`
+      :`<span class="pi on" role="link" tabindex="0" data-href="${esc0(u)}" aria-label="${esc0(p.n)}" title="${esc0(p.n)}">${svg}</span>`}).join('')}</span>`}
+$('#gl').innerHTML=GAMES.map((g,i)=>`<button class="gc rv ${i%2?'d1':''}" type="button" data-i="${i}" data-cat="${g.cat}"><span class="im">${GP.showComingSoon!==false?`<span class="soon" aria-label="${esc0(GP.comingSoonText||'Coming Soon...')}"><span class="o" aria-hidden="true">${esc0(GP.comingSoonText||'Coming Soon...')}</span><span class="f" aria-hidden="true">${esc0(GP.comingSoonText||'Coming Soon...')}</span></span>`:thumb(i)?`<img src="${thumb(i)}" alt="Key visual for ${g.t}">`:`<span class="ph" style="color:#F3F3F0">${fbArt(i)}</span>`}<span class="st"><span class="tag f">${g.codev?tx('In development'):g.st}</span></span>${g.codev?`<span class="cdb">${esc0(tx('Co-development'))}</span>`:''}<span class="no" aria-hidden="true">0${i+1}</span></span><span class="tx"><h3>${g.t}</h3><span class="cp">${g.spec}</span>${g.codev&&g.collab&&g.collab.length?`<span class="cp cw">${esc0(tx('With'))} ${g.collab.map(esc0).join(', ')}</span>`:''}<span class="more"><span class="ci">${ARW}</span></span></span>${platHTML(g,false)}</button>`).join('');
+/* hover a game card (mouse devices only): its trailer plays muted over the picture, the first 10 seconds on a loop */
+if(!RM&&matchMedia('(hover:hover) and (pointer:fine)').matches)$$('.gc').forEach(c=>{const g=GAMES[+c.dataset.i],im=c.querySelector('.im');if(!g||!g.trailer||g.sealed||!im)return;let v=null,on=false;
+  const loop=()=>{if(on){v.currentTime=0;v.play().catch(()=>{})}};
+  c.addEventListener('mouseenter',()=>{on=true;if(!v){v=document.createElement('video');Object.assign(v,{muted:true,playsInline:true,preload:'auto',src:g.trailer});v.className='gc-prev';v.setAttribute('aria-hidden','true');v.tabIndex=-1;
+      v.addEventListener('timeupdate',()=>{if(on&&v.currentTime>=10)loop()});v.addEventListener('ended',loop);v.addEventListener('error',()=>{v.remove();v=null;on=false});im.appendChild(v)}
+    v.play().then(()=>{if(on)v.classList.add('on')}).catch(()=>{})});
+  c.addEventListener('mouseleave',()=>{on=false;if(!v)return;v.classList.remove('on');v.pause();v.currentTime=0})});
+/* a card is one big button, so its platform logos are handled here and never open the press kit */
+$('#gl').addEventListener('click',e=>{const a=e.target.closest('.pi[data-href]');if(!a)return;e.stopPropagation();e.preventDefault();window.open(a.dataset.href,'_blank','noopener,noreferrer')},true);
+$('#gl').addEventListener('keydown',e=>{const a=e.target.closest&&e.target.closest('.pi[data-href]');if(!a||(e.key!=='Enter'&&e.key!==' '))return;e.stopPropagation();e.preventDefault();window.open(a.dataset.href,'_blank','noopener,noreferrer')},true);
 $$('.gc').forEach(c=>{c.onclick=()=>openDp(+c.dataset.i);if(GAMES[+c.dataset.i]?.nopk)c.classList.add('nopk')});
 $$('#games .tab').forEach(b=>b.onclick=()=>{const f=b.dataset.g;$$('#games .tab').forEach(x=>x.setAttribute('aria-pressed',x===b));$$('.gc').forEach(c=>c.classList.toggle('hide',f!=='all'&&c.dataset.cat!==f))});
 $('#mq1').innerHTML=('<span>Gattabara Games</span><span>Original IP</span><span>Co-owned IP</span><span>GG Productions</span>').repeat(3);
@@ -357,7 +375,7 @@ function openDp(i,push=true){const g=GAMES[i];if(!g||g.nopk)return;dpLast=dpLast
    <div class="wrap">
     <header class="pk-hero"><div class="cap">${GP.showComingSoon!==false?soonHTML():thumb(i)?`<img src="${thumb(i)}" alt="Capsule art for ${g.t}">`:`<div style="position:absolute;inset:0;color:#F3F3F0">${fbArt(i)}</div>`}</div>
      <div><p class="lbl"><b>${pl('tag','PRESS KIT')}</b>${g.code}</p><h1 id="dpt">${g.t}</h1><p class="rel">${pl('release','Release date:')} <b>${sealed?'Sealed':esc(factOf(g,'Release date')||'To be announced')}</b></p>
-      <div class="pk-tags">${g.tags.map(t=>`<span class="tag">${sealed&&!opened&&t==='Sealed'?t:esc(t)}</span>`).join('')}</div>
+      <div class="pk-tags">${g.tags.map(t=>`<span class="tag">${sealed&&!opened&&t==='Sealed'?t:esc(t)}</span>`).join('')}</div>${platHTML(g,true)}
       <div class="acts">${sealed?`<a class="btn" href="#contact" data-line="insider">${pl('insider','Join the insider list')}</a>`:`<button class="btn" type="button" data-dl="all">${pl('downloadAll','↓ Download all media (.zip)')}</button>`}<a class="btn ln" href="#contact" data-line="press">${pl('inquiry','Press inquiry')}</a></div></div></header>
     <section class="pk-s" id="pk-fact"><h2>${pl('fact','Factsheet')}</h2><div><table class="prof">${fact.map(r=>`<tr><th>${r[0]}</th><td>${sealedRow(r)?R(r[1]):esc(r[1])}</td></tr>`).join('')}</table>${sealed?'':`<p style="margin-top:20px"><button class="dl" type="button" data-dl="fact">${pl('factDl','↓ Factsheet .md')}</button></p>`}</div></section>
     <section class="pk-s" id="pk-desc"><h2>${pl('descTitle','Description')}</h2><div class="body"><p class="mono">${pl('short','Short description')}</p><p class="lead">${g.short}</p>
