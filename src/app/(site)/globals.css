@@ -789,7 +789,6 @@ footer{background:var(--k);color:#F3F3F0;padding:110px 0 calc(40px + env(safe-ar
 .kv-st .sl{position:absolute;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.2) 0 1px,transparent 1px 3px);overflow:hidden}
 .kv-st .sl::after{content:"";position:absolute;left:0;right:0;height:18%;top:-20%;background:linear-gradient(transparent,rgba(243,243,240,.045),transparent);animation:roll 8s linear infinite}
 @keyframes roll{to{top:105%}}
-.gc .im::after,.pkf .im::after,.pk-hero .cap::after,.others button::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.2) 0 1px,transparent 1px 3px)}
 .others button{position:relative}
 .others button::after{bottom:auto;aspect-ratio:16/10}
 .gc .im::before,.pkf .im::before,.cl::after{content:"";position:absolute;inset:18px;z-index:3;pointer-events:none;opacity:0;color:#F3F3F0;transition:opacity .2s,inset .35s cubic-bezier(.2,.8,.2,1);
