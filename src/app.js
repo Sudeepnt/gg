@@ -707,6 +707,8 @@ addEventListener('pointermove',e=>{G.mx=e.clientX/innerWidth*2-1;G.my=e.clientY/
 $('#ld').hidden=true;start();
 function start(){$('#kvcatch').classList.add('on');KV.gl=.6;KV.fl=1;hud()}
 measure();frame();try{document.fonts.ready.then(()=>{measure();frame();setActiveW(active,true)})}catch(e){}
+/* smooth scroll keeps its own copy of the page height: refresh it once fonts and images have settled, so the very bottom (footer logo) is always reachable */
+{const rs=()=>{measure();frame();try{lenis&&lenis.resize()}catch(e){}};addEventListener('load',()=>[0,400,1500,4000].forEach(t=>setTimeout(rs,t)));try{document.fonts.ready.then(rs)}catch(e){}$$('footer img').forEach(i=>i.complete||i.addEventListener('load',rs,{once:true}))}
 {let h0=HASH0;if(h0==='pitch'){setTab('pitch');h0='contact'}
   if(h0&&WINS.some(w=>w.id===h0)&&h0!=='top'){const idx=WINS.findIndex(w=>w.id===h0);let touched=false;
     const release=()=>{landing=false;try{nativeHist.replaceState(null,'',HASH0==='pitch'||WINS.some(w=>w.id===HASH0)?'#'+HASH0:location.hash)}catch(e){}};
