@@ -150,6 +150,10 @@ function applyHeroStories(games, slides) {
     if (id) e.id = id;
     e.className = 'herovid';
     Object.assign(e, { muted: true, playsInline: true, preload: 'auto' });
+    e.controls = false;
+    ['webkit-playsinline', 'disablepictureinpicture', 'disableremoteplayback'].forEach(a => e.setAttribute(a, ''));
+    e.setAttribute('x-webkit-airplay', 'deny');
+    e.setAttribute('tabindex', '-1');
     e.setAttribute('aria-hidden', 'true');
     return e;
   };
@@ -158,7 +162,7 @@ function applyHeroStories(games, slides) {
   const vids = [pre || mk('herovid'), mk()];
   let v = vids[0];
   vids.forEach(e => { if (!e.isConnected) st.insertBefore(e, $('#kv').nextSibling); });
-  if (pre) { pre.classList.add('herovid'); pre.removeAttribute('autoplay'); }
+  if (pre) { pre.classList.add('herovid'); pre.removeAttribute('autoplay'); pre.controls = false; pre.removeAttribute('controls'); }
   if (pre && pre.error) mediaFallback(pre);       /* it may have failed before this script ran */
   const bars = $('#stbars'), lb = $('#stlb'), sb = $('#stsb'), pk = $('#stpk');
   bars.innerHTML = list.map(() => '<span><i></i></span>').join('');

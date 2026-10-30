@@ -32,7 +32,7 @@ export async function heroHead(content: Record<string, any>): Promise<{ video: s
   const css = (u: string) => (u ? `background-image:url(${u});` : "");
   const style = `<style>.kv-st{background-color:#000;background-size:cover;background-position:center;${css(pPc)}}@media ${MOBILE_QUERY}{.kv-st{${css(pMob || pPc)}}}</style>`;
   /* the inline script runs while the page is still being read, so the right file starts downloading immediately */
-  const video = `<video id="herovid" class="herovid on" muted playsinline autoplay preload="auto" aria-hidden="true"></video>`
+  const video = `<video id="herovid" class="herovid on" muted playsinline webkit-playsinline autoplay preload="auto" disablepictureinpicture disableremoteplayback x-webkit-airplay="deny" tabindex="-1" aria-hidden="true"></video>`
     + `<script>(function(){var v=document.getElementById("herovid");if(v)v.src=matchMedia(${JSON.stringify(MOBILE_QUERY)}).matches?${JSON.stringify(mobile)}:${JSON.stringify(pc)}})()</script>`;
   let origin = "";
   try { origin = new URL(pc).origin; } catch {}

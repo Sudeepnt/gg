@@ -1434,6 +1434,7 @@ body.stories .kv-st{inset:var(--fr);border-radius:clamp(14px,1.6vw,24px);backgro
 body.stories .kv-hud,body.stories .kv-cap,body.stories .kv-tl,body.stories .kv-meta{display:none}
 body.stories #herovid,body.stories .herovid{filter:none}
 .herovid{opacity:0;transition:opacity .2s}
+.herovid::-webkit-media-controls,.herovid::-webkit-media-controls-panel,.herovid::-webkit-media-controls-play-button,.herovid::-webkit-media-controls-start-playback-button,.herovid::-webkit-media-controls-overlay-play-button,.herovid::-webkit-media-controls-enclosure{display:none!important;-webkit-appearance:none;opacity:0!important}
 .herovid.on{opacity:1}
 body.stories .kv-st .sl{display:none}
 body.stories .kv-st::after{display:none}
