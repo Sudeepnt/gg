@@ -39,7 +39,7 @@ export default async function PrivacyPolicy() {
         {P.lead && <p className="lg-lead">{inline(String(P.lead), cl)}</p>}
 
         {secs.length > 1 && (
-          <nav className="lg-toc" aria-label="Contents">
+          <nav className="lg-toc" aria-label={P.tocTitle || "Contents"}>
             <p className="lg-k">{P.tocTitle || "In this policy"}</p>
             <ol>{secs.map((s, i) => <li key={i}><a href={`#s${i + 1}`}>{s.title}</a></li>)}</ol>
           </nav>
@@ -54,7 +54,7 @@ export default async function PrivacyPolicy() {
       </main>
 
       <footer className="lg-foot">
-        <span>© {new Date().getFullYear()} Gattabara Games LLP. All rights reserved.</span>
+        <span>{P.copyright || "© 2026 Gattabara Games LLP. All rights reserved."}</span>
         <button type="button" className="lg-link" data-cookie-settings>{cl}</button>
       </footer>
     </div>

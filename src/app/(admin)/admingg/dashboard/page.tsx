@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
     Home, Newspaper, Gamepad2, BookOpen, Clapperboard, Mail, Users, Building2, Briefcase, Send, Phone, Globe, Type, Search, ChevronDown, Sun, Moon, Inbox, ClipboardList, RefreshCw, Paperclip, History,
-    Shield, Save, LogOut, Download, UploadCloud, Plus, Trash2, ArrowUp, ArrowDown, Loader2, Check, X, Image as ImageIcon, Film,
+    Shield, Settings, Save, LogOut, Download, UploadCloud, Plus, Trash2, ArrowUp, ArrowDown, Loader2, Check, X, Image as ImageIcon, Film,
 } from "lucide-react";
 import pageTexts from "@/content/page-texts.json";
 import { UI_STRINGS } from "@/content/uiStrings.js";
@@ -248,7 +248,7 @@ const TABS: { id: string; label: string; icon: any; blocks: Block[] }[] = [
             { key: "kicker", label: "Small label above the title", type: "text" }, { key: "title", label: "Title", type: "text" },
             { key: "updated", label: "Date line", type: "text", hint: "For example: Last updated 30 October 2026. Change it whenever you edit the policy." },
             { key: "lead", label: "Introduction", type: "textarea" }, { key: "tocTitle", label: "Heading of the contents box", type: "text" },
-            { key: "backLink", label: "\u201cBack to site\u201d button", type: "text" }, { key: "cookieLabel", label: "\u201cCookie settings\u201d wording", type: "text", hint: "Used for the link at the bottom of the page and wherever you write {{cookie-settings}}." }] },
+            { key: "backLink", label: "\u201cBack to site\u201d button", type: "text" }, { key: "copyright", label: "Line at the bottom of the page", type: "text" }, { key: "cookieLabel", label: "\u201cCookie settings\u201d wording", type: "text", hint: "Used for the link at the bottom of the page and wherever you write {{cookie-settings}}." }] },
         { kind: "list", path: "privacy.sections", title: "Privacy policy page: sections (in this order, numbered automatically)", addLabel: "Add section", label: x => x.title || "New section", blank: () => ({ title: "", body: "" }),
           fields: [{ key: "title", label: "Section title", type: "text" },
             { key: "body", label: "Text", type: "textarea", hint: "Leave a blank line between paragraphs. Start every line with \u201c- \u201d for a bullet list. For a table, write one row per line with \u201c | \u201d between the columns; the first line is the header. **bold**, [link text](https://example.com) and [email](mailto:name@site.com) work. {{cookie-settings}} adds a button that reopens the cookie popup." }] },
@@ -260,6 +260,12 @@ const TABS: { id: string; label: string; icon: any; blocks: Block[] }[] = [
             { key: "necessaryTitle", label: "Necessary: title", type: "text" }, { key: "necessaryText", label: "Necessary: text", type: "text" },
             { key: "analyticsTitle", label: "Analytics: title", type: "text" }, { key: "analyticsText", label: "Analytics: text", type: "text" },
             { key: "marketingTitle", label: "Marketing: title", type: "text" }, { key: "marketingText", label: "Marketing: text", type: "text" }] }] },
+    { id: "site", label: "Page title & 404", icon: Settings, blocks: [
+        { kind: "object", path: "seo", title: "Browser tab title and search / sharing text", fields: [
+            { key: "title", label: "Page title (browser tab and Google)", type: "text" }, { key: "description", label: "Description (Google)", type: "textarea" },
+            { key: "shareTitle", label: "Title when the link is shared (WhatsApp, LinkedIn, \u2026)", type: "text" }, { key: "shareDescription", label: "Text when the link is shared", type: "textarea" }] },
+        { kind: "object", path: "notFound", title: "\u201cPage not found\u201d page (shown for a wrong web address)", fields: [
+            { key: "title", label: "Heading", type: "text" }, { key: "text", label: "Text", type: "textarea" }, { key: "button", label: "Button", type: "text" }] }] },
     { id: "texts", label: "All other text", icon: Type, blocks: [{ kind: "pagetext" }, { kind: "uitext", title: "Pop-ups, loading screen, Machine view and other wording the page builds itself" }] },
 ];
 

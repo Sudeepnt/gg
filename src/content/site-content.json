@@ -1339,7 +1339,8 @@
         "title": "Contact and complaints",
         "body": "Gattabara Games LLP\nBengaluru, Karnataka, India\n[info@gattabaragames.com](mailto:info@gattabaragames.com)\n\nIf you are in the EEA, the UK or Switzerland, you may also complain to your local data protection authority. In India you can raise a grievance with us first, and then with the Data Protection Board of India. We would appreciate the chance to put things right before you do."
       }
-    ]
+    ],
+    "copyright": "© 2026 Gattabara Games LLP. All rights reserved."
   },
   "cookieBanner": {
     "kicker": "Cookies & privacy",
@@ -1356,5 +1357,16 @@
     "analyticsText": "Helps us understand how the site is used, so we can improve it.",
     "marketingTitle": "Marketing",
     "marketingText": "Used to measure and show our own campaigns on other sites."
+  },
+  "seo": {
+    "title": "Gattabara Games — We summon worlds that eat reality",
+    "description": "Gattabara Games is a video game company and creative studio in Bengaluru, India. Original IP, co-owned IP and production services through GG Productions.",
+    "shareTitle": "Gattabara Games",
+    "shareDescription": "We summon worlds that eat reality. Original IP, co-owned IP and GG Productions, from Bengaluru."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "text": "The page you are looking for does not exist or has moved.",
+    "button": "Back to the home page"
   }
 }

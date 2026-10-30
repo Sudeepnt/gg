@@ -3,20 +3,21 @@ import "./globals.css";
 import Consent from "./Consent";
 import { getRuntimeContent } from "@/lib/content";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://gattabaragames.com"),
-  title: "Gattabara Games — We summon worlds that eat reality",
-  description:
-    "Gattabara Games is a video game company and creative studio in Bengaluru, India. Original IP, co-owned IP and production services through GG Productions.",
-  icons: { icon: "/logos/logo1black.png", apple: "/logos/logo1black.png" },
-  alternates: { types: { "text/plain": [{ url: "/llms.txt", title: "llms.txt" }] } },
-  openGraph: {
-    type: "website",
-    title: "Gattabara Games",
-    description: "We summon worlds that eat reality. Original IP, co-owned IP and GG Productions, from Bengaluru.",
-    images: ["/logos/logo1black.png"],
-  },
-};
+/* the page title and descriptions are edited in the admin (Page title & 404 tab); the defaults are in src/content/site-content.json */
+export async function generateMetadata(): Promise<Metadata> {
+  const c = await getRuntimeContent();
+  const S = (c.seo || {}) as Record<string, string>;
+  const title = S.title || "Gattabara Games — We summon worlds that eat reality";
+  const description = S.description || "Gattabara Games is a video game company and creative studio in Bengaluru, India.";
+  return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://gattabaragames.com"),
+    title,
+    description,
+    icons: { icon: "/logos/logo1black.png", apple: "/logos/logo1black.png" },
+    alternates: { types: { "text/plain": [{ url: "/llms.txt", title: "llms.txt" }] } },
+    openGraph: { type: "website", title: S.shareTitle || "Gattabara Games", description: S.shareDescription || description, images: ["/logos/logo1black.png"] },
+  };
+}
 
 export const viewport: Viewport = {
   width: "device-width",
