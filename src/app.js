@@ -79,7 +79,7 @@ if(GGC){const DEF=GAMES.slice();const arr=a=>Array.isArray(a)?a:[];
     const shots=Array.isArray(g.screenshots)?g.screenshots:arr(g.screenshotCaptions).map(c=>({caption:c,image:''}));
     return {...d,id:g.id||('game-'+(k+1)),t:g.title||'Untitled',code:g.code||('GG-'+(k+1)),st:g.status||'In development',cat:sealed?'sealed':'dev',sealed:sealed?1:undefined,
       spec:g.cardCaption||'',short:g.shortDescription||'',intro:g.summary||g.shortDescription||'',desc:arr(g.description),tags:arr(g.tags),
-      feat:arr(g.features).map(f=>[f.title||'',f.text||'']),shots:shots.map(x=>x.caption||''),shotImgs:shots.map(x=>x.image||''),trailer:g.trailer||'',trailerPoster:g.trailerPoster||'',logoBlack:g.logoBlack||'',logoWhite:g.logoWhite||'',promo:{main:g.promoMain||'',vertical:g.promoVertical||'',small:g.promoSmall||''},intel:g.sealedText||'',image:g.image||'',
+      feat:arr(g.features).map(f=>[f.title||'',f.text||'']),shots:shots.map(x=>x.caption||''),shotImgs:shots.map(x=>x.image||''),trailer:g.trailer||'',trailerPoster:g.trailerPoster||'',logoBlack:g.logoBlack||'',logoWhite:g.logoWhite||'',promo:{main:g.promoMain||'',vertical:g.promoVertical||'',small:g.promoSmall||''},heroPc:g.heroVideoPc||'',heroMobile:g.heroVideoMobile||'',intel:g.sealedText||'',image:g.image||'',
       catch:d.catch||[g.title||'',''],fact:arr(g.factsheet).map(r=>[r.label||'',r.value||''])}});
   if(GGC.production){SVC=arr(GGC.production.services).map(v=>[v.title||'',v.description||'',arr(v.tags),v.quote||undefined].filter((x,i2)=>i2<3||x));
     SK=arr(GGC.production.specialties).map(v=>[v.name||'',Math.max(0,Math.min(100,+v.score||0)),v.description||''])}
@@ -230,6 +230,7 @@ const KV={i:0,acc:0,gl:0,fl:0,cov:false,paused:RM};
   let scale=1;function rs(){const d=Math.min(1.5,devicePixelRatio||1)*scale;cv.width=Math.round(cv.clientWidth*d);cv.height=Math.round(cv.clientHeight*d);gl.viewport(0,0,cv.width,cv.height)}rs();addEventListener('resize',rs);
   let vis=true;new IntersectionObserver(e=>vis=e[0].isIntersecting).observe(cv.parentElement);const start=performance.now();let m=[0,0],acc=0,fr=0,last=start;
   function loop(){requestAnimationFrame(loop);const now=performance.now(),dt=Math.min(.1,(now-last)/1000);last=now;if(!vis||KV.cov||document.hidden)return;
+    if(document.body.classList.contains('stories'))return;/* the story carousel (cms-apply.js) drives the hero */
     if(!KV.paused){KV.acc+=dt;if(KV.acc>=CLIPS[KV.i].d)cut(KV.i+1)}
     /* the showreel video replaces the shader, but the game caption + timeline underneath keep cycling */
     if((document.body.classList.contains('reelhero')||document.body.classList.contains('reelwait'))){const cc=CLIPS[KV.i];hudTick(Math.min(1,KV.acc/cc.d));return}
@@ -275,7 +276,7 @@ function renderNews(){const L=NEWS.filter(n=>nf==='all'||n[1]===nf);$('#nw').inn
   $$('#nw a').forEach(a=>a.onclick=e=>{e.preventDefault();const li=a.parentElement,o=li.classList.toggle('open');a.setAttribute('aria-expanded',o);li.querySelector('.bd').hidden=!o})}
 $$('#news .tab').forEach(b=>b.onclick=()=>{nf=b.dataset.f;$$('#news .tab').forEach(x=>x.setAttribute('aria-pressed',x===b));renderNews()});
 const NW0=$('#nwallt').textContent;$('#nwall').onclick=()=>{nall=!nall;$('#nwallt').textContent=nall?tx('Show fewer'):NW0;renderNews()};renderNews();
-if(NEWS[0]){$('#pkt').textContent=NEWS[0][0];$('#pka').textContent=NEWS[0][2]}else{const tk=$('.pick');if(tk)tk.style.display='none'}
+
 
 /* doctrine words */
 (function(){const m=$('#doc');m.innerHTML=m.textContent.trim().split(/\s+/).map(w=>`<span class="w">${w}</span>`).join(' ')})();

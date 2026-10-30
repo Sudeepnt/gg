@@ -1,5 +1,5 @@
 /* Applies the carried-over gg CMS data to the page: client logos, the reel video and the contact email. */
-import { loadCMS, clientsOf } from './cms.js';
+import { loadCMS, clientsOf, siteContent } from './cms.js';
 import { tx } from './tx.js';
 
 const $ = s => document.querySelector(s);
@@ -22,12 +22,13 @@ function applyClients(list) {
 }
 
 /* GG Productions monitor: "Animation" plays the main reel (same as the hero), "Art" plays the second CMS reel
-   (home.playReelVideo2, falling back to the main one). No native controls and no full-screen view: it autoplays muted
-   while on screen, with the old site's round play/pause and volume buttons plus a thin progress line as an overlay. */
+   (home.playReelVideo2, falling back to the main one). No native controls: it autoplays muted
+   while on screen, with the old site's round play/pause, volume and full-screen buttons plus a thin progress line as an overlay. */
 const IC = {
   play: '<polygon points="6 3 20 12 6 21 6 3" fill="currentColor"/>',
   pause: '<rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/>',
   vol: '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>',
+  full: '<path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/>',
   mute: '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/>',
 };
 const svg = n => `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]}</svg>`;
@@ -42,7 +43,7 @@ function applyReel(url, url2) {
   v.src = reels.anim;
   const ctl = document.createElement('div');
   ctl.className = 'rv-ctl';
-  ctl.innerHTML = `<div class="rv-row"><button type="button" class="rv-btn" data-a="play" aria-label="${tx('Pause reel')}">${svg('pause')}</button><button type="button" class="rv-btn" data-a="mute" aria-label="${tx('Unmute reel')}">${svg('mute')}</button></div><div class="rv-bar" role="progressbar" aria-label="${tx('Reel progress')}"><i></i></div>`;
+  ctl.innerHTML = `<div class="rv-row"><button type="button" class="rv-btn" data-a="play" aria-label="${tx('Pause reel')}">${svg('pause')}</button><button type="button" class="rv-btn" data-a="mute" aria-label="${tx('Unmute reel')}">${svg('mute')}</button><button type="button" class="rv-btn" data-a="full" aria-label="${tx('Full screen')}">${svg('full')}</button></div><div class="rv-bar" role="progressbar" aria-label="${tx('Reel progress')}"><i></i></div>`;
   scr.append(v, ctl);
   canvas.style.visibility = 'hidden';            /* keep its size so the monitor does not collapse */
   const play = $('#play'); if (play) play.style.display = 'none';
@@ -59,6 +60,15 @@ function applyReel(url, url2) {
   const toggle = () => { userPaused = !v.paused; if (v.paused) v.play().catch(() => {}); else v.pause(); };
   bPlay.onclick = e => { e.stopPropagation(); toggle(); };
   bMute.onclick = e => { e.stopPropagation(); v.muted = !v.muted; icons(); };
+  /* full screen: the monitor itself where the browser allows it (keeps our own controls), the video's native player on iPhone */
+  ctl.querySelector('[data-a=full]').onclick = e => {
+    e.stopPropagation();
+    const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+    if (fsEl) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
+    const req = scr.requestFullscreen || scr.webkitRequestFullscreen;
+    if (req) req.call(scr); else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();
+    if (v.paused) { userPaused = false; v.play().catch(() => {}); }
+  };
   v.addEventListener('click', toggle);
   ['play', 'pause', 'volumechange'].forEach(ev => v.addEventListener(ev, icons));
   v.addEventListener('timeupdate', () => { fill.style.width = (v.duration ? v.currentTime / v.duration * 100 : 0) + '%'; });
@@ -72,35 +82,77 @@ function applyReel(url, url2) {
   icons();
 }
 
-/* Hero: the showreel replaces the WebGL montage (the montage loop idles while body.reelhero is set). */
-function applyHeroReel(url) {
-  const st = $('.kv-st');
-  if (!st || !url || $('#herovid')) return;
+/* Hero: an Instagram-stories style carousel. One slide per game, each a short clip (the CMS gives every game a PC video and a
+   mobile video; until they are uploaded every slide plays the 7-second cut of the showreel). Tap the left or right edge to go
+   back or forward, press and hold to pause. While it runs, body.stories keeps the generated WebGL montage idle. */
+const REEL7 = { pc: '/reels/showreel-7s.mp4', mobile: '/reels/showreel-7s-mobile.mp4' };
+function applyHeroStories(games, url) {
+  const st = $('.kv-st'), box = $('#stories');
+  if (!st || !box || $('#herovid')) return;
+  const list = (games && games.length ? games : [{ title: 'Gattabara Games' }]);
+  const mq = window.matchMedia('(max-width: 700px)');
+  const srcOf = g => {
+    const own = mq.matches ? (g.heroVideoMobile || g.heroVideoPc) : (g.heroVideoPc || g.heroVideoMobile);
+    return own || (url ? (mq.matches ? REEL7.mobile : REEL7.pc) : '');
+  };
+  if (!list.some(srcOf)) return;               /* nothing to play: keep the generated montage */
+
   const v = document.createElement('video');
   v.id = 'herovid';
-  Object.assign(v, { src: lean(url, 'hero'), muted: true, loop: true, autoplay: true, playsInline: true, preload: 'auto', poster: lean(url, 'poster') });
+  Object.assign(v, { muted: true, playsInline: true, preload: 'auto', poster: url ? lean(url, 'poster') : '' });
   v.setAttribute('aria-hidden', 'true');
-  v.addEventListener('playing', () => { document.body.classList.add('reelhero'); document.body.classList.remove('reelwait'); }, { once: true });
-  /* if the video cannot play (error or too slow), fall back to the generated montage instead of a blank hero */
-  const giveUp = () => document.body.classList.remove('reelwait');
-  v.addEventListener('error', giveUp, { once: true });
-  setTimeout(() => { if (!document.body.classList.contains('reelhero')) giveUp(); }, 12000);
   st.insertBefore(v, $('#kv').nextSibling);
-
-  /* Only decode while the hero is on screen and nothing covers it (press kit, Machine view, menu, tab hidden),
-     otherwise the 1080p video steals the frame budget from scrolling elsewhere. */
-  let inView = true;
+  const bars = $('#stbars'), lb = $('#stlb'), sb = $('#stsb'), pk = $('#stpk');
+  bars.innerHTML = list.map(() => '<span><i></i></span>').join('');
+  const fills = [...bars.querySelectorAll('i')];
+  let cur = -1, held = false, inView = true;
   const covered = () => !!document.querySelector('#dp.open, #machine.open, #fm.open, #modal:not([hidden])');
   const sync = () => {
-    const run = inView && !covered() && !document.hidden;
-    if (run && v.paused) v.play().catch(() => {});
-    else if (!run && !v.paused) v.pause();
+    const run = inView && !covered() && !document.hidden && !held;
+    if (run && v.paused) v.play().catch(() => {}); else if (!run && !v.paused) v.pause();
   };
+  const show = i => {
+    cur = (i + list.length) % list.length;
+    const g = list[cur];
+    fills.forEach((f, k) => { f.style.width = k < cur ? '100%' : '0'; });
+    lb.textContent = (g.title || '').toUpperCase();
+    sb.textContent = g.cardCaption || '';
+    pk.hidden = !document.querySelector(`.gc[data-i="${cur}"]`);
+    pk.textContent = tx('Press kit ↗');
+    const src = srcOf(g);
+    if (src && !v.src.endsWith(src)) v.src = src; else v.currentTime = 0;
+    v.play().catch(() => {});
+    sync();
+  };
+  v.addEventListener('timeupdate', () => { if (cur >= 0 && v.duration) fills[cur].style.width = (v.currentTime / v.duration * 100) + '%'; });
+  v.addEventListener('ended', () => show(cur + 1));
+  v.addEventListener('error', () => { if (cur < 0) { document.body.classList.remove('reelwait'); box.hidden = true; document.body.classList.remove('stories'); } else show(cur + 1); });
+  v.addEventListener('playing', () => { document.body.classList.add('reelhero'); document.body.classList.remove('reelwait'); }, { once: true });
+  mq.addEventListener('change', () => { if (cur >= 0) { v.src = srcOf(list[cur]); sync(); } });
+
+  /* tap an edge: previous / next. Press and hold anywhere on an edge: pause until released. */
+  [[$('#stprev'), -1], [$('#stnext'), 1]].forEach(([el, d]) => {
+    let t0 = 0, timer = 0, long = false;
+    el.addEventListener('pointerdown', () => { t0 = Date.now(); long = false; timer = setTimeout(() => { long = true; held = true; sync(); }, 220); });
+    const up = () => { clearTimeout(timer); if (held) { held = false; sync(); } };
+    el.addEventListener('pointerup', () => { const was = long; up(); if (!was && Date.now() - t0 < 600) show(cur + d); });
+    ['pointerleave', 'pointercancel'].forEach(e => el.addEventListener(e, up));
+  });
+  document.addEventListener('keydown', e => {
+    if (!inView || covered() || /INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName || '')) return;
+    if (e.key === 'ArrowRight') show(cur + 1); else if (e.key === 'ArrowLeft') show(cur - 1);
+  });
+  pk.addEventListener('click', e => { e.stopPropagation(); document.querySelector(`.gc[data-i="${cur}"]`)?.click(); });
+
   new IntersectionObserver(([e]) => { inView = e.isIntersecting; sync(); }, { threshold: 0.05 }).observe(st);
   const mo = new MutationObserver(sync);
   ['#dp', '#machine', '#fm', '#modal'].forEach(q => { const n = $(q); if (n) mo.observe(n, { attributes: true, attributeFilter: ['class', 'hidden'] }); });
   document.addEventListener('visibilitychange', sync);
-  sync();
+  box.hidden = false;
+  document.body.classList.add('stories');
+  const giveUp = () => document.body.classList.remove('reelwait');
+  setTimeout(() => { if (!document.body.classList.contains('reelhero')) giveUp(); }, 12000);
+  show(0);
 }
 
 function applyContact(email) {
@@ -110,7 +162,7 @@ function applyContact(email) {
 
 loadCMS().then(cms => {
   applyClients(clientsOf(cms));
-  applyHeroReel(cms.home?.playReelVideo);
+  applyHeroStories(siteContent()?.games, cms.home?.playReelVideo);
   applyReel(cms.home?.playReelVideo, cms.home?.playReelVideo2);
   applyContact(cms.contact?.email || cms.home?.socials?.email);
 });

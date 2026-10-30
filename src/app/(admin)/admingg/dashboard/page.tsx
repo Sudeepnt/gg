@@ -122,7 +122,7 @@ const TABS: { id: string; label: string; icon: any; blocks: Block[] }[] = [
             factsheet: [{ label: "Developer", value: "Gattabara Games" }, { label: "Based in", value: "Bengaluru, India" }, { label: "Genre", value: "" }, { label: "Players", value: "" },
               { label: "Platforms", value: "To be announced" }, { label: "Release date", value: "To be announced" }, { label: "Status", value: "In development" },
               { label: "Website", value: "gattabaragames.com" }, { label: "Press contact", value: "info@gattabaragames.com" }],
-            shortDescription: "", description: [], features: [], trailer: "", trailerPoster: "", logoBlack: "", logoWhite: "",
+            shortDescription: "", description: [], features: [], heroVideoPc: "", heroVideoMobile: "", trailer: "", trailerPoster: "", logoBlack: "", logoWhite: "",
             screenshots: [1, 2, 3, 4, 5, 6].map((n) => ({ caption: `Frame 0${n}`, image: "" })), promoMain: "", promoVertical: "", promoSmall: "", sealedText: "", summary: "" }),
           fields: [
             { key: "title", label: "Title", type: "text" },
@@ -130,6 +130,8 @@ const TABS: { id: string; label: string; icon: any; blocks: Block[] }[] = [
             { key: "cardCaption", label: "Line under the title (Games card)", type: "text" },
             { key: "code", label: "Press kit code (shown after \u201cPRESS KIT\u201d)", type: "text" },
             { key: "image", label: "Key art", type: "image" },
+            { key: "heroVideoPc", label: "Home carousel \u2192 PC video (wide, 16:9, about 7 seconds)", type: "video", hint: "Plays in this game\u2019s slide of the home-page carousel on computers and tablets. Leave empty to show the sample showreel cut." },
+            { key: "heroVideoMobile", label: "Home carousel \u2192 Mobile video (tall, 9:16, about 7 seconds)", type: "video", hint: "Plays in this game\u2019s slide on phones. Leave empty to use the PC video, or the sample cut." },
             { key: "tags", label: "Tags (comma separated)", type: "tags" },
             { key: "factsheet", label: "Factsheet", type: "rows", addLabel: "Add row", blank: () => ({ label: "", value: "" }), itemLabel: r => r.label || "New row",
               itemFields: [{ key: "label", label: "Label", type: "text" }, { key: "value", label: "Value", type: "text" }] },

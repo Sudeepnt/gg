@@ -53,7 +53,7 @@
       "title": "Pen Fight",
       "code": "PEN-FIGHT",
       "status": "In development",
-      "cardCaption": "Physics duel · Local + online",
+      "cardCaption": "Physics duel \u00b7 Local + online",
       "tags": [
         "Physics",
         "Duel",
@@ -77,7 +77,7 @@
         },
         {
           "label": "Players",
-          "value": "1–2, local and online"
+          "value": "1\u20132, local and online"
         },
         {
           "label": "Platforms",
@@ -155,14 +155,16 @@
       "logoWhite": "",
       "promoMain": "",
       "promoVertical": "",
-      "promoSmall": ""
+      "promoSmall": "",
+      "heroVideoPc": "",
+      "heroVideoMobile": ""
     },
     {
       "id": "auto-rush",
       "title": "Auto Rush",
       "code": "AUTO-RUSH",
       "status": "In development",
-      "cardCaption": "Arcade racer · Single player",
+      "cardCaption": "Arcade racer \u00b7 Single player",
       "tags": [
         "Arcade",
         "Racing",
@@ -263,14 +265,16 @@
       "logoWhite": "",
       "promoMain": "",
       "promoVertical": "",
-      "promoSmall": ""
+      "promoSmall": "",
+      "heroVideoPc": "",
+      "heroVideoMobile": ""
     },
     {
       "id": "classified-01",
       "title": "Classified 01",
       "code": "GG-IP-03",
       "status": "Sealed",
-      "cardCaption": "Flagship · Details withheld",
+      "cardCaption": "Flagship \u00b7 Details withheld",
       "tags": [
         "Flagship",
         "Sealed"
@@ -286,19 +290,19 @@
         },
         {
           "label": "Genre",
-          "value": "—"
+          "value": "\u2014"
         },
         {
           "label": "Players",
-          "value": "—"
+          "value": "\u2014"
         },
         {
           "label": "Platforms",
-          "value": "—"
+          "value": "\u2014"
         },
         {
           "label": "Release date",
-          "value": "—"
+          "value": "\u2014"
         },
         {
           "label": "Status",
@@ -326,14 +330,16 @@
       "logoWhite": "",
       "promoMain": "",
       "promoVertical": "",
-      "promoSmall": ""
+      "promoSmall": "",
+      "heroVideoPc": "",
+      "heroVideoMobile": ""
     },
     {
       "id": "classified-02",
       "title": "Classified 02",
       "code": "GG-IP-04",
       "status": "Sealed",
-      "cardCaption": "Original IP · Details withheld",
+      "cardCaption": "Original IP \u00b7 Details withheld",
       "tags": [
         "Original IP",
         "Sealed"
@@ -349,19 +355,19 @@
         },
         {
           "label": "Genre",
-          "value": "—"
+          "value": "\u2014"
         },
         {
           "label": "Players",
-          "value": "—"
+          "value": "\u2014"
         },
         {
           "label": "Platforms",
-          "value": "—"
+          "value": "\u2014"
         },
         {
           "label": "Release date",
-          "value": "—"
+          "value": "\u2014"
         },
         {
           "label": "Status",
@@ -389,7 +395,9 @@
       "logoWhite": "",
       "promoMain": "",
       "promoVertical": "",
-      "promoSmall": ""
+      "promoSmall": "",
+      "heroVideoPc": "",
+      "heroVideoMobile": ""
     }
   ],
   "pressKit": {
@@ -429,7 +437,7 @@
     "people": [
       {
         "role": "Combat designer",
-        "city": "Kraków",
+        "city": "Krak\u00f3w",
         "lat": 50.06,
         "lon": 19.94,
         "discipline": "Combat",
@@ -438,7 +446,7 @@
       },
       {
         "role": "Combat animator",
-        "city": "Montréal",
+        "city": "Montr\u00e9al",
         "lat": 45.5,
         "lon": -73.57,
         "discipline": "Combat",
@@ -528,7 +536,7 @@
       },
       {
         "role": "Environment artist",
-        "city": "Bogotá",
+        "city": "Bogot\u00e1",
         "lat": 4.71,
         "lon": -74.07,
         "discipline": "3D Modeling",
@@ -576,34 +584,34 @@
   "heroCaptions": [
     {
       "label": "Pen Fight",
-      "sub": "Original IP · In development"
+      "sub": "Original IP \u00b7 In development"
     },
     {
       "label": "Auto Rush",
-      "sub": "Original IP · In development"
+      "sub": "Original IP \u00b7 In development"
     },
     {
-      "label": "Pen Fight × Auto Rush",
+      "label": "Pen Fight \u00d7 Auto Rush",
       "sub": "Two worlds in production"
     },
     {
       "label": "Classified 01",
-      "sub": "Sealed · Flagship"
+      "sub": "Sealed \u00b7 Flagship"
     },
     {
       "label": "The slate",
-      "sub": "Four titles · One standard"
+      "sub": "Four titles \u00b7 One standard"
     },
     {
       "label": "Classified 02",
-      "sub": "Sealed · A comedy with teeth"
+      "sub": "Sealed \u00b7 A comedy with teeth"
     },
     {
       "label": "GG Productions",
-      "sub": "Global roster · On call"
+      "sub": "Global roster \u00b7 On call"
     },
     {
-      "label": "Roster × Flagship",
+      "label": "Roster \u00d7 Flagship",
       "sub": "Services feed the slate"
     },
     {
@@ -612,7 +620,7 @@
     },
     {
       "label": "Gattabara Games",
-      "sub": "Bengaluru · For the world"
+      "sub": "Bengaluru \u00b7 For the world"
     }
   ],
   "texts": {},
@@ -746,7 +754,7 @@
       "We are early. We think that is an advantage."
     ],
     "signature": "The Founding Partners",
-    "signatureLine": "Gattabara Games LLP · Bengaluru · October 2026"
+    "signatureLine": "Gattabara Games LLP \u00b7 Bengaluru \u00b7 October 2026"
   },
   "leadership": [
     {
@@ -867,7 +875,7 @@
       "collabPublishing": "Go-To-Market & Publishing Support",
       "collabPublishingDesc": "Gattabara supports release, distribution, marketing, and launch strategy while you retain creative authorship.",
       "description": "Short Project Description",
-      "descriptionHint": "(Tell us what you’re building, why it matters, and what makes it distinct.)",
+      "descriptionHint": "(Tell us what you\u2019re building, why it matters, and what makes it distinct.)",
       "totalBudget": "Total Project Budget (USD)",
       "totalBudgetHint": "(The estimated total cost to ship the project, including any spend to date.)",
       "budgetAsk": "Collaboration Budget Ask (USD)",
@@ -982,10 +990,10 @@
     "tag": "PRESS KIT",
     "release": "Release date:",
     "insider": "Join the insider list",
-    "downloadAll": "↓ Download all media (.zip)",
+    "downloadAll": "\u2193 Download all media (.zip)",
     "inquiry": "Press inquiry",
     "fact": "Factsheet",
-    "factDl": "↓ Factsheet .md",
+    "factDl": "\u2193 Factsheet .md",
     "descTitle": "Description",
     "short": "Short description",
     "descLabel": "Description",
@@ -1003,43 +1011,43 @@
     "embargoText": "Media embargoed until reveal day",
     "trailer": "Trailer",
     "comingSoonTag": "COMING SOON",
-    "comingSoonText": "Trailer · coming soon",
+    "comingSoonText": "Trailer \u00b7 coming soon",
     "logo": "Logo",
-    "logoSpec": "TRANSPARENT PNG · 1600×640",
+    "logoSpec": "TRANSPARENT PNG \u00b7 1600\u00d7640",
     "black": "Black",
     "white": "White",
     "screenshots": "Screenshots",
-    "screenshotSpec": "PNG · 1920×1080",
+    "screenshotSpec": "PNG \u00b7 1920\u00d71080",
     "promo": "Promo graphics",
     "promoSpec": "STORE CAPSULES",
     "cap_main": "Main capsule",
     "cap_vertical": "Vertical capsule",
     "cap_small": "Small capsule",
-    "note": "※ Images are key visuals from our halftone renderer until final in-game captures are released.",
-    "dlPng": "↓ PNG",
-    "dlFile": "↓ File",
+    "note": "\u203b Images are key visuals from our halftone renderer until final in-game captures are released.",
+    "dlPng": "\u2193 PNG",
+    "dlFile": "\u2193 File",
     "about": "About the developer",
-    "logoWhiteBtn": "↓ Logo (white)",
-    "logoBlackBtn": "↓ Logo (black)",
+    "logoWhiteBtn": "\u2193 Logo (white)",
+    "logoBlackBtn": "\u2193 Logo (black)",
     "contact": "Contact",
     "others": "Other titles",
     "pressKitWord": "Press kit"
   },
   "clientsPage": {
     "ctaTitle": "Your studio",
-    "ctaText": "Start a brief →"
+    "ctaText": "Start a brief \u2192"
   },
   "heroHud": {
     "play": "PLAY",
     "pause": "PAUSE",
     "clip": "CLIP",
-    "pressKit": "Press kit ↗"
+    "pressKit": "Press kit \u2197"
   },
   "networkCall": {
-    "ring": "Incoming call…",
-    "missed": "Missed · tap to return",
+    "ring": "Incoming call\u2026",
+    "missed": "Missed \u00b7 tap to return",
     "connected": "Connected",
-    "ended": "Call ended · tap to call back",
+    "ended": "Call ended \u00b7 tap to call back",
     "idle": "Line idle",
     "onCall": "On call",
     "standby": "Standby"
