@@ -136,10 +136,9 @@ function applyHeroStories(games, slides) {
   if (!st || !box || window.__ggStories) return;
   window.__ggStories = true;
   const mq = window.matchMedia('(max-width: 700px)');
-  const gi = name => (games || []).findIndex(g => (g.title || '').trim().toLowerCase() === String(name || '').trim().toLowerCase());
   let list = (slides || []).filter(x => x && (x.pc || x.mobile)).map(x => {
-    const i = x.game ? gi(x.game) : -1;
-    return { title: x.title || (i >= 0 ? games[i].title : x.game) || '', cardCaption: x.caption || '', pc: x.pc, mobile: x.mobile, i, pk: i >= 0 && !games[i].noPressKit };
+    /* slides are standalone: nothing here reads the Games list, so editing games never changes the carousel */
+    return { title: x.title || '', cardCaption: x.caption || '', pc: x.pc, mobile: x.mobile, i: -1, pk: false };
   });
   if (!list.length) return;                    /* nothing to play: keep the generated montage */
   const srcOf = g => (mq.matches ? (g.mobile || g.pc) : (g.pc || g.mobile));

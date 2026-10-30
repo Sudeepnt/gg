@@ -16,27 +16,12 @@ export const BACKUP_KEY = "site_backup";
 export const bundledContent = bundled as Record<string, any>;
 
 const isObj = (v: unknown): v is Record<string, any> => !!v && typeof v === "object" && !Array.isArray(v);
-/* Lists replace each other, except the games: a game list saved before the home carousel existed keeps working.
-   Per game, noPressKit comes from the bundled game with the same id when the saved copy never had it, and bundled games that
-   the bundled carousel slides point at, but that are missing from the saved list, are added. Once the admin saves, the saved
-   copy has everything and always wins. */
-function mergeGames(base: any[], over: any[], slides: any[]): any[] {
-  const byId = new Map(base.map((g) => [g?.id, g]));
-  const out = over.map((g) => {
-    const b = byId.get(g?.id);
-    if (!b || !isObj(g)) return g;
-    return g.noPressKit === undefined && b.noPressKit !== undefined ? { ...g, noPressKit: b.noPressKit } : g;
-  });
-  const have = new Set(over.map((g) => g?.id));
-  const used = new Set((slides || []).map((x) => String(x?.game || "").toLowerCase()).filter(Boolean));
-  for (const b of base) if (!have.has(b?.id) && used.has(String(b?.title || "").toLowerCase())) out.push(b);
-  return out;
-}
+/* Lists always replace each other: every section (games, carousel slides, news...) is edited on its own and never fills in from another. */
 export function mergeContent(base: any, over: any): any {
   if (!isObj(base) || !isObj(over)) return over === undefined ? base : over;
   const out: Record<string, any> = { ...base };
   for (const k of Object.keys(over)) out[k] = isObj(base[k]) && isObj(over[k]) ? mergeContent(base[k], over[k])
-    : k === "games" && Array.isArray(base[k]) && Array.isArray(over[k]) ? mergeGames(base[k], over[k], base.heroSlides) : over[k];
+    : over[k];
   return out;
 }
 

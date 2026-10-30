@@ -96,11 +96,10 @@ const TABS: { id: string; label: string; icon: any; blocks: Block[] }[] = [
         { kind: "object", path: "heroHud", title: "Hero: small labels on the screen", fields: [
             { key: "play", label: "PLAY (state shown while playing)", type: "text" }, { key: "pause", label: "PAUSE (state shown when paused)", type: "text" },
             { key: "clip", label: "CLIP (before the clip number)", type: "text" }, { key: "pressKit", label: "Press kit \u2197 (button on game captions)", type: "text" }] },
-        { kind: "list", path: "heroSlides", title: "Home carousel \u2192 slides (in this order)", addLabel: "Add slide", label: x => (x.title || x.game || "New slide") + (x.caption ? " \u00b7 " + x.caption : ""),
-          blank: () => ({ game: "", title: "", caption: "", pc: "", mobile: "" }),
+        { kind: "list", path: "heroSlides", title: "Home carousel \u2192 slides (in this order)", addLabel: "Add slide", label: x => (x.title || "New slide") + (x.caption ? " \u00b7 " + x.caption : ""),
+          blank: () => ({ title: "", caption: "", pc: "", mobile: "" }),
           fields: [
-            { key: "game", label: "Game (links the Press kit button; pick \u201cnone\u201d for a slide like the showreel)", type: "select", options: "games" },
-            { key: "title", label: "Name shown on the slide (white tag)", type: "text", hint: "Leave empty to use the game\u2019s name." },
+            { key: "title", label: "Name shown on the slide (white tag)", type: "text", hint: "Free text, independent of the Games section." },
             { key: "caption", label: "Small text next to the name", type: "text" },
             { key: "pc", label: "PC video (16:9, about 7 seconds)", type: "video", hint: "Plays on computers and tablets." },
             { key: "mobile", label: "Mobile video (9:16, about 7 seconds)", type: "video", hint: "Plays on phones. Leave empty to use the PC video." }] },
@@ -141,7 +140,7 @@ const TABS: { id: string; label: string; icon: any; blocks: Block[] }[] = [
             { key: "cardCaption", label: "Line under the title (Games card)", type: "text" },
             { key: "code", label: "Press kit code (shown after \u201cPRESS KIT\u201d)", type: "text" },
             { key: "image", label: "Key art", type: "image" },
-            { key: "noPressKit", label: "Hide the press kit for now", type: "toggle", hint: "On: the game card is not clickable and its home-carousel slides show no Press kit button." },
+            { key: "noPressKit", label: "Hide the press kit for now", type: "toggle", hint: "On: the game card is not clickable." },
             { key: "tags", label: "Tags (comma separated)", type: "tags" },
             { key: "factsheet", label: "Factsheet", type: "rows", addLabel: "Add row", blank: () => ({ label: "", value: "" }), itemLabel: r => r.label || "New row",
               itemFields: [{ key: "label", label: "Label", type: "text" }, { key: "value", label: "Value", type: "text" }] },

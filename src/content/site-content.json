@@ -463,7 +463,7 @@
       "id": "puk-puk",
       "title": "Puk Puk Puk",
       "code": "PUK-PUK-PUK",
-      "status": "In development",
+      "status": "In co-development",
       "cardCaption": "Details soon",
       "tags": [
         "Puk Puk Puk"
@@ -521,7 +521,8 @@
       "promoMain": "",
       "promoVertical": "",
       "promoSmall": "",
-      "noPressKit": true
+      "noPressKit": true,
+      "collaboratingWith": []
     },
     {
       "id": "gattabara",
@@ -1247,53 +1248,34 @@
   "uiText": {},
   "heroSlides": [
     {
-      "game": "",
       "title": "GG Productions",
       "caption": "Showreel",
       "pc": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/gg-productions-pc.mp4",
       "mobile": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/gg-productions-mobile.mp4"
     },
     {
-      "game": "Project V",
-      "title": "",
+      "title": "Project V",
       "caption": "Environment",
       "pc": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-environment-pc.mp4",
       "mobile": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-environment-mobile.mp4"
     },
     {
-      "game": "Project V",
-      "title": "",
+      "title": "Project V",
       "caption": "Character 01",
       "pc": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-character-pc.mp4",
       "mobile": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-character-mobile.mp4"
     },
     {
-      "game": "Project V",
-      "title": "",
+      "title": "Project V",
       "caption": "Character 02",
       "pc": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-character2-pc.mp4",
       "mobile": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-character2-mobile.mp4"
     },
     {
-      "game": "Puk Puk Puk",
-      "title": "",
+      "title": "Puk Puk Puk",
       "caption": "Gameplay",
       "pc": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-pukpuk-pc.mp4",
       "mobile": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-pukpuk-mobile.mp4"
-    },
-    {
-      "game": "Pen Fight",
-      "title": "",
-      "caption": "Gameplay",
-      "pc": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-penfight-pc.mp4",
-      "mobile": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-penfight-mobile.mp4"
-    },
-    {
-      "game": "Gattabara",
-      "title": "",
-      "caption": "Gameplay",
-      "pc": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-gattabara-pc.mp4",
-      "mobile": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/site/videos/hero/v-gattabara-mobile.mp4"
     }
   ]
 }
