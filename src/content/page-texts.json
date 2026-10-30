@@ -18,12 +18,6 @@
   "text": "NEWS"
  },
  {
-  "key": "Header::PHILOSOPHY",
-  "group": "Header",
-  "label": "Text",
-  "text": "PHILOSOPHY"
- },
- {
   "key": "Header::GAMES",
   "group": "Header",
   "label": "Text",
@@ -40,12 +34,6 @@
   "group": "Header",
   "label": "Text",
   "text": "GG PRODUCTIONS"
- },
- {
-  "key": "Header::COMPANY",
-  "group": "Header",
-  "label": "Text",
-  "text": "COMPANY"
  },
  {
   "key": "Header::RECRUIT",
@@ -228,42 +216,6 @@
   "text": "View all news"
  },
  {
-  "key": "Philosophy::Philosophy",
-  "group": "Philosophy",
-  "label": "Heading",
-  "text": "Philosophy"
- },
- {
-  "key": "Philosophy::Mission · Vision · Values",
-  "group": "Philosophy",
-  "label": "Paragraph",
-  "text": "Mission · Vision · Values"
- },
- {
-  "key": "Philosophy::MISSION",
-  "group": "Philosophy",
-  "label": "Bold text",
-  "text": "MISSION"
- },
- {
-  "key": "Philosophy::VISION",
-  "group": "Philosophy",
-  "label": "Bold text",
-  "text": "VISION"
- },
- {
-  "key": "Philosophy::VALUES",
-  "group": "Philosophy",
-  "label": "Bold text",
-  "text": "VALUES"
- },
- {
-  "key": "Philosophy::FROM THE STUDIO HANDBOOK",
-  "group": "Philosophy",
-  "label": "Text",
-  "text": "FROM THE STUDIO HANDBOOK"
- },
- {
   "key": "Games::Games",
   "group": "Games",
   "label": "Heading",
@@ -300,10 +252,10 @@
   "text": "Business"
  },
  {
-  "key": "Business::Three lines of work",
+  "key": "Business::Who we are, what we do",
   "group": "Business",
   "label": "Paragraph",
-  "text": "Three lines of work"
+  "text": "Who we are, what we do"
  },
  {
   "key": "Business::Gattabara works along three lines. Each runs on the same craft, the same rules and the same core team.",
@@ -346,6 +298,66 @@
   "group": "Business",
   "label": "Paragraph",
   "text": "Our services arm. Development, art and strategy for studios worldwide, with clear milestones and transparent delivery."
+ },
+ {
+  "key": "Business::Philosophy",
+  "group": "Business",
+  "label": "Paragraph",
+  "text": "Philosophy"
+ },
+ {
+  "key": "Business::Mission · Vision · Values",
+  "group": "Business",
+  "label": "Heading",
+  "text": "Mission · Vision · Values"
+ },
+ {
+  "key": "Business::MISSION",
+  "group": "Business",
+  "label": "Bold text",
+  "text": "MISSION"
+ },
+ {
+  "key": "Business::VISION",
+  "group": "Business",
+  "label": "Bold text",
+  "text": "VISION"
+ },
+ {
+  "key": "Business::VALUES",
+  "group": "Business",
+  "label": "Bold text",
+  "text": "VALUES"
+ },
+ {
+  "key": "Business::FROM THE STUDIO HANDBOOK",
+  "group": "Business",
+  "label": "Text",
+  "text": "FROM THE STUDIO HANDBOOK"
+ },
+ {
+  "key": "Business::Message",
+  "group": "Business",
+  "label": "Paragraph",
+  "text": "Message"
+ },
+ {
+  "key": "Business::From the founding partners",
+  "group": "Business",
+  "label": "Heading",
+  "text": "From the founding partners"
+ },
+ {
+  "key": "Business::Leadership",
+  "group": "Business",
+  "label": "Paragraph",
+  "text": "Leadership"
+ },
+ {
+  "key": "Business::The team accountable",
+  "group": "Business",
+  "label": "Heading",
+  "text": "The team accountable"
  },
  {
   "key": "GG Productions::GG Productions",
@@ -462,100 +474,76 @@
   "text": "The work ships and the squad stands down. No bench on your invoice."
  },
  {
-  "key": "Network::Network",
-  "group": "Network",
+  "key": "GG Productions::Clients",
+  "group": "GG Productions",
+  "label": "Paragraph",
+  "text": "Clients"
+ },
+ {
+  "key": "GG Productions::Studios we have built with",
+  "group": "GG Productions",
   "label": "Heading",
+  "text": "Studios we have built with"
+ },
+ {
+  "key": "GG Productions::Studios that have trusted us with their games, through GG Productions.",
+  "group": "GG Productions",
+  "label": "Paragraph",
+  "text": "Studios that have trusted us with their games, through GG Productions."
+ },
+ {
+  "key": "GG Productions::Network",
+  "group": "GG Productions",
+  "label": "Paragraph",
   "text": "Network"
  },
  {
-  "key": "Network::A world on call",
-  "group": "Network",
-  "label": "Paragraph",
+  "key": "GG Productions::A world on call",
+  "group": "GG Productions",
+  "label": "Heading",
   "text": "A world on call"
  },
  {
-  "key": "Network::A core team in Bengaluru. A world on call. Around our leads is a vetted roster of specialist contractors, activated for the discipline and quality bar each brief needs, then stood down when the work ships.",
-  "group": "Network",
+  "key": "GG Productions::A core team in Bengaluru. A world on call. Around our leads is a vetted roster of specialist contractors, activated for the discipline and quality bar each brief needs, then stood down when the work ships.",
+  "group": "GG Productions",
   "label": "Paragraph",
   "text": "A core team in Bengaluru. A world on call. Around our leads is a vetted roster of specialist contractors, activated for the discipline and quality bar each brief needs, then stood down when the work ships."
  },
  {
-  "key": "Network::Global roster",
-  "group": "Network",
+  "key": "GG Productions::Global roster",
+  "group": "GG Productions",
   "label": "Bold text",
   "text": "Global roster"
  },
  {
-  "key": "Network::Specialists",
-  "group": "Network",
+  "key": "GG Productions::Specialists",
+  "group": "GG Productions",
   "label": "Text",
   "text": "Specialists"
  },
  {
-  "key": "Network::Cities",
-  "group": "Network",
+  "key": "GG Productions::Cities",
+  "group": "GG Productions",
   "label": "Text",
   "text": "Cities"
  },
  {
-  "key": "Network::Disciplines",
-  "group": "Network",
+  "key": "GG Productions::Disciplines",
+  "group": "GG Productions",
   "label": "Text",
   "text": "Disciplines"
  },
  {
-  "key": "Network::ORIGIN · BENGALURU",
-  "group": "Network",
+  "key": "GG Productions::ORIGIN · BENGALURU",
+  "group": "GG Productions",
   "label": "Paragraph",
   "text": "ORIGIN · BENGALURU"
  },
  {
-  "key": "Network::SAMPLE ROSTER · 15 LINKS",
-  "group": "Network",
+  "key": "GG Productions::SAMPLE ROSTER · 15 LINKS",
+  "group": "GG Productions",
   "label": "Paragraph",
   "text": "SAMPLE ROSTER · 15 LINKS"
- },
- {
-  "key": "Message::Message",
-  "group": "Message",
-  "label": "Heading",
-  "text": "Message"
- },
- {
-  "key": "Message::From the founding partners",
-  "group": "Message",
-  "label": "Paragraph",
-  "text": "From the founding partners"
- },
- {
-  "key": "Leadership::Leadership",
-  "group": "Leadership",
-  "label": "Heading",
-  "text": "Leadership"
- },
- {
-  "key": "Leadership::The team accountable",
-  "group": "Leadership",
-  "label": "Paragraph",
-  "text": "The team accountable"
- },
- {
-  "key": "Clients::Clients",
-  "group": "Clients",
-  "label": "Heading",
-  "text": "Clients"
- },
- {
-  "key": "Clients::Studios we have built with",
-  "group": "Clients",
-  "label": "Paragraph",
-  "text": "Studios we have built with"
- },
- {
-  "key": "Clients::Studios that have trusted us with their games, through GG Productions.",
-  "group": "Clients",
-  "label": "Paragraph",
-  "text": "Studios that have trusted us with their games, through GG Productions."
  },
  {
   "key": "Recruit::Recruit",
@@ -636,12 +624,6 @@
   "text": "COMPANY"
  },
  {
-  "key": "Footer::Philosophy",
-  "group": "Footer",
-  "label": "Link / button",
-  "text": "Philosophy"
- },
- {
   "key": "Footer::Business",
   "group": "Footer",
   "label": "Link / button",
@@ -652,30 +634,6 @@
   "group": "Footer",
   "label": "Link / button",
   "text": "GG Productions"
- },
- {
-  "key": "Footer::Network",
-  "group": "Footer",
-  "label": "Link / button",
-  "text": "Network"
- },
- {
-  "key": "Footer::Message",
-  "group": "Footer",
-  "label": "Link / button",
-  "text": "Message"
- },
- {
-  "key": "Footer::Leadership",
-  "group": "Footer",
-  "label": "Link / button",
-  "text": "Leadership"
- },
- {
-  "key": "Footer::Clients",
-  "group": "Footer",
-  "label": "Link / button",
-  "text": "Clients"
  },
  {
   "key": "Footer::JOIN",
@@ -718,6 +676,18 @@
   "group": "Footer",
   "label": "Text",
   "text": "© 2026 Gattabara Games LLP. All rights reserved."
+ },
+ {
+  "key": "Footer::Privacy Policy",
+  "group": "Footer",
+  "label": "Link / button",
+  "text": "Privacy Policy"
+ },
+ {
+  "key": "Footer::Cookie settings",
+  "group": "Footer",
+  "label": "Link / button",
+  "text": "Cookie settings"
  },
  {
   "key": "Footer::Bengaluru · India",
@@ -902,13 +872,6 @@
   "attr": "aria-label"
  },
  {
-  "key": "Philosophy::[data-name] PHILOSOPHY",
-  "group": "Philosophy",
-  "label": "Section name (window bar and side rail)",
-  "text": "PHILOSOPHY",
-  "attr": "data-name"
- },
- {
   "key": "Games::[data-name] GAMES",
   "group": "Games",
   "label": "Section name (window bar and side rail)",
@@ -951,46 +914,18 @@
   "attr": "aria-label"
  },
  {
-  "key": "Network::[data-name] NETWORK",
-  "group": "Network",
-  "label": "Section name (window bar and side rail)",
-  "text": "NETWORK",
-  "attr": "data-name"
- },
- {
-  "key": "Network::[aria-label] Answer the call to open the contractor roster",
-  "group": "Network",
+  "key": "GG Productions::[aria-label] Answer the call to open the contractor roster",
+  "group": "GG Productions",
   "label": "Screen-reader label",
   "text": "Answer the call to open the contractor roster",
   "attr": "aria-label"
  },
  {
-  "key": "Network::[aria-label] Globe showing roster cities linked to Bengaluru",
-  "group": "Network",
+  "key": "GG Productions::[aria-label] Globe showing roster cities linked to Bengaluru",
+  "group": "GG Productions",
   "label": "Screen-reader label",
   "text": "Globe showing roster cities linked to Bengaluru",
   "attr": "aria-label"
- },
- {
-  "key": "Message::[data-name] MESSAGE",
-  "group": "Message",
-  "label": "Section name (window bar and side rail)",
-  "text": "MESSAGE",
-  "attr": "data-name"
- },
- {
-  "key": "Leadership::[data-name] LEADERSHIP",
-  "group": "Leadership",
-  "label": "Section name (window bar and side rail)",
-  "text": "LEADERSHIP",
-  "attr": "data-name"
- },
- {
-  "key": "Clients::[data-name] CLIENTS",
-  "group": "Clients",
-  "label": "Section name (window bar and side rail)",
-  "text": "CLIENTS",
-  "attr": "data-name"
  },
  {
   "key": "Recruit::[data-name] RECRUIT",
