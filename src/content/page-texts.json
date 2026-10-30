@@ -672,12 +672,6 @@
   "text": "Machine view"
  },
  {
-  "key": "Footer::Gattabara",
-  "group": "Footer",
-  "label": "Paragraph",
-  "text": "Gattabara"
- },
- {
   "key": "Footer::© 2026 Gattabara Games LLP. All rights reserved.",
   "group": "Footer",
   "label": "Text",

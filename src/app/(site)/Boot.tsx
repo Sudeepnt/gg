@@ -17,7 +17,6 @@ export default function Boot() {
       await import("../../app.js");
       await cms;
       await import("../../pitch.js");
-      await import("../../footer-particles.js");
     })();
   }, []);
   return null;

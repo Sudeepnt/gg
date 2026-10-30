@@ -658,7 +658,6 @@ if(FINE&&!RM){const SEL='.gnav a .e,.hd-ct,.more>span:not(.ci),.btn,.fsm a,.fsm 
     scramble(t,t.textContent,300);setTimeout(()=>{t.style.minWidth=t.style.maxWidth=t.style.overflow=t.style.whiteSpace='';if(disp==='inline')t.style.display='';t._sc=0},360)})}
 (function(){const c=$('#clk');if(!c)return;const f=()=>{try{c.textContent=tx('BLR')+' '+new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date())+' '+tx('IST')}catch(e){}};f();setInterval(f,1000)})();
 (function(){const L=['GG-OS 2.6 · NODE BLR-01','MEM OK · GPU OK · ROSTER ONLINE','MOUNT /WORLDS ........ OK'].map(tx);const b=$('#bios');if(!b||RM)return;let i=0;const all=L.join('\n');(function t(){i+=3;b.textContent=all.slice(0,i);if(i<all.length)setTimeout(t,14)})()})();
-(function(){const f=$('#fwm');if(!f||RM)return;let vis=false;new IntersectionObserver(e=>vis=e[0].isIntersecting).observe(f);setInterval(()=>{if(!vis||document.hidden)return;f.classList.remove('gx');void f.offsetWidth;f.classList.add('gx')},6200)})();
 
 /* ================= WINDOW STACK ENGINE ================= */
 const WINS=$$('main .win');const MOBQ=()=>innerWidth<761;const HHq=()=>$('#hd').offsetHeight;
@@ -697,7 +696,7 @@ function onScroll(){frame()}
 $('#ptop').onclick=()=>go('top');
 
 /* footer wordmark fit */
-function fit(){[$('#fwm'),...$$('.sh h2'),...$$('.dp-kv h1')].forEach(el=>{if(!el)return;el.style.fontSize='';const w=Math.max(...[...el.querySelectorAll('.wd')].map(x=>x.scrollWidth),el.scrollWidth),a=el.clientWidth;if(w>a+1)el.style.fontSize=(parseFloat(getComputedStyle(el).fontSize)*a/w*.97)+'px'})}addEventListener('resize',fit);try{document.fonts.ready.then(fit)}catch(e){}setTimeout(fit,1500);
+function fit(){[...$$('.sh h2'),...$$('.dp-kv h1')].forEach(el=>{if(!el)return;el.style.fontSize='';const w=Math.max(...[...el.querySelectorAll('.wd')].map(x=>x.scrollWidth),el.scrollWidth),a=el.clientWidth;if(w>a+1)el.style.fontSize=(parseFloat(getComputedStyle(el).fontSize)*a/w*.97)+'px'})}addEventListener('resize',fit);try{document.fonts.ready.then(fit)}catch(e){}setTimeout(fit,1500);
 
 /* cursor */
 addEventListener('pointermove',e=>{G.mx=e.clientX/innerWidth*2-1;G.my=e.clientY/innerHeight*2-1;const f=$('#float');if(f.classList.contains('on'))f.style.transform=`translate(${e.clientX+24}px,${e.clientY-90}px)`},{passive:true});
