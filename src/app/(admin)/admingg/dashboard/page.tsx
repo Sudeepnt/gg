@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
     Home, Newspaper, Gamepad2, BookOpen, Clapperboard, Mail, Users, Building2, Briefcase, Send, Phone, Globe, Type, Search, ChevronDown, Sun, Moon, Inbox, ClipboardList, RefreshCw, Paperclip, History,
-    Save, LogOut, Download, UploadCloud, Plus, Trash2, ArrowUp, ArrowDown, Loader2, Check, X, Image as ImageIcon, Film,
+    Shield, Save, LogOut, Download, UploadCloud, Plus, Trash2, ArrowUp, ArrowDown, Loader2, Check, X, Image as ImageIcon, Film,
 } from "lucide-react";
 import pageTexts from "@/content/page-texts.json";
 import { UI_STRINGS } from "@/content/uiStrings.js";
@@ -239,6 +239,23 @@ const TABS: { id: string; label: string; icon: any; blocks: Block[] }[] = [
         { kind: "object", path: "contact", title: "Footer and contact details (shown in the footer and under the form)", fields: [
             { key: "tagline", label: "Footer line", type: "text" }, { key: "company", label: "Company name", type: "text" },
             { key: "address", label: "Address", type: "text" }, { key: "email", label: "Email address", type: "text" }] }] },
+    { id: "privacy", label: "Privacy policy", icon: Shield, blocks: [
+        { kind: "object", path: "privacy", title: "Privacy policy page: heading", fields: [
+            { key: "kicker", label: "Small label above the title", type: "text" }, { key: "title", label: "Title", type: "text" },
+            { key: "updated", label: "Date line", type: "text", hint: "For example: Last updated 30 October 2026. Change it whenever you edit the policy." },
+            { key: "lead", label: "Introduction", type: "textarea" }, { key: "tocTitle", label: "Heading of the contents box", type: "text" },
+            { key: "backLink", label: "\u201cBack to site\u201d button", type: "text" }, { key: "cookieLabel", label: "\u201cCookie settings\u201d wording", type: "text", hint: "Used for the link at the bottom of the page and wherever you write {{cookie-settings}}." }] },
+        { kind: "list", path: "privacy.sections", title: "Privacy policy page: sections (in this order, numbered automatically)", addLabel: "Add section", label: x => x.title || "New section", blank: () => ({ title: "", body: "" }),
+          fields: [{ key: "title", label: "Section title", type: "text" },
+            { key: "body", label: "Text", type: "textarea", hint: "Leave a blank line between paragraphs. Start every line with \u201c- \u201d for a bullet list. For a table, write one row per line with \u201c | \u201d between the columns; the first line is the header. **bold**, [link text](https://example.com) and [email](mailto:name@site.com) work. {{cookie-settings}} adds a button that reopens the cookie popup." }] },
+        { kind: "object", path: "cookieBanner", title: "Cookie popup (shown to every new visitor)", fields: [
+            { key: "kicker", label: "Small label", type: "text" }, { key: "title", label: "Title", type: "text" },
+            { key: "text", label: "Text", type: "textarea" }, { key: "policyLink", label: "Link to the privacy policy", type: "text" },
+            { key: "accept", label: "Accept button", type: "text" }, { key: "reject", label: "Reject button", type: "text" },
+            { key: "customise", label: "Customise button", type: "text" }, { key: "save", label: "Save choices button", type: "text" },
+            { key: "necessaryTitle", label: "Necessary: title", type: "text" }, { key: "necessaryText", label: "Necessary: text", type: "text" },
+            { key: "analyticsTitle", label: "Analytics: title", type: "text" }, { key: "analyticsText", label: "Analytics: text", type: "text" },
+            { key: "marketingTitle", label: "Marketing: title", type: "text" }, { key: "marketingText", label: "Marketing: text", type: "text" }] }] },
     { id: "texts", label: "All other text", icon: Type, blocks: [{ kind: "pagetext" }, { kind: "uitext", title: "Pop-ups, loading screen, Machine view and other wording the page builds itself" }] },
 ];
 

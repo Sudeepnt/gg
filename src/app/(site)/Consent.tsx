@@ -29,7 +29,19 @@ function save(analytics: boolean, marketing: boolean) {
   window.dispatchEvent(new CustomEvent("gg:consent", { detail: c }));
 }
 
-export default function Consent() {
+const DEF = {
+  kicker: "Cookies & privacy", title: "Your choice",
+  text: "We use a small amount of storage that the site needs to work. With your permission we would also use analytics and marketing cookies. Nothing optional is switched on until you say so.",
+  policyLink: "Read our Privacy Policy", accept: "Accept all", reject: "Reject all", customise: "Customise", save: "Save my choices",
+  necessaryTitle: "Necessary", necessaryText: "Remembers this choice and small interface settings. Always on.",
+  analyticsTitle: "Analytics", analyticsText: "Helps us understand how the site is used, so we can improve it.",
+  marketingTitle: "Marketing", marketingText: "Used to measure and show our own campaigns on other sites.",
+};
+type Text = typeof DEF;
+
+/* wording comes from the CMS (admin -> Privacy policy -> Cookie popup); anything left empty falls back to the default */
+export default function Consent({ text }: { text?: Partial<Text> }) {
+  const T = { ...DEF, ...Object.fromEntries(Object.entries(text || {}).filter(([, v]) => typeof v === "string" && v.trim())) } as Text;
   const [open, setOpen] = useState(false);
   const [detail, setDetail] = useState(false);
   const [an, setAn] = useState(false);
@@ -60,34 +72,31 @@ export default function Consent() {
   if (!open) return null;
   return (
     <div className="ck" role="dialog" aria-modal="false" aria-labelledby="ck-t" data-lenis-prevent>
-      <p className="ck-k">Cookies &amp; privacy</p>
-      <h2 id="ck-t">Your choice</h2>
-      <p className="ck-p">
-        We use a small amount of storage that the site needs to work. With your permission we would also use analytics and marketing cookies.
-        Nothing optional is switched on until you say so. Read our <a href="/privacy-policy">Privacy Policy</a>.
-      </p>
+      <p className="ck-k">{T.kicker}</p>
+      <h2 id="ck-t">{T.title}</h2>
+      <p className="ck-p">{T.text} <a href="/privacy-policy">{T.policyLink}</a>.</p>
       {detail && (
         <div className="ck-list">
           <label className="ck-row">
-            <span><b>Necessary</b><small>Remembers this choice and small interface settings. Always on.</small></span>
-            <input type="checkbox" checked disabled aria-label="Necessary, always on" />
+            <span><b>{T.necessaryTitle}</b><small>{T.necessaryText}</small></span>
+            <input type="checkbox" checked disabled aria-label={T.necessaryTitle} />
           </label>
           <label className="ck-row">
-            <span><b>Analytics</b><small>Helps us understand how the site is used, so we can improve it.</small></span>
+            <span><b>{T.analyticsTitle}</b><small>{T.analyticsText}</small></span>
             <input type="checkbox" checked={an} onChange={(e) => setAn(e.target.checked)} />
           </label>
           <label className="ck-row">
-            <span><b>Marketing</b><small>Used to measure and show our own campaigns on other sites.</small></span>
+            <span><b>{T.marketingTitle}</b><small>{T.marketingText}</small></span>
             <input type="checkbox" checked={mk} onChange={(e) => setMk(e.target.checked)} />
           </label>
         </div>
       )}
       <div className="ck-btns">
-        <button type="button" className="ck-b ck-pri" onClick={() => done(true, true)}>Accept all</button>
-        <button type="button" className="ck-b" onClick={() => done(false, false)}>Reject all</button>
+        <button type="button" className="ck-b ck-pri" onClick={() => done(true, true)}>{T.accept}</button>
+        <button type="button" className="ck-b" onClick={() => done(false, false)}>{T.reject}</button>
         {detail
-          ? <button type="button" className="ck-b" onClick={() => done(an, mk)}>Save my choices</button>
-          : <button type="button" className="ck-b" onClick={() => setDetail(true)}>Customise</button>}
+          ? <button type="button" className="ck-b" onClick={() => done(an, mk)}>{T.save}</button>
+          : <button type="button" className="ck-b" onClick={() => setDetail(true)}>{T.customise}</button>}
       </div>
     </div>
   );

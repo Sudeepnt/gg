@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Consent from "./Consent";
+import { getRuntimeContent } from "@/lib/content";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://gattabaragames.com"),
@@ -24,7 +25,8 @@ export const viewport: Viewport = {
   themeColor: "#0A0A0A",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const content = await getRuntimeContent();
   return (
     <html lang="en">
       <head>
@@ -38,7 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         {children}
-        <Consent />
+        <Consent text={content.cookieBanner} />
       </body>
     </html>
   );
