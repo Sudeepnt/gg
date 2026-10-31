@@ -45,6 +45,8 @@ const IC = {
   vol: '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>',
   full: '<path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/>',
   close: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+  prev: '<path d="m15 18-6-6 6-6"/>',
+  next: '<path d="m9 18 6-6-6-6"/>',
   mute: '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/>',
 };
 const svg = n => `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]}</svg>`;
@@ -245,6 +247,55 @@ function applyHeroStories(games, slides) {
   show(0, true);
 }
 
+/* GG Productions image gallery: the same monitor as the showreel, for pictures. Shown only when images are added in the CMS (GG Productions -> Image gallery). */
+function applyGallery(list) {
+  const box = $('#gal');
+  const items = (list || []).filter(x => x && x.image).map(x => ({ src: x.image, cap: x.caption || '' }));
+  if (!box || !items.length) return;
+  let cur = 0;
+  const pad = n => String(n).padStart(2, '0');
+  box.hidden = false;
+  box.innerHTML = `<div class="mon gmon"><div class="scr"><img class="gi" alt="" draggable="false"><div class="rv-ctl"><div class="rv-row">${items.length > 1 ? `<button type="button" class="rv-btn" data-a="prev" aria-label="Previous image">${svg('prev')}</button><button type="button" class="rv-btn" data-a="next" aria-label="Next image">${svg('next')}</button>` : ''}<button type="button" class="rv-btn" data-a="full" aria-label="${tx('Full screen')}">${svg('full')}</button></div><div class="rv-bar" aria-hidden="true"><i></i></div></div></div><div class="ctl"><span class="mono gcap" style="color:#7A7A77"></span><span class="mono gn" style="color:#7A7A77"></span></div></div>`;
+  const img = box.querySelector('.gi'), cap = box.querySelector('.gcap'), num = box.querySelector('.gn'), fill = box.querySelector('.rv-bar i');
+  let popImg = null, popNum = null;
+  const show = k => {
+    cur = (k + items.length) % items.length;
+    const it = items[cur];
+    img.src = it.src; img.alt = it.cap;
+    cap.textContent = it.cap; num.textContent = `${pad(cur + 1)} / ${pad(items.length)}`;
+    fill.style.width = ((cur + 1) / items.length * 100) + '%';
+    if (popImg) { popImg.src = it.src; popImg.alt = it.cap; popNum.textContent = num.textContent; }
+    new Image().src = items[(cur + 1) % items.length].src;       /* the next picture is already loaded when it is asked for */
+  };
+  const openFull = () => {
+    if (document.querySelector('.rv-pop')) return;
+    const pop = document.createElement('div');
+    pop.className = 'rv-pop'; pop.setAttribute('data-lenis-prevent', ''); pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-modal', 'true'); pop.setAttribute('aria-label', tx('Reel'));
+    pop.innerHTML = `<div class="rv-pop-box"><img class="rv-pop-vid gi-pop" alt=""></div><div class="rv-pop-ctl"><div class="rv-row">${items.length > 1 ? `<button type="button" class="rv-btn" data-a="prev" aria-label="Previous image">${svg('prev')}</button>` : ''}<button type="button" class="rv-btn" data-a="close" aria-label="${tx('Close')}">${svg('close')}</button>${items.length > 1 ? `<button type="button" class="rv-btn" data-a="next" aria-label="Next image">${svg('next')}</button>` : ''}</div><span class="mono" style="color:#bbb"></span></div>`;
+    popImg = pop.querySelector('img'); popNum = pop.querySelector('.rv-pop-ctl > span');
+    document.body.appendChild(pop);
+    const prevOverflow = document.body.style.overflow; document.body.style.overflow = 'hidden';
+    const close = () => { document.removeEventListener('keydown', onKey); pop.remove(); popImg = popNum = null; document.body.style.overflow = prevOverflow; };
+    const onKey = e => { if (e.key === 'Escape') close(); else if (e.key === 'ArrowRight') show(cur + 1); else if (e.key === 'ArrowLeft') show(cur - 1); };
+    document.addEventListener('keydown', onKey);
+    pop.querySelector('[data-a=close]').onclick = e => { e.stopPropagation(); close(); };
+    pop.querySelector('[data-a=prev]')?.addEventListener('click', e => { e.stopPropagation(); show(cur - 1); });
+    pop.querySelector('[data-a=next]')?.addEventListener('click', e => { e.stopPropagation(); show(cur + 1); });
+    pop.addEventListener('click', e => { if (e.target === pop) close(); });
+    show(cur);
+  };
+  box.querySelector('[data-a=prev]')?.addEventListener('click', e => { e.stopPropagation(); show(cur - 1); });
+  box.querySelector('[data-a=next]')?.addEventListener('click', e => { e.stopPropagation(); show(cur + 1); });
+  box.querySelector('[data-a=full]').addEventListener('click', e => { e.stopPropagation(); openFull(); });
+  img.addEventListener('click', openFull);
+  /* swipe on touch screens */
+  let x0 = null;
+  const scr = box.querySelector('.scr');
+  scr.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') x0 = e.clientX; });
+  scr.addEventListener('pointerup', e => { if (x0 == null) return; const d = e.clientX - x0; x0 = null; if (Math.abs(d) > 40) show(cur + (d < 0 ? 1 : -1)); });
+  show(0);
+}
+
 function applyContact(email) {
   if (!email) return;
   const mail = $('#mail'); if (mail) mail.textContent = email;
@@ -254,5 +305,6 @@ loadCMS().then(cms => {
   applyClients(clientsOf(cms));
   applyHeroStories(siteContent()?.games, siteContent()?.heroSlides);
   applyReel(cms.home?.playReelVideo, cms.home?.playReelVideo2);
+  applyGallery(siteContent()?.productionImages);
   applyContact(cms.contact?.email || cms.home?.socials?.email);
 });

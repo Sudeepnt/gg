@@ -69,9 +69,13 @@ const PLATS=['PC','Console','Mobile','AR/VR'].map(tx),STAGES=['Concept','Prototy
 const GP=(GGC&&GGC.gamesPage)||{};
 const HUDL=(GGC&&GGC.heroHud)||{};
 const NCL=(GGC&&GGC.networkCall)||{};
+/* the three big numbers under the roster panel (Specialists, Cities, Disciplines) come from the CMS */
+['countSpecialists','countCities','countDisciplines'].forEach((k,i)=>{const b=document.querySelectorAll('#call + .stats b')[i],n=Number(NCL[k]);if(b&&NCL[k]!==''&&NCL[k]!=null&&n>=0)b.dataset.count=n});
 const PL=(GGC&&GGC.pressKitLabels)||{};const pl=(k,d)=>PL[k]||d;
 let PKSTUDIO={white:'/logos/gg-white.png',black:'/logos/gg-black.png'};
 let PKCONTACT=[['Press','info@gattabaragames.com'],['Business','info@gattabaragames.com'],['Website','gattabaragames.com']];
+/* a game's press kit shows its own About / logos / contact rows when it has them, otherwise the shared ones (Games -> Press kit defaults) */
+const pkAbout=g=>g.pkAbout||BOILER,pkStudio=(g,white)=>(white?g.pkStudioW:g.pkStudioB)||(white?PKSTUDIO.white:PKSTUDIO.black),pkContact=g=>g.pkContact&&g.pkContact.length?g.pkContact:PKCONTACT;
 let BOILER='Gattabara Games is a video game company and creative studio based in Bengaluru, India. It builds original IP, co-owns and co-develops worlds with independent creators, and offers development, art and strategy services to studios worldwide through GG Productions.';
 
 /* ---- apply the editable content ---- */
@@ -81,7 +85,7 @@ if(GGC){const DEF=GAMES.slice();const arr=a=>Array.isArray(a)?a:[];
     const shots=Array.isArray(g.screenshots)?g.screenshots:arr(g.screenshotCaptions).map(c=>({caption:c,image:''}));
     return {...d,id:g.id||('game-'+(k+1)),t:g.title||'Untitled',code:g.code||('GG-'+(k+1)),st:g.status||'In development',cat:sealed?'sealed':'dev',codev:!sealed&&/co-?dev/i.test(g.status||'')?1:undefined,plats:arr(g.platformLinks).map(p=>({n:String(p&&p.platform||''),u:String(p&&p.url||'').trim()})).filter(p=>PLATFORM_ICONS[p.n]),collab:arr(g.collaboratingWith).map(c=>String(c&&c.name!=null?c.name:c||'').trim()).filter(Boolean),sealed:sealed?1:undefined,
       spec:g.cardCaption||'',short:g.shortDescription||'',intro:g.summary||g.shortDescription||'',desc:arr(g.description),tags:arr(g.tags),
-      feat:arr(g.features).map(f=>[f.title||'',f.text||'']),shots:shots.map(x=>x.caption||''),shotImgs:shots.map(x=>x.image||''),trailer:g.trailer||'',trailerPoster:g.trailerPoster||'',logoBlack:g.logoBlack||'',logoWhite:g.logoWhite||'',promo:{main:g.promoMain||'',vertical:g.promoVertical||'',small:g.promoSmall||''},nopk:g.noPressKit?1:undefined,intel:g.sealedText||'',image:g.image||'',
+      feat:arr(g.features).map(f=>[f.title||'',f.text||'']),shots:shots.map(x=>x.caption||''),shotImgs:shots.map(x=>x.image||''),trailer:g.trailer||'',trailerPoster:g.trailerPoster||'',logoBlack:g.logoBlack||'',logoWhite:g.logoWhite||'',pkAbout:(g.pressAbout||'').trim(),pkStudioW:g.pressStudioLogo||'',pkStudioB:g.pressStudioLogoBlack||'',pkContact:arr(g.pressContact).map(r=>[r.label||'',r.value||'']).filter(r=>r[0]||r[1]),promo:{main:g.promoMain||'',vertical:g.promoVertical||'',small:g.promoSmall||''},nopk:g.noPressKit?1:undefined,intel:g.sealedText||'',image:g.image||'',
       catch:d.catch||[g.title||'',''],fact:arr(g.factsheet).map(r=>[r.label||'',r.value||''])}});
   if(GGC.production){SVC=arr(GGC.production.services).map(v=>[v.title||'',v.description||'',arr(v.tags),v.quote||undefined].filter((x,i2)=>i2<3||x));
     SK=arr(GGC.production.specialties).map(v=>[v.name||'',Math.max(0,Math.min(100,+v.score||0)),v.description||''])}
@@ -100,7 +104,9 @@ if(GGC){const DEF=GAMES.slice();const arr=a=>Array.isArray(a)?a:[];
       body.innerHTML=`<p class="to">${esc0(Lt.to)}</p>${ps(Lt.before)}<ol class="pr">${arr(Lt.principles).map(x=>`<li><span><b>${esc0(x.title)}</b> ${esc0(x.text)}</span></li>`).join('')}</ol>${ps(Lt.after)}`;
       if(sg){const sp=sg.querySelector('span');if(sp)sp.innerHTML=`<b>${esc0(Lt.signature)}</b>${esc0(Lt.signatureLine)}`;body.appendChild(sg)}}}
   const C=GGC.contact;if(C){const f=document.querySelector('.fsm > div:first-child');if(f){const ps=f.querySelectorAll('p');if(ps[0])ps[0].textContent=C.tagline||'';if(ps[1])ps[1].innerHTML=`${esc0(C.company)}<br>${esc0(C.address)}<br>${esc0(C.email)}`}
-    const m=document.getElementById('mail');if(m)m.textContent=C.email||''}
+    const m=document.getElementById('mail');if(m)m.textContent=C.email||'';
+    /* the menu's company name and email follow the same Contact fields as the footer */
+    const mb=document.querySelectorAll('.fm .side .blk');if(mb[0]&&C.company){const h=mb[0].querySelector('h4');if(h)h.textContent=C.company.toUpperCase()}if(mb[1]&&C.email){const q=mb[1].querySelector('p');if(q)q.textContent=C.email}}
   if(GGC.pressKit){if(GGC.pressKit.about)BOILER=GGC.pressKit.about;if(GGC.pressKit.studioLogo)PKSTUDIO.white=GGC.pressKit.studioLogo;if(GGC.pressKit.studioLogoBlack)PKSTUDIO.black=GGC.pressKit.studioLogoBlack;if(Array.isArray(GGC.pressKit.contact))PKCONTACT=GGC.pressKit.contact.map(r=>[r.label||'',r.value||''])}
   /* footer press-kit shortcuts follow the games list */
   const fk=[...document.querySelectorAll('.fsm [data-open]')];if(fk.length){const anchor=fk[0].previousElementSibling;fk.forEach(x=>x.remove());
@@ -275,7 +281,7 @@ hud();
 
 /* ================= NEWS ================= */
 let nf='all',nall=false;
-function renderNews(){const L=NEWS.filter(n=>nf==='all'||n[1]===nf);$('#nw').innerHTML=L.map((n,i)=>`<li class="${i>=4?'x':''}"><a href="#" data-i="${NEWS.indexOf(n)}" aria-expanded="false"><time>${n[0]}</time><span class="m"><span class="tag">${n[1]}</span></span><span class="t">${n[2]}</span><span class="ar" aria-hidden="true">${ARW}</span></a><div class="bd" hidden>${n[3]}</div></li>`).join('');
+function renderNews(){const L=NEWS.filter(n=>nf==='all'||n[1]===nf);$('#nw').innerHTML=L.map((n,i)=>`<li class="${i>=4?'more-item':''}"><a href="#" data-i="${NEWS.indexOf(n)}" aria-expanded="false"><time>${n[0]}</time><span class="m"><span class="tag">${n[1]}</span></span><span class="t">${n[2]}</span><span class="ar" aria-hidden="true">${ARW}</span></a><div class="bd" hidden>${n[3]}</div></li>`).join('');
   $('#nw').classList.toggle('all',nall);$('#nwall').style.display=L.length>4?'':'none';
   $$('#nw a').forEach(a=>a.onclick=e=>{e.preventDefault();const li=a.parentElement,o=li.classList.toggle('open');a.setAttribute('aria-expanded',o);li.querySelector('.bd').hidden=!o})}
 $$('#news .tab').forEach(b=>b.onclick=()=>{nf=b.dataset.f;$$('#news .tab').forEach(x=>x.setAttribute('aria-pressed',x===b));renderNews()});
@@ -339,7 +345,7 @@ function zip(files){const enc=new TextEncoder();const parts=[],cent=[];let off=0
     const c=new DataView(new ArrayBuffer(46));c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(14,0x21,true);c.setUint32(16,crc,true);c.setUint32(20,d.length,true);c.setUint32(24,d.length,true);c.setUint16(28,nm.length,true);c.setUint32(42,off,true);cent.push(c.buffer,nm);off+=30+nm.length+d.length}
   const cs=cent.reduce((a,b)=>a+b.byteLength,0);const e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cs,true);e.setUint32(16,off,true);
   return new Blob([...parts,...cent,e.buffer],{type:'application/zip'})}
-function factMd(g){const L=[`# ${g.t} \u2014 Press kit`,'',`> ${g.short}`,'','## Factsheet'];(g.fact||[]).forEach(r=>L.push(`- ${r[0]}: ${r[1]}`));L.push('','## Description',...(g.desc||[g.intro]).flatMap(p=>[p,'']),'## Features',...(g.feat||[]).map(f=>`- ${f[0]}: ${f[1]}`),'','## About the developer',BOILER,'');return L.join('\n')}
+function factMd(g){const L=[`# ${g.t} \u2014 Press kit`,'',`> ${g.short}`,'','## Factsheet'];(g.fact||[]).forEach(r=>L.push(`- ${r[0]}: ${r[1]}`));L.push('','## Description',...(g.desc||[g.intro]).flatMap(p=>[p,'']),'## Features',...(g.feat||[]).map(f=>`- ${f[0]}: ${f[1]}`),'','## About the developer',pkAbout(g),'');return L.join('\n')}
 const extOf=u=>{const m=String(u).split('?')[0].match(/\.([a-z0-9]{2,4})$/i);return m?m[1].toLowerCase():'png'};
 async function blobOf(url){const r=await fetch(url);if(!r.ok)throw new Error('http '+r.status);return r.blob()}
 /* custom (uploaded) media: save it when the host allows it, otherwise open it so the visitor can save it */
@@ -350,13 +356,13 @@ async function pkDownload(i,what){const g=GAMES[i],sl=slug(g.t);
   if(what.startsWith('shot:')){const k=+what.slice(5);if((g.shotImgs||[])[k])return saveRemote(`${sl}-screenshot-${String(k+1).padStart(2,'0')}.${extOf(g.shotImgs[k])}`,g.shotImgs[k]);const c=shotCanvas(i,k%SHOTS.length,1920,1080);if(!c)return toast('Rendering unavailable');return saveFile(`${sl}-screenshot-0${k+1}.png`,await toBlob(c))}
   if(what.startsWith('logo:')){const dk=what.endsWith('dark');const cu=dk?g.logoBlack:g.logoWhite;if(cu)return saveRemote(`${sl}-logo-${dk?'black':'white'}.${extOf(cu)}`,cu);return saveFile(`${sl}-logo-${dk?'black':'white'}.png`,await toBlob(logoCanvas(g,dk)))}
   if(what.startsWith('cap:')){const cp=CAPS.find(x=>x[0]===what.slice(4));const cu=(g.promo||{})[cp[0]];if(cu)return saveRemote(`${sl}-capsule-${cp[0]}-${cp[2]}x${cp[3]}.${extOf(cu)}`,cu);return saveFile(`${sl}-capsule-${cp[0]}-${cp[2]}x${cp[3]}.png`,await toBlob(capCanvas(i,cp[2],cp[3])))}
-  if(what==='studio:white'||what==='studio:black'){const u=what.endsWith('white')?PKSTUDIO.white:PKSTUDIO.black;return saveRemote('gattabara-games-logo-'+(what.endsWith('white')?'white':'black')+'.'+extOf(u),u)}
+  if(what==='studio:white'||what==='studio:black'){const u=pkStudio(g,what.endsWith('white'));return saveRemote('gattabara-games-logo-'+(what.endsWith('white')?'white':'black')+'.'+extOf(u),u)}
   if(what==='fact')return saveFile(`${sl}-factsheet.md`,new Blob([factMd(g)],{type:'text/markdown'}));
   if(what==='all'){toast('Preparing press kit…');await new Promise(r=>setTimeout(r,60));const F=[];const add=async(n,b)=>F.push({name:`${sl}-press-kit/${n}`,data:new Uint8Array(await b.arrayBuffer())});
     await add('factsheet.md',new Blob([factMd(g)]));await add('logo/logo-black.png',await pickBlob(g.logoBlack,async()=>toBlob(logoCanvas(g,true))));await add('logo/logo-white.png',await pickBlob(g.logoWhite,async()=>toBlob(logoCanvas(g,false))));
     for(let k=0;k<g.shots.length;k++){const b=await pickBlob((g.shotImgs||[])[k],async()=>{const c=shotCanvas(i,k%SHOTS.length,1920,1080);return c?toBlob(c):null});if(b)await add(`screenshots/screenshot-${String(k+1).padStart(2,'0')}.png`,b)}
     for(const cp of CAPS)await add(`promo/capsule-${cp[0]}-${cp[2]}x${cp[3]}.png`,await pickBlob((g.promo||{})[cp[0]],async()=>toBlob(capCanvas(i,cp[2],cp[3]))));
-    await add('studio/gattabara-games-logo-white.png',await pickBlob(PKSTUDIO.white,async()=>new Blob([])));await add('studio/gattabara-games-logo-black.png',await pickBlob(PKSTUDIO.black,async()=>new Blob([])));
+    await add('studio/gattabara-games-logo-white.png',await pickBlob(pkStudio(g,true),async()=>new Blob([])));await add('studio/gattabara-games-logo-black.png',await pickBlob(pkStudio(g,false),async()=>new Blob([])));
     return saveFile(`${sl}-press-kit.zip`,zip(F))}
   }catch(e){toast('Could not prepare that file')}}
 function openDp(i,push=true){const g=GAMES[i];if(!g||g.nopk)return;dpLast=dpLast||document.activeElement;$('#dpbc').textContent=g.t.toUpperCase();
@@ -382,8 +388,8 @@ function openDp(i,push=true){const g=GAMES[i];if(!g||g.nopk)return;dpLast=dpLast
      ${sealed?`<div class="lock" style="margin-top:40px"><p class="mono" style="color:#9A9A97">${pl('restricted','Access restricted')}</p><p class="tt2" id="lockt">${opened?pl('decryptedLine','File decrypted.'):pl('sealedLine','This file is sealed.')}</p><button class="hold ${opened?'done':''}" type="button" id="hold"><span class="f"></span><span class="lb">${opened?pl('decrypted','Decrypted'):pl('hold','Hold to decrypt')}</span></button><p class="intel" id="intel" ${opened?'':'hidden'}>${g.intel}</p></div>`:
      `<p class="mono" style="margin-top:44px">${pl('descLabel','Description')}</p>${g.desc.map(p=>`<p>${p}</p>`).join('')}<p class="mono" style="margin-top:44px">${pl('features','Features')}</p><div class="feat">${g.feat.map((f,k)=>`<div><span>${pl('feature','FEATURE')} 0${k+1}</span><b>${f[0]}</b><p>${f[1]}</p></div>`).join('')}</div>`}</div></section>
     <section class="pk-s" id="pk-media"><h2>${pl('media','Media')}</h2><div>${media}</div></section>
-    <section class="pk-s" id="pk-about"><h2>${pl('about','About the developer')}</h2><div><p class="lead">${BOILER}</p><div class="studio"><img class="studio-logo" src="${esc(PKSTUDIO.white)}" alt="Gattabara Games logo"><div class="bt"><button class="dl" type="button" data-dl="studio:white">${pl('logoWhiteBtn','\u2193 Logo (white)')}</button><button class="dl" type="button" data-dl="studio:black">${pl('logoBlackBtn','\u2193 Logo (black)')}</button></div></div></div></section>
-    <section class="pk-s" id="pk-contact"><h2>${pl('contact','Contact')}</h2><div><table class="prof">${PKCONTACT.map(r=>`<tr><th>${esc(r[0])}</th><td>${esc(r[1])}</td></tr>`).join('')}</table></div></section>
+    <section class="pk-s" id="pk-about"><h2>${pl('about','About the developer')}</h2><div><p class="lead">${pkAbout(g)}</p><div class="studio"><img class="studio-logo" src="${esc(pkStudio(g,true))}" alt="Gattabara Games logo"><div class="bt"><button class="dl" type="button" data-dl="studio:white">${pl('logoWhiteBtn','\u2193 Logo (white)')}</button><button class="dl" type="button" data-dl="studio:black">${pl('logoBlackBtn','\u2193 Logo (black)')}</button></div></div></div></section>
+    <section class="pk-s" id="pk-contact"><h2>${pl('contact','Contact')}</h2><div><table class="prof">${pkContact(g).map(r=>`<tr><th>${esc(r[0])}</th><td>${esc(r[1])}</td></tr>`).join('')}</table></div></section>
     <div class="pk-s" style="border-bottom:0;padding-bottom:30px"><h2>${pl('others','Other titles')}</h2><div></div></div>
     <div class="others">${others.map(j=>`<button type="button" data-j="${j}"><span class="oim">${GP.showComingSoon!==false?soonHTML():thumb(j)?`<img src="${thumb(j)}" alt="">`:''}</span><b>${GAMES[j].t}</b><span class="mono" style="color:#7A7A77">${GAMES[j].st} · ${pl('pressKitWord','Press kit')}</span></button>`).join('')}</div></div>`;
   $$('#dpbody .others button').forEach(b=>b.onclick=()=>{$('#dp').scrollTo({top:0});openDp(+b.dataset.j,false);try{nativeHist.replaceState({dp:GAMES[+b.dataset.j].id},'','#title/'+GAMES[+b.dataset.j].id)}catch(e){}});
@@ -623,7 +629,7 @@ $('#mnav').innerHTML=MROUTES.map(r=>`<a href="#" data-r="${r}">${r}</a>`).join('
 $('#mnav').addEventListener('click',e=>{const a=e.target.closest('a');if(!a)return;e.preventDefault();mrender(a.dataset.r)});
 $('#mdoc').addEventListener('click',e=>{const a=e.target.closest('a.jump');if(!a)return;e.preventDefault();const r=a.dataset.r;
   if(r.startsWith('human:')){const t=r.slice(6);machine(false);setTimeout(()=>{if(t.startsWith('title/')){const i=GAMES.findIndex(g=>g.id===t.slice(6));if(i>=0)openDp(i)}else go(t)},520)}else mrender(r)});
-const CMDS={help:()=>['commands: <span class="h">about</span> · <span class="h">games</span> · <span class="h">game &lt;name&gt;</span> · <span class="h">services</span> · <span class="h">specialties</span> · <span class="h">network</span> · <span class="h">leadership</span> · <span class="h">clients</span> · <span class="h">careers</span> · <span class="h">pitch</span> · <span class="h">contact</span> · <span class="h">open &lt;page&gt;</span> · <span class="h">goto &lt;section&gt;</span> · <span class="h">human</span> · <span class="h">clear</span>'],
+const CMDS={help:()=>['<span class="s">'+tx('commands:')+'</span> <span class="h">about</span> · <span class="h">games</span> · <span class="h">game &lt;name&gt;</span> · <span class="h">services</span> · <span class="h">specialties</span> · <span class="h">network</span> · <span class="h">leadership</span> · <span class="h">clients</span> · <span class="h">careers</span> · <span class="h">pitch</span> · <span class="h">contact</span> · <span class="h">open &lt;page&gt;</span> · <span class="h">goto &lt;section&gt;</span> · <span class="h">human</span> · <span class="h">clear</span>'],
  about:()=>['Gattabara Games — video game company and creative studio, Bengaluru.',tx('Mission')+': '+DATA.organization.mission,tx('Vision')+': '+DATA.organization.vision],
  games:()=>GAMES.map(g=>`${g.code.padEnd(11)} ${g.t.padEnd(14)} ${g.st.toLowerCase()}`),
  game:a=>{const g=GAMES.find(x=>a&&x.t.toLowerCase().includes(a.toLowerCase()));return g?[g.t+' · '+g.st.toLowerCase(),g.short].concat(g.sealed?['<span class="c">access restricted. hold to decrypt on the press kit.</span>']:[]):['no title matches. try: games']},

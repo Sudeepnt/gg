@@ -1,6 +1,6 @@
 /* Content loader. All editable content now comes from src/content/site-content.json (embedded in the page as
-   #gg-content and edited from /admingg). Nothing is read from Supabase. The bundled gg snapshot (cms-data.json) only
-   supplies the application-form labels, which have no editor yet. */
+   #gg-content and edited from /admingg). Nothing is read from Supabase. The bundled snapshot (cms-data.json) only
+   supplies the default wording of the Pitch us intro and the application form. */
 import snapshot from './cms-data.json';
 
 function merge(base, over) {

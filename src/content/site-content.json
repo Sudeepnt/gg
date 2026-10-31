@@ -1,5 +1,4 @@
 {
-  "_help": "Edited from /admingg. Safe to edit by hand too. Lists can have items added or removed.",
   "hero": {
     "line1": "We summon worlds",
     "line2": "that eat reality.",
@@ -156,7 +155,25 @@
       "promoMain": "",
       "promoVertical": "",
       "promoSmall": "",
-      "noPressKit": false
+      "noPressKit": false,
+      "platformLinks": [
+        {
+          "platform": "Steam",
+          "url": "https://store.steampowered.com/"
+        },
+        {
+          "platform": "Epic Games Store",
+          "url": "https://store.epicgames.com/"
+        },
+        {
+          "platform": "PlayStation",
+          "url": "https://store.playstation.com/"
+        },
+        {
+          "platform": "Xbox",
+          "url": ""
+        }
+      ]
     },
     {
       "id": "auto-rush",
@@ -795,6 +812,7 @@
     ],
     "doc": "Craft is the foundation. Authorship creates accountability. Every frame must carry weight."
   },
+  "productionImages": [],
   "production": {
     "services": [
       {
@@ -1070,10 +1088,7 @@
       "captchaBrand": "reCAPTCHA",
       "captchaPrivacy": "Privacy",
       "captchaTerms": "Terms",
-      "formAria": "Application form",
-      "closeForm": "Close form",
-      "finalizing": "Finalizing submission...",
-      "errorFallback": "An unexpected error occurred. Please check your connection and try again."
+      "finalizing": "Finalizing submission..."
     }
   },
   "contactPage": {
@@ -1191,7 +1206,10 @@
     "ended": "Call ended · tap to call back",
     "idle": "Line idle",
     "onCall": "On call",
-    "standby": "Standby"
+    "standby": "Standby",
+    "countSpecialists": 16,
+    "countCities": 14,
+    "countDisciplines": 7
   },
   "gamesPage": {
     "showComingSoon": true,

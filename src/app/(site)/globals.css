@@ -311,8 +311,8 @@ body.nogl .kv-fb{display:block}
 .nw .ar svg{width:11px;height:11px}
 .nw li.open .ar{transform:rotate(90deg)}
 .nw .bd{padding:0 0 26px 128px;color:var(--mute);font-size:14.5px;max-width:58em}
-.nw li.x{display:none}
-.nw.all li.x{display:block}
+.nw li.more-item{display:none}
+.nw.all li.more-item{display:block}
 @media (max-width:720px){.nw a{grid-template-columns:minmax(0,1fr) 30px;gap:8px 12px}.nw a .m{grid-column:1;display:flex;gap:12px;align-items:center}.nw .t{grid-column:1}.nw .ar{grid-row:1/3;grid-column:2}.nw .bd{padding-left:0}}
 
 /* ---------- PHILOSOPHY ---------- */
@@ -388,6 +388,11 @@ body.nogl .kv-fb{display:block}
 .mon canvas{display:block;width:100%;aspect-ratio:16/9;max-width:100%}
 .mon .scr::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px)}
 .mon .play{position:absolute;inset:0;margin:auto;width:max-content;height:max-content;z-index:2;min-width:0}
+.gal{margin-top:28px}
+.gal .scr{aspect-ratio:16/9;background:#000;touch-action:pan-y}
+.gal .gi{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;cursor:pointer;-webkit-user-drag:none;user-select:none}
+.gal .gcap{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rv-pop-vid.gi-pop{object-fit:contain}
 .mon .ctl{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 2px 2px}
 .seg{display:flex;gap:18px}
 .seg button{font-family:var(--lat);font-weight:500;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:#7A7A77;padding:4px 0;border-bottom:1px solid transparent}

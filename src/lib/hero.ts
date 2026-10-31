@@ -20,7 +20,6 @@ async function dataUri(url: string): Promise<string> {
   } catch { return ""; }
 }
 
-const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
 const isHttp = (u: unknown): u is string => typeof u === "string" && /^https?:\/\//.test(u);
 
 export async function heroHead(content: Record<string, any>): Promise<{ video: string; style: string; origin: string }> {

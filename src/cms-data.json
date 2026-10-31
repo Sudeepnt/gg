@@ -1,81 +1,4 @@
 {
-    "home": {
-        "particleText": "Gattabara Games",
-        "playReelVideo": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/hero-reels/1774408082516-GG_Website_Showreel-(1)-(1).mp4",
-        "socials": {
-            "instagram": "https://instagram.com/gattabaragames",
-            "twitter": "https://twitter.com/gattabaragames",
-            "linkedin": "https://linkedin.com/company/gattabaragames",
-            "email": "info@gattabaragames.com"
-        },
-        "description": "Gattabara Games is a video game company and creative studio based in Bengaluru, India, developing original titles and partnering with bold creators. We combine experimental design with distinctive art direction, backed by disciplined production and shared governance.",
-        "ctaText": "Contact Us",
-        "cookieText": "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies. For more information, please visit our",
-        "cookieButton": "Accept",
-        "playReelVideo2": ""
-    },
-    "about": {
-        "quote": "At Gattabara Games, craft is not decoration, it is the foundation. We prototype fast, test honestly, and refine relentlessly until the experience feels inevitable. We don’t separate dreamers from builders because authorship creates accountability. Every mechanic must justify itself. Every frame must carry weight. We build original games with distinctive design and disciplined production, games remembered not for noise, but for depth.",
-        "signature": "Gattabara Games"
-    },
-    "ggProductions": {
-        "particleText": "GG Productions",
-        "brief": [
-            "At GG Productions, we know what it’s like to build games with tight budgets and big ambitions. Every decision is about momentum, what to ship now, what to defer, and where the right support can unblock your next milestone.",
-            "We stay lean so you can move fast, plugging in exactly the talent you need, when you need it, across art, tech, design, and production.",
-            "With clear milestones and transparent delivery, we integrate as an extension of your team, whether for full production or focused co-development, so you keep creative control while scaling execution globally."
-        ],
-        "servicesTitle": "Our Services",
-        "services": [
-            {
-                "title": "Development",
-                "description": "From early concepts to shippable builds, our team designs core systems, builds robust gameplay foundations, and executes with production-grade engineering. We handle mechanics, level design, rapid prototyping, and full-cycle development across Unity, Unreal, and Roblox, with scalability in mind for long-term updates and live operations."
-            },
-            {
-                "title": "Art",
-                "description": "Our art direction and production bring clarity and identity to your game, from visual style discovery to complete world-building. We deliver cohesive 2D and 3D art, animation, and UI that give characters and environments a distinct voice, always grounded in gameplay and audience experience."
-            },
-            {
-                "title": "Strategy & Pre-Production",
-                "description": "We help you make the right game before you make the whole game. From IP ideation and concept validation to MVP planning for fundraising, we craft clear design documentation and production roadmaps. Our approach blends creative vision with market and production reality, helping you de-risk development across entertainment titles, branded experiences, and applied games."
-            }
-        ],
-        "clientsTitle": "Our Clients",
-        "clients": [
-            {
-                "name": "Nexon Games America",
-                "image": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/client-logos/1774423165417-79df150833611f3fd8a320b59b5fb55ee455642b_full.jpg"
-            },
-            {
-                "name": "Magadha Studios",
-                "image": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/client-logos/1774423169395-images.jpg"
-            },
-            {
-                "name": "Qila Games",
-                "image": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/client-logos/1774423173406-images.png"
-            },
-            {
-                "name": "Studio Cupcakes",
-                "image": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/client-logos/1774423176475-images-1.jpg"
-            },
-            {
-                "name": "Silvine Game Studios",
-                "image": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/client-logos/1774423183121-images-2.jpg"
-            },
-            {
-                "name": "BattleBucks",
-                "image": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/client-logos/1774423187281-images-3.jpg"
-            },
-            {
-                "name": "Singular Scheme",
-                "image": "https://pub-7744ab3205554c71b5119fde2cc046a8.r2.dev/applications/client-logos/1774423191955-unnamed.jpg"
-            }
-        ],
-        "footerTitle": "Looking for a game development partner?",
-        "footerCta": "Let's make magic",
-        "copyright": "Gattabara Games",
-        "projects": []
-    },
     "pitch": {
         "title": "Inbound Form",
         "paragraphs": [
@@ -85,22 +8,6 @@
             "GG collaborates on PC, Console, and mobile titles. AR/VR and mobile-first projects are welcome."
         ],
         "buttonText": "Click Here to Start"
-    },
-    "contact": {
-        "formLine1Start": "Hi, my name is",
-        "namePlaceholder": "your name",
-        "formLine1End": "and I'm exploring a potential partnership or opportunity with Gattabara Games.",
-        "formLine2Start": "Get in touch with me at",
-        "emailPlaceholder": "your e-mail",
-        "formLine2End": ".",
-        "consentText": "Hereby I authorise Gattabara Games, to process the given personal information in connection with my the inquiry. I am aware that submitting personal data is voluntary and that I have a right to view, edit and delete all the data concerning myself.",
-        "buttonText": "Send",
-        "companyName": "Gattabara Games",
-        "email": "info@gattabaragames.com",
-        "phone": " ",
-        "address1": "No. 55, 1st Floor, 10th Cross, 2nd Stage, Mahalakshmipuram,",
-        "address2": "WOC Road, Bengaluru, Karnataka,",
-        "address3": "India - 560086"
     },
     "form": {
         "title": "Gattabara Games Application Form",
@@ -171,11 +78,7 @@
             "captchaBrand": "reCAPTCHA",
             "captchaPrivacy": "Privacy",
             "captchaTerms": "Terms",
-            "formAria": "Application form",
-            "closeForm": "Close form",
-            "finalizing": "Finalizing submission...",
-            "errorFallback": "An unexpected error occurred. Please check your connection and try again."
+            "finalizing": "Finalizing submission..."
         }
-    },
-    "projects": []
+    }
 }

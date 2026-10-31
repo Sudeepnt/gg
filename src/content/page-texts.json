@@ -2,68 +2,62 @@
  {
   "key": "Header::NEWS",
   "group": "Header",
-  "label": "Text",
+  "label": "Navigation link",
   "text": "NEWS"
  },
  {
   "key": "Header::GAMES",
   "group": "Header",
-  "label": "Text",
+  "label": "Navigation link",
   "text": "GAMES"
  },
  {
   "key": "Header::BUSINESS",
   "group": "Header",
-  "label": "Text",
+  "label": "Navigation link",
   "text": "BUSINESS"
  },
  {
   "key": "Header::GG PRODUCTIONS",
   "group": "Header",
-  "label": "Text",
+  "label": "Navigation link",
   "text": "GG PRODUCTIONS"
  },
  {
   "key": "Header::RECRUIT",
   "group": "Header",
-  "label": "Text",
+  "label": "Navigation link",
   "text": "RECRUIT"
  },
  {
   "key": "Header::HUMAN",
   "group": "Header",
-  "label": "Link / button",
+  "label": "View switch button",
   "text": "HUMAN"
  },
  {
   "key": "Header::MACHINE",
   "group": "Header",
-  "label": "Link / button",
+  "label": "View switch button",
   "text": "MACHINE"
  },
  {
   "key": "Header::PITCH US",
   "group": "Header",
-  "label": "Link / button",
+  "label": "Button",
   "text": "PITCH US"
  },
  {
   "key": "Header::CONTACT",
   "group": "Header",
-  "label": "Link / button",
+  "label": "Button",
   "text": "CONTACT"
  },
  {
   "key": "Header::MENU",
   "group": "Header",
-  "label": "Text",
+  "label": "Menu button",
   "text": "MENU"
- },
- {
-  "key": "Menu::GATTABARA GAMES LLP",
-  "group": "Menu",
-  "label": "Heading",
-  "text": "GATTABARA GAMES LLP"
  },
  {
   "key": "Menu::A video game company and creative studio in Bengaluru, India. Original IP, co-owned IP and production services through GG Productions.",
@@ -74,31 +68,25 @@
  {
   "key": "Menu::CONTACT",
   "group": "Menu",
-  "label": "Heading",
+  "label": "Small heading",
   "text": "CONTACT"
- },
- {
-  "key": "Menu::info@gattabaragames.com",
-  "group": "Menu",
-  "label": "Paragraph",
-  "text": "info@gattabaragames.com"
  },
  {
   "key": "Menu::VIEW",
   "group": "Menu",
-  "label": "Heading",
+  "label": "Small heading",
   "text": "VIEW"
  },
  {
   "key": "Menu::HUMAN",
   "group": "Menu",
-  "label": "Link / button",
+  "label": "View switch button",
   "text": "HUMAN"
  },
  {
   "key": "Menu::MACHINE",
   "group": "Menu",
-  "label": "Link / button",
+  "label": "View switch button",
   "text": "MACHINE"
  },
  {
@@ -110,37 +98,37 @@
  {
   "key": "Other::PAGE",
   "group": "Other",
-  "label": "Text",
+  "label": "Button",
   "text": "PAGE"
  },
  {
   "key": "Other::TOP",
   "group": "Other",
-  "label": "Text",
+  "label": "Button",
   "text": "TOP"
  },
  {
   "key": "Other::VIEW",
   "group": "Other",
-  "label": "Bold text",
+  "label": "Bold label",
   "text": "VIEW"
  },
  {
   "key": "Top::Games",
   "group": "Top",
-  "label": "Text",
+  "label": "Button",
   "text": "Games"
  },
  {
   "key": "Top::Pitch us",
   "group": "Top",
-  "label": "Text",
+  "label": "Button",
   "text": "Pitch us"
  },
  {
   "key": "Top::Game services",
   "group": "Top",
-  "label": "Text",
+  "label": "Button",
   "text": "Game services"
  },
  {
@@ -152,43 +140,43 @@
  {
   "key": "News::Studio updates",
   "group": "News",
-  "label": "Paragraph",
+  "label": "Sub-heading",
   "text": "Studio updates"
  },
  {
   "key": "News::All",
   "group": "News",
-  "label": "Link / button",
+  "label": "Filter button",
   "text": "All"
  },
  {
   "key": "News::Games",
   "group": "News",
-  "label": "Link / button",
+  "label": "Filter button",
   "text": "Games"
  },
  {
   "key": "News::Studio",
   "group": "News",
-  "label": "Link / button",
+  "label": "Filter button",
   "text": "Studio"
  },
  {
   "key": "News::Productions",
   "group": "News",
-  "label": "Link / button",
+  "label": "Filter button",
   "text": "Productions"
  },
  {
   "key": "News::Recruit",
   "group": "News",
-  "label": "Link / button",
+  "label": "Filter button",
   "text": "Recruit"
  },
  {
   "key": "News::View all news",
   "group": "News",
-  "label": "Text",
+  "label": "Button",
   "text": "View all news"
  },
  {
@@ -200,25 +188,25 @@
  {
   "key": "Games::Title lineup",
   "group": "Games",
-  "label": "Paragraph",
+  "label": "Sub-heading",
   "text": "Title lineup"
  },
  {
   "key": "Games::All titles",
   "group": "Games",
-  "label": "Link / button",
+  "label": "Filter button",
   "text": "All titles"
  },
  {
   "key": "Games::In development",
   "group": "Games",
-  "label": "Link / button",
+  "label": "Filter button",
   "text": "In development"
  },
  {
   "key": "Games::Sealed",
   "group": "Games",
-  "label": "Link / button",
+  "label": "Filter button",
   "text": "Sealed"
  },
  {
@@ -230,13 +218,13 @@
  {
   "key": "Business::Who we are, what we do",
   "group": "Business",
-  "label": "Paragraph",
+  "label": "Sub-heading",
   "text": "Who we are, what we do"
  },
  {
   "key": "Business::Gattabara works along three lines. Each runs on the same craft, the same rules and the same core team.",
   "group": "Business",
-  "label": "Paragraph",
+  "label": "Introduction",
   "text": "Gattabara works along three lines. Each runs on the same craft, the same rules and the same core team."
  },
  {
@@ -278,7 +266,7 @@
  {
   "key": "Business::Philosophy",
   "group": "Business",
-  "label": "Paragraph",
+  "label": "Small label above the heading",
   "text": "Philosophy"
  },
  {
@@ -290,31 +278,31 @@
  {
   "key": "Business::MISSION",
   "group": "Business",
-  "label": "Bold text",
+  "label": "Bold label",
   "text": "MISSION"
  },
  {
   "key": "Business::VISION",
   "group": "Business",
-  "label": "Bold text",
+  "label": "Bold label",
   "text": "VISION"
  },
  {
   "key": "Business::VALUES",
   "group": "Business",
-  "label": "Bold text",
+  "label": "Bold label",
   "text": "VALUES"
  },
  {
   "key": "Business::FROM THE STUDIO HANDBOOK",
   "group": "Business",
-  "label": "Text",
+  "label": "Signature line",
   "text": "FROM THE STUDIO HANDBOOK"
  },
  {
   "key": "Business::Message",
   "group": "Business",
-  "label": "Paragraph",
+  "label": "Small label above the heading",
   "text": "Message"
  },
  {
@@ -326,7 +314,7 @@
  {
   "key": "Business::Leadership",
   "group": "Business",
-  "label": "Paragraph",
+  "label": "Small label above the heading",
   "text": "Leadership"
  },
  {
@@ -344,49 +332,37 @@
  {
   "key": "GG Productions::Services arm",
   "group": "GG Productions",
-  "label": "Paragraph",
+  "label": "Sub-heading",
   "text": "Services arm"
  },
  {
   "key": "GG Productions::A lean partner for studios with limited budgets and ambitious goals. We add the talent your project needs across art, tech, design and production, with clear milestones and transparent delivery. You keep creative control.",
   "group": "GG Productions",
-  "label": "Paragraph",
+  "label": "Introduction",
   "text": "A lean partner for studios with limited budgets and ambitious goals. We add the talent your project needs across art, tech, design and production, with clear milestones and transparent delivery. You keep creative control."
- },
- {
-  "key": "GG Productions::► Play reel",
-  "group": "GG Productions",
-  "label": "Link / button",
-  "text": "► Play reel"
  },
  {
   "key": "GG Productions::Animation",
   "group": "GG Productions",
-  "label": "Link / button",
+  "label": "Reel switch button",
   "text": "Animation"
  },
  {
   "key": "GG Productions::Art",
   "group": "GG Productions",
-  "label": "Link / button",
+  "label": "Reel switch button",
   "text": "Art"
- },
- {
-  "key": "GG Productions::* Reel shown is a placeholder sample.",
-  "group": "GG Productions",
-  "label": "Paragraph",
-  "text": "* Reel shown is a placeholder sample."
  },
  {
   "key": "GG Productions::STEP 01",
   "group": "GG Productions",
-  "label": "Text",
+  "label": "Step label",
   "text": "STEP 01"
  },
  {
   "key": "GG Productions::Brief",
   "group": "GG Productions",
-  "label": "Bold text",
+  "label": "Bold label",
   "text": "Brief"
  },
  {
@@ -398,13 +374,13 @@
  {
   "key": "GG Productions::STEP 02",
   "group": "GG Productions",
-  "label": "Text",
+  "label": "Step label",
   "text": "STEP 02"
  },
  {
   "key": "GG Productions::Assemble",
   "group": "GG Productions",
-  "label": "Bold text",
+  "label": "Bold label",
   "text": "Assemble"
  },
  {
@@ -416,13 +392,13 @@
  {
   "key": "GG Productions::STEP 03",
   "group": "GG Productions",
-  "label": "Text",
+  "label": "Step label",
   "text": "STEP 03"
  },
  {
   "key": "GG Productions::Direct",
   "group": "GG Productions",
-  "label": "Bold text",
+  "label": "Bold label",
   "text": "Direct"
  },
  {
@@ -434,13 +410,13 @@
  {
   "key": "GG Productions::STEP 04",
   "group": "GG Productions",
-  "label": "Text",
+  "label": "Step label",
   "text": "STEP 04"
  },
  {
   "key": "GG Productions::Deliver",
   "group": "GG Productions",
-  "label": "Bold text",
+  "label": "Bold label",
   "text": "Deliver"
  },
  {
@@ -452,7 +428,7 @@
  {
   "key": "GG Productions::Clients",
   "group": "GG Productions",
-  "label": "Paragraph",
+  "label": "Small label above the heading",
   "text": "Clients"
  },
  {
@@ -464,13 +440,13 @@
  {
   "key": "GG Productions::Studios that have trusted us with their games, through GG Productions.",
   "group": "GG Productions",
-  "label": "Paragraph",
+  "label": "Introduction",
   "text": "Studios that have trusted us with their games, through GG Productions."
  },
  {
   "key": "GG Productions::Network",
   "group": "GG Productions",
-  "label": "Paragraph",
+  "label": "Small label above the heading",
   "text": "Network"
  },
  {
@@ -482,13 +458,13 @@
  {
   "key": "GG Productions::A core team in Bengaluru. A world on call. Around our leads is a vetted roster of specialist contractors, activated for the discipline and quality bar each brief needs, then stood down when the work ships.",
   "group": "GG Productions",
-  "label": "Paragraph",
+  "label": "Introduction",
   "text": "A core team in Bengaluru. A world on call. Around our leads is a vetted roster of specialist contractors, activated for the discipline and quality bar each brief needs, then stood down when the work ships."
  },
  {
   "key": "GG Productions::Global roster",
   "group": "GG Productions",
-  "label": "Bold text",
+  "label": "Bold label",
   "text": "Global roster"
  },
  {
@@ -512,13 +488,13 @@
  {
   "key": "GG Productions::ORIGIN · BENGALURU",
   "group": "GG Productions",
-  "label": "Paragraph",
+  "label": "Caption",
   "text": "ORIGIN · BENGALURU"
  },
  {
   "key": "GG Productions::SAMPLE ROSTER · 15 LINKS",
   "group": "GG Productions",
-  "label": "Paragraph",
+  "label": "Caption",
   "text": "SAMPLE ROSTER · 15 LINKS"
  },
  {
@@ -530,25 +506,25 @@
  {
   "key": "Recruit::Careers",
   "group": "Recruit",
-  "label": "Paragraph",
+  "label": "Sub-heading",
   "text": "Careers"
  },
  {
   "key": "Recruit::Join",
   "group": "Recruit",
-  "label": "Bold text",
+  "label": "Bold label",
   "text": "Join"
  },
  {
   "key": "Recruit::the",
   "group": "Recruit",
-  "label": "Paragraph",
+  "label": "Big line",
   "text": "the"
  },
  {
   "key": "Recruit::craft.",
   "group": "Recruit",
-  "label": "Paragraph",
+  "label": "Big line",
   "text": "craft."
  },
  {
@@ -560,13 +536,13 @@
  {
   "key": "Recruit::Entry",
   "group": "Recruit",
-  "label": "Link / button",
+  "label": "Button",
   "text": "Entry"
  },
  {
   "key": "Recruit::* Listings shown are samples.",
   "group": "Recruit",
-  "label": "Paragraph",
+  "label": "Note",
   "text": "* Listings shown are samples."
  },
  {
@@ -578,67 +554,67 @@
  {
   "key": "Footer::GAMES",
   "group": "Footer",
-  "label": "Heading",
+  "label": "Small heading",
   "text": "GAMES"
  },
  {
   "key": "Footer::Title lineup",
   "group": "Footer",
-  "label": "Link / button",
+  "label": "Link",
   "text": "Title lineup"
  },
  {
   "key": "Footer::News",
   "group": "Footer",
-  "label": "Link / button",
+  "label": "Link",
   "text": "News"
  },
  {
   "key": "Footer::COMPANY",
   "group": "Footer",
-  "label": "Heading",
+  "label": "Small heading",
   "text": "COMPANY"
  },
  {
   "key": "Footer::Business",
   "group": "Footer",
-  "label": "Link / button",
+  "label": "Link",
   "text": "Business"
  },
  {
   "key": "Footer::GG Productions",
   "group": "Footer",
-  "label": "Link / button",
+  "label": "Link",
   "text": "GG Productions"
  },
  {
   "key": "Footer::JOIN",
   "group": "Footer",
-  "label": "Heading",
+  "label": "Small heading",
   "text": "JOIN"
  },
  {
   "key": "Footer::Recruit",
   "group": "Footer",
-  "label": "Link / button",
+  "label": "Link",
   "text": "Recruit"
  },
  {
   "key": "Footer::Pitch us",
   "group": "Footer",
-  "label": "Link / button",
+  "label": "Link",
   "text": "Pitch us"
  },
  {
   "key": "Footer::Contact",
   "group": "Footer",
-  "label": "Link / button",
+  "label": "Link",
   "text": "Contact"
  },
  {
   "key": "Footer::Machine view",
   "group": "Footer",
-  "label": "Link / button",
+  "label": "Button",
   "text": "Machine view"
  },
  {
@@ -650,13 +626,13 @@
  {
   "key": "Footer::Privacy Policy",
   "group": "Footer",
-  "label": "Link / button",
+  "label": "Link",
   "text": "Privacy Policy"
  },
  {
   "key": "Footer::Cookie settings",
   "group": "Footer",
-  "label": "Link / button",
+  "label": "Button",
   "text": "Cookie settings"
  },
  {
@@ -680,7 +656,7 @@
  {
   "key": "Other::Close ×",
   "group": "Other",
-  "label": "Link / button",
+  "label": "Button",
   "text": "Close ×"
  },
  {
@@ -710,233 +686,86 @@
  {
   "key": "Network roster window::Send a brief",
   "group": "Network roster window",
-  "label": "Link / button",
+  "label": "Button",
   "text": "Send a brief"
  },
  {
   "key": "Machine view::GATTABARA/AI",
   "group": "Machine view",
-  "label": "Bold text",
+  "label": "Bold label",
   "text": "GATTABARA/AI"
  },
  {
   "key": "Machine view::Copy .md",
   "group": "Machine view",
-  "label": "Link / button",
+  "label": "Button",
   "text": "Copy .md"
  },
  {
   "key": "Machine view::Save",
   "group": "Machine view",
-  "label": "Link / button",
+  "label": "Button",
   "text": "Save"
  },
  {
   "key": "Machine view::HUMAN",
   "group": "Machine view",
-  "label": "Link / button",
+  "label": "View switch button",
   "text": "HUMAN"
  },
  {
   "key": "Machine view::MACHINE",
   "group": "Machine view",
-  "label": "Link / button",
+  "label": "View switch button",
   "text": "MACHINE"
- },
- {
-  "key": "Header::[aria-label] Gattabara Games, top",
-  "group": "Header",
-  "label": "Screen-reader label",
-  "text": "Gattabara Games, top",
-  "attr": "aria-label"
- },
- {
-  "key": "Header::[alt] Gattabara Games",
-  "group": "Header",
-  "label": "Image description",
-  "text": "Gattabara Games",
-  "attr": "alt"
- },
- {
-  "key": "Header::[aria-label] Main",
-  "group": "Header",
-  "label": "Screen-reader label",
-  "text": "Main",
-  "attr": "aria-label"
- },
- {
-  "key": "Header::[aria-label] View mode",
-  "group": "Header",
-  "label": "Screen-reader label",
-  "text": "View mode",
-  "attr": "aria-label"
- },
- {
-  "key": "Other::[aria-label] Site menu",
-  "group": "Other",
-  "label": "Screen-reader label",
-  "text": "Site menu",
-  "attr": "aria-label"
- },
- {
-  "key": "Menu::[aria-label] View mode",
-  "group": "Menu",
-  "label": "Screen-reader label",
-  "text": "View mode",
-  "attr": "aria-label"
- },
- {
-  "key": "Other::[aria-label] Back to top of page",
-  "group": "Other",
-  "label": "Screen-reader label",
-  "text": "Back to top of page",
-  "attr": "aria-label"
  },
  {
   "key": "Top::[data-name] TOP",
   "group": "Top",
-  "label": "Section name (window bar and side rail)",
+  "label": "Section name (shown in the thin bar at the top of the section, the side rail and the top bar)",
   "text": "TOP",
   "attr": "data-name"
  },
  {
-  "key": "Top::[aria-label] Previous story",
-  "group": "Top",
-  "label": "Screen-reader label",
-  "text": "Previous story",
-  "attr": "aria-label"
- },
- {
-  "key": "Top::[aria-label] Next story",
-  "group": "Top",
-  "label": "Screen-reader label",
-  "text": "Next story",
-  "attr": "aria-label"
- },
- {
   "key": "News::[data-name] NEWS",
   "group": "News",
-  "label": "Section name (window bar and side rail)",
+  "label": "Section name (shown in the thin bar at the top of the section, the side rail and the top bar)",
   "text": "NEWS",
   "attr": "data-name"
  },
  {
-  "key": "News::[aria-label] Filter news",
-  "group": "News",
-  "label": "Screen-reader label",
-  "text": "Filter news",
-  "attr": "aria-label"
- },
- {
   "key": "Games::[data-name] GAMES",
   "group": "Games",
-  "label": "Section name (window bar and side rail)",
+  "label": "Section name (shown in the thin bar at the top of the section, the side rail and the top bar)",
   "text": "GAMES",
   "attr": "data-name"
  },
  {
-  "key": "Games::[aria-label] Filter titles",
-  "group": "Games",
-  "label": "Screen-reader label",
-  "text": "Filter titles",
-  "attr": "aria-label"
- },
- {
   "key": "Business::[data-name] BUSINESS",
   "group": "Business",
-  "label": "Section name (window bar and side rail)",
+  "label": "Section name (shown in the thin bar at the top of the section, the side rail and the top bar)",
   "text": "BUSINESS",
   "attr": "data-name"
  },
  {
   "key": "GG Productions::[data-name] GG PRODUCTIONS",
   "group": "GG Productions",
-  "label": "Section name (window bar and side rail)",
+  "label": "Section name (shown in the thin bar at the top of the section, the side rail and the top bar)",
   "text": "GG PRODUCTIONS",
   "attr": "data-name"
  },
  {
-  "key": "GG Productions::[aria-label] Sample reel preview",
-  "group": "GG Productions",
-  "label": "Screen-reader label",
-  "text": "Sample reel preview",
-  "attr": "aria-label"
- },
- {
-  "key": "GG Productions::[aria-label] Choose reel",
-  "group": "GG Productions",
-  "label": "Screen-reader label",
-  "text": "Choose reel",
-  "attr": "aria-label"
- },
- {
-  "key": "GG Productions::[aria-label] Answer the call to open the contractor roster",
-  "group": "GG Productions",
-  "label": "Screen-reader label",
-  "text": "Answer the call to open the contractor roster",
-  "attr": "aria-label"
- },
- {
-  "key": "GG Productions::[aria-label] Globe showing roster cities linked to Bengaluru",
-  "group": "GG Productions",
-  "label": "Screen-reader label",
-  "text": "Globe showing roster cities linked to Bengaluru",
-  "attr": "aria-label"
- },
- {
   "key": "Recruit::[data-name] RECRUIT",
   "group": "Recruit",
-  "label": "Section name (window bar and side rail)",
+  "label": "Section name (shown in the thin bar at the top of the section, the side rail and the top bar)",
   "text": "RECRUIT",
   "attr": "data-name"
  },
  {
   "key": "Contact::[data-name] CONTACT",
   "group": "Contact",
-  "label": "Section name (window bar and side rail)",
+  "label": "Section name (shown in the thin bar at the top of the section, the side rail and the top bar)",
   "text": "CONTACT",
   "attr": "data-name"
- },
- {
-  "key": "Contact::[aria-label] Contact or pitch a game",
-  "group": "Contact",
-  "label": "Screen-reader label",
-  "text": "Contact or pitch a game",
-  "attr": "aria-label"
- },
- {
-  "key": "Footer::[alt] Gattabara Games",
-  "group": "Footer",
-  "label": "Image description",
-  "text": "Gattabara Games",
-  "attr": "alt"
- },
- {
-  "key": "Network roster window::[aria-label] Close",
-  "group": "Network roster window",
-  "label": "Screen-reader label",
-  "text": "Close",
-  "attr": "aria-label"
- },
- {
-  "key": "Other::[aria-label] Machine view",
-  "group": "Other",
-  "label": "Screen-reader label",
-  "text": "Machine view",
-  "attr": "aria-label"
- },
- {
-  "key": "Machine view::[aria-label] View mode",
-  "group": "Machine view",
-  "label": "Screen-reader label",
-  "text": "View mode",
-  "attr": "aria-label"
- },
- {
-  "key": "Machine view::[aria-label] Machine pages",
-  "group": "Machine view",
-  "label": "Screen-reader label",
-  "text": "Machine pages",
-  "attr": "aria-label"
  }
 ]

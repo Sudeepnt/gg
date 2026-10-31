@@ -7,8 +7,11 @@ export const EXCLUDE = ['#gl', '#svc', '#spx', '#jobs', '#cli', '#ldr', '#fmlist
   '#kvlb', '#kvpk', '#csub', '#tn', 'button[data-open]', '#kvsb', '#kvhud', '#shot', '#clk', '#pitch', '#mail', '.wbar', '#dpbody', '#dpbc', '#mstat', '#mnav', '#mdoc', '.fsm > div:first-child', '#ctsub', '#cttabs', '#toast', '#slotv', '#slotn',
   '#rsec', '#rno', '#pka', '#pkt', '#nl', '.sc', '#ptc', '.kv-th', '#kvsegs', '#kvn', '#kvtot', '#kvtc', '#kvstate', '#ldn', '#bios', '#panelContact', '.mail',
   /* retired: the boot screen was removed, and the old hero montage's coordinates, clock and canvas label are hidden behind the stories carousel */
-  '#ld', '.kv-meta', '#kv', '#stpk'];
-const ATTRS = [['aria-label', 'Screen-reader label'], ['title', 'Tooltip'], ['placeholder', 'Hint inside the box'], ['alt', 'Image description'], ['data-name', 'Section name (window bar and side rail)']];
+  '#ld', '.kv-meta', '#kv', '#stpk',
+  /* the sample showreel's own button and note are never shown (the real reel always plays), and the menu's company name and email follow Contact -> Footer and contact details */
+  '#play', '.mon + .note', '.fm .side .blk:nth-child(1) h4', '.fm .side .blk:nth-child(2) p'];
+/* only wording a visitor can see: tooltips, hints inside boxes and each section's name (its thin top bar, the side rail and the top bar). Screen-reader labels and image descriptions are not editable. */
+const ATTRS = [['title', 'Tooltip'], ['placeholder', 'Hint inside the box'], ['data-name', 'Section name (shown in the thin bar at the top of the section, the side rail and the top bar)']];
 const SKIP_TAGS = new Set(['script', 'style', 'svg', 'canvas', 'noscript', 'textarea', 'option', 'select']);
 export const norm = t => String(t).replace(/\s+/g, ' ').trim();
 const titleCase = s => s.toLowerCase().replace(/\b\w/g, c => c.toUpperCase()).replace(/\bGg\b/, 'GG');
@@ -25,7 +28,39 @@ function groupOf(node) {
   }
   return 'Other';
 }
-const labelOf = tag => ({ H1: 'Heading', H2: 'Heading', H3: 'Heading', H4: 'Heading', P: 'Paragraph', A: 'Link / button', BUTTON: 'Link / button', LABEL: 'Label', LI: 'List item', TH: 'Label', TD: 'Value', SMALL: 'Small text', B: 'Bold text' }[tag] || 'Text');
+/* what the visitor would call this piece of text: a heading, a button, a filter button... (shown above its box in the admin) */
+function labelOf(node, group) {
+  const up = []; for (let n = node.parentNode, i = 0; n && i < 4; n = n.parentNode, i++) up.push(n);
+  const has = (n, c) => !!n?.classList?.contains(c);
+  const btn = up.find(n => n.tagName === 'A' || n.tagName === 'BUTTON');
+  if (btn && !/^(P|H[1-4])$/.test(up[0]?.tagName)) {   /* a heading or paragraph inside a clickable card is still a heading or paragraph */
+    if (has(btn, 'tab')) return 'Filter button';
+    if (has(btn.parentNode, 'mode')) return 'View switch button';
+    if (has(btn.parentNode, 'seg')) return 'Reel switch button';
+    if (btn.getAttribute('id') === 'mbtn') return 'Menu button';
+    if (group === 'Footer' && btn.tagName === 'A') return 'Link';
+    if (group === 'Header' && btn.tagName === 'A' && !has(btn, 'hd-ct')) return 'Navigation link';
+    return 'Button';
+  }
+  const p = up[0], tag = p?.tagName;
+  if (tag === 'H1' || tag === 'H2' || tag === 'H3') return 'Heading';
+  if (tag === 'H4') return 'Small heading';
+  if (tag === 'LABEL' || tag === 'TH') return 'Label';
+  if (tag === 'LI') return 'List item';
+  if (tag === 'TD') return 'Value';
+  if (has(p, 'sub')) return 'Sub-heading';
+  if (has(p, 'lead')) return 'Introduction';
+  if (has(p, 'pn-k')) return 'Small label above the heading';
+  if (has(p, 'note')) return 'Note';
+  if (has(p, 'cap')) return 'Caption';
+  if (has(p, 'big')) return 'Big line';
+  if (has(p, 's')) return 'Step label';
+  if (has(p, 'sig')) return 'Signature line';
+  if (tag === 'P') return 'Paragraph';
+  if (tag === 'B') return 'Bold label';
+  if (tag === 'SMALL') return 'Small text';
+  return 'Text';
+}
 
 /* walk every editable text node: calls visit(node, {key, group, label, text}) */
 export function walk(html, visit) {
@@ -41,7 +76,7 @@ export function walk(html, visit) {
         const text = norm(ch.text);
         if (text.length < 2 || !/[A-Za-z]/.test(text)) continue;
         const group = groupOf(ch);
-        visit(ch, { key: `${group}::${text}`, group, label: labelOf(ch.parentNode?.tagName), text });
+        visit(ch, { key: `${group}::${text}`, group, label: labelOf(ch, group), text });
       }
     }
   };
@@ -50,7 +85,7 @@ export function walk(html, visit) {
      Collected first and applied after, so a renamed section never changes the group (and key) of the entries inside it. */
   /* attributes the script rewrites itself are edited under "All other text" (uiStrings.js) or their own tab, never twice */
   const ATTR_SKIP = new Set();
-  ['#kvpp', '#panelContact', '#pitch', '#toast', '#kv', '#kvsegs', '#stpk'].forEach(sel => { try { root.querySelectorAll(sel).forEach(e => { ATTR_SKIP.add(e); e.querySelectorAll('*').forEach(c => ATTR_SKIP.add(c)); }); } catch { /* ignore */ } });
+  ['#kvpp', '#panelContact', '#pitch', '#toast', '#kv', '#kvsegs', '#stpk', '#reel'].forEach(sel => { try { root.querySelectorAll(sel).forEach(e => { ATTR_SKIP.add(e); e.querySelectorAll('*').forEach(c => ATTR_SKIP.add(c)); }); } catch { /* ignore */ } });
   const found = [];
   const walkEls = node => {
     for (const ch of node.childNodes) {
