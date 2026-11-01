@@ -54,11 +54,15 @@ ul,ol.steps{margin:0;padding:0;list-style:none}
 .grain{position:fixed;inset:-50%;z-index:96;pointer-events:none;opacity:.028;animation:nz .9s steps(4) infinite}
 @keyframes nz{25%{transform:translate(-2%,1%)}50%{transform:translate(1%,-2%)}75%{transform:translate(-1%,2%)}}
 main,footer{position:relative;z-index:2}
+/* start the window stack below the fixed header, where app.js measures it from; otherwise the next window already sits a header-height into the screen and pops in on the first scroll */
+main{margin-top:calc(var(--hd) + env(safe-area-inset-top,0px))}
 
 
 /* ---------- WINDOW STACK ---------- */
 .win{position:sticky;top:calc(var(--hd) + env(safe-area-inset-top,0px));background:var(--bg);color:var(--fg);will-change:transform;backface-visibility:hidden;overflow-x:clip}
 .win>.shade{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;z-index:40}
+/* while a window is rising into view its content lags a little behind the window edge, then settles (--e: 0 → 1, set by app.js) */
+.win.rising>:not(.wbar):not(.shade){translate:0 calc((1 - var(--e,1)) * 48px)}
 .wbar{position:sticky;top:calc(var(--hd) + env(safe-area-inset-top,0px));z-index:30;height:36px;display:flex;align-items:center;gap:14px;padding:0 max(24px,env(safe-area-inset-right,0px)) 0 max(24px,env(safe-area-inset-left,0px));background:var(--bg);border-bottom:1px solid var(--line);font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);margin-top:calc(-1 * var(--padt,clamp(110px,13vw,170px)));margin-bottom:calc(clamp(74px,9vw,134px) + var(--padt,clamp(110px,13vw,170px)) - clamp(110px,13vw,170px))}
 .wbar b{font-weight:400;color:var(--fg)}
 .wbar .sq{width:7px;height:7px;background:var(--fg)}

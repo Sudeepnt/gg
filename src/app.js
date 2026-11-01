@@ -682,11 +682,13 @@ let rzT;addEventListener('resize',()=>{measure();clearTimeout(rzT);rzT=setTimeou
 const easeS=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;let active=-1;const C=188.5;let lastY=0,mqx=0,vel=0;
 function frame(){const y=scrollY,av=VH-HH,X=MOBQ()?4:6;let act=0;
   for(let i=1;i<WINS.length;i++){const p=Math.max(0,Math.min(1,(y-(T[i]-VH))/av));if(p>=.55)act=i;if(Math.abs(p-LS[i].p)<.0005&&!dirtyS)continue;LS[i].p=p;const e=RM?(p>0?1:0):easeS(p);const w=WINS[i],pv=WINS[i-1];
-    if(p<=0){w.style.clipPath='inset(0 0 100% 0)';w.style.visibility='hidden'}else if(p>=1){w.style.clipPath='';w.style.visibility=''}else{w.style.visibility='';const k=(1-e)*X;w.style.clipPath=`inset(0 ${k.toFixed(3)}% 0 ${k.toFixed(3)}%)`}
+    /* while the incoming window rises, its content trails slightly behind the edge (--e drives that lift in CSS) */
+    if(p<=0){w.style.clipPath='inset(0 0 100% 0)';w.style.visibility='hidden';w.classList.remove('rising')}else if(p>=1){w.style.clipPath='';w.style.visibility='';w.classList.remove('rising')}else{w.style.visibility='';const k=(1-e)*X;w.style.clipPath=`inset(0 ${k.toFixed(3)}% 0 ${k.toFixed(3)}%)`;w.style.setProperty('--e',e.toFixed(4));w.classList.add('rising')}
     const b=w.querySelector('.wbar');if(b){b.style.setProperty('--p',p.toFixed(3));const pc=p>=1?'READY':String(Math.round(p*100)).padStart(3,'0')+'%';const pe=b.querySelector('.pc');if(pe.textContent!==pc)pe.textContent=pc}
     const shp=pv.querySelector(':scope>.shade');if(p>0&&p<1){pv.style.transform=MOBQ()?'':`scale(${(1-.04*e).toFixed(4)})`;shp.style.opacity=(.6*e).toFixed(3)}else if(p>=1){pv.style.transform=MOBQ()?'':'scale(.96)';shp.style.opacity='.6'}else{pv.style.transform='';shp.style.opacity='0'}}
   dirtyS=false;if(act!==active){const first=active<0;active=act;setActiveW(act,first)}
-  {const w=WINS[active],lim=innerHeight*.94;w.querySelectorAll('.rv:not(.in),.split:not(.in),.sh:not(.in)').forEach(e=>{const t=e.getBoundingClientRect().top;if(t<lim&&t>-e.offsetHeight){e.classList.add('in');e.querySelectorAll('[data-count]').forEach(count)}})}
+  /* reveal content in the active window AND in a window that is still rising, so its heading and text arrive with it instead of popping in after it docks */
+  for(const w of [WINS[active],WINS[active+1]]){if(!w||(w!==WINS[active]&&!(LS[WINS.indexOf(w)].p>0)))continue;const lim=innerHeight*.9;w.querySelectorAll('.rv:not(.in),.split:not(.in),.sh:not(.in)').forEach(e=>{const t=e.getBoundingClientRect().top;if(t<lim&&t>-e.offsetHeight){e.classList.add('in');e.querySelectorAll('[data-count]').forEach(count)}})}
   /* a window that has been scrolled into but is no longer the active one must show all its content: reveals only ran for the active window, so jumping to #contact (or flicking back up) left earlier windows as bare headings */
   WINS.forEach((w,i)=>{if(i===active||w._all||!(i===0||LS[i].p>0))return;w._all=1;w.querySelectorAll('.rv:not(.in),.split:not(.in),.sh:not(.in),.nums:not(.in),.stats:not(.in)').forEach(e=>{e.classList.add('in');e.querySelectorAll('[data-count]').forEach(count)})});
   KV.cov=LS[1].p>=1;
