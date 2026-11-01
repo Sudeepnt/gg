@@ -14,6 +14,8 @@ const lean = (url, kind) => {
   if (!k) return kind === 'poster' ? '' : url;
   try { return new URL(url).origin + '/' + LEAN[k][kind]; } catch { return kind === 'poster' ? '' : url; }
 };
+/* a video uploaded from the admin has its first-frame picture stored next to it as "<name>-poster.jpg" */
+const posterOf = url => (lean(url, 'poster') || (url ? url.replace(/\.[a-z0-9]+(\?.*)?$/i, '') + '-poster.jpg' : ''));
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 /* if the media Worker ever fails, play the same file straight from the bucket's r2.dev address */
@@ -55,8 +57,10 @@ function applyReel(url, url2) {
   const canvas = $('#reel'), scr = canvas?.closest('.scr');
   if (!scr || !url || scr.querySelector('video')) return;
   const reels = { anim: lean(url, 'full'), art: lean(url2 || url, 'full') };
+  const posters = { anim: posterOf(url), art: posterOf(url2 || url) };
+  let current = 'anim';
   const v = document.createElement('video');
-  Object.assign(v, { muted: true, loop: true, playsInline: true, preload: 'metadata', poster: lean(url, 'poster') });
+  Object.assign(v, { muted: true, loop: true, playsInline: true, preload: 'metadata', poster: posters.anim });
   v.className = 'rv-video';
   v.src = reels.anim;
   v.addEventListener('error', () => mediaFallback(v));
@@ -121,8 +125,8 @@ function applyReel(url, url2) {
   v.addEventListener('timeupdate', () => { fill.style.width = (v.duration ? v.currentTime / v.duration * 100 : 0) + '%'; });
   ctl.querySelector('.rv-bar').addEventListener('click', e => { e.stopPropagation(); const r = e.currentTarget.getBoundingClientRect(); if (v.duration) v.currentTime = (e.clientX - r.left) / r.width * v.duration; });
   document.querySelectorAll('.mon .seg button[data-r]').forEach(b => b.addEventListener('click', () => {
-    const src = reels[b.dataset.r]; if (!src || v.src.endsWith(src)) return;
-    v.src = src; userPaused = false; sync();
+    const key = b.dataset.r, src = reels[key]; if (!src || key === current) return;
+    current = key; v.poster = posters[key]; v.src = src; userPaused = false; sync();
   }));
   new IntersectionObserver(([e]) => { inView = e.isIntersecting; sync(); }, { threshold: 0.35 }).observe(scr);
   document.addEventListener('visibilitychange', sync);

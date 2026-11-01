@@ -17,7 +17,8 @@ export async function loadCMS() {
   const c = siteContent();
   if (!c) return snapshot;
   return merge(snapshot, {
-    home: { playReelVideo: c.reels?.main || '', playReelVideo2: c.reels?.second || '' },
+    /* GG Productions monitor: one video per switch button (admin: GG Productions -> Showreel player). Empty = the older reels.main / reels.second. */
+    home: { playReelVideo: c.productionReels?.animation || c.reels?.main || '', playReelVideo2: c.productionReels?.art || c.reels?.second || '' },
     ggProductions: { clients: (c.clients || []).map(x => ({ name: x.name, image: x.logo })) },
     pitch: { title: c.pitch?.title, paragraphs: c.pitch?.paragraphs, buttonText: c.pitch?.buttonText },
     contact: { email: c.contact?.email },

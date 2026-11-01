@@ -363,6 +363,10 @@ const TABS: Tab[] = [
     { id: "production", label: "GG Productions", icon: Clapperboard, blocks: [
         card("Heading and introduction", [W("GG Productions"), T("GG Productions", "GG Productions", "Heading"), T("GG Productions", "Services arm", "Sub-heading"), T("GG Productions", "A lean partner", "Introduction")]),
         servicesList,
+        { kind: "object", path: "productionReels", title: "Showreel videos", cols: 2,
+          hint: "The video monitor next to the services. Each switch button plays its own video. Leave one empty and that button plays the other button's video. Upload a video (about 16:9, MP4) or paste a link; it is stored on Cloudflare R2.",
+          fields: [{ key: "animation", label: "Video for button 1 (Animation)", type: "video", hint: "Plays when the page opens and when button 1 is pressed." },
+                   { key: "art", label: "Video for button 2 (Art)", type: "video", hint: "Plays when button 2 is pressed." }] },
         card("Showreel player", [G("Reel switch buttons"), T("GG Productions", "Animation", "Button 1"), T("GG Productions", "Art", "Button 2"), G("Caption under the player"), ...UF("GG Productions")], "The video monitor next to the services."),
         { kind: "list", path: "productionImages", title: "Image gallery", addLabel: "Add image", label: (x) => x.caption || "New image", blank: () => ({ image: "", caption: "" }),
           hint: "Looks like the showreel monitor and sits under it, with previous / next buttons and a full-screen view. It only appears on the site when at least one image is added; with none, the page stays as it is now.",
