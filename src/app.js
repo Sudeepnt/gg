@@ -670,7 +670,13 @@ if(FINE&&!RM){const SEL='.gnav a .e,.hd-ct,.more>span:not(.ci),.btn,.fsm a,.fsm 
 (function(){const L=['GG-OS 2.6 · NODE BLR-01','MEM OK · GPU OK · ROSTER ONLINE','MOUNT /WORLDS ........ OK'].map(tx);const b=$('#bios');if(!b||RM)return;let i=0;const all=L.join('\n');(function t(){i+=3;b.textContent=all.slice(0,i);if(i<all.length)setTimeout(t,14)})()})();
 
 /* ================= WINDOW STACK ENGINE ================= */
-const WINS=$$('main .win');const MOBQ=()=>innerWidth<761;const HHq=()=>$('#hd').offsetHeight;
+/* nothing from the CMS for a block: take its container out of the page (and its menu links) instead of leaving an empty frame */
+{const off=(sel,...ids)=>{$$(sel).forEach(e=>{e.hidden=true;e.style.display='none'});ids.forEach(id=>$$(`a[href="#${id}"],[data-go="${id}"],[data-w="${id}"]`).forEach(e=>{if(!e.closest('main'))e.hidden=true,e.style.display='none'}))};
+  if(!NEWS.length)off('#news','news');if(!GAMES.length)off('#games','games');
+  if(!JOBS.length)off('#jobs,#recruit .note');if(!CLIENTS.length)off('#clients','clients');if(!CREW.length)off('#leadership','leadership');
+  if(!SVC.length)off('#svc');if(!SK.length)off('#spx');
+  $$('main .win:not([hidden])').forEach((w,i)=>{if(!i)return;const n=String(i).padStart(2,'0');w.dataset.no=n;const p=w.querySelector('.sh .no');if(p)p.textContent=n+' '})}
+const WINS=$$('main .win:not([hidden])');const MOBQ=()=>innerWidth<761;const HHq=()=>$('#hd').offsetHeight;
 WINS.forEach((w,i)=>{w.style.zIndex=i+1;const sh=document.createElement('div');sh.className='shade';w.appendChild(sh);
   if(i){const b=document.createElement('div');b.className='wbar';b.setAttribute('aria-hidden','true');b.innerHTML=`<span class="sq"></span><b>${w.dataset.no}</b><span class="nm">${w.dataset.name}</span><i class="cur"></i><span class="ld"><i></i></span><span class="pc">READY</span>`;w.prepend(b)}});
 $('#wrail').innerHTML=WINS.map(()=>'<i></i>').join('');
