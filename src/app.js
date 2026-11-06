@@ -371,7 +371,7 @@ function openDp(i,push=true){const g=GAMES[i];if(!g||g.nopk)return;dpLast=dpLast
   const fact=g.fact||[];
   const sealedRow=r=>sealed&&!['Developer','Based in','Website','Press contact','Status'].includes(r[0]);
   const fig=(cls,ratio,img,cap,dl,dlt)=>`<figure class="pkf ${cls}"><div class="im" style="aspect-ratio:${ratio}">${img}</div><figcaption><span>${cap}</span><button class="dl" type="button" data-dl="${dl}">${dlt}</button></figcaption></figure>`;
-  const hasLogo=!!(g.logoBlack||g.logoWhite),hasShots=(g.shotImgs||[]).some(Boolean),hasPromo=Object.values(g.promo||{}).some(Boolean),hasMedia=sealed||!!g.trailer||hasLogo||hasShots||hasPromo;
+  const hasLogo=!!(g.logoBlack||g.logoWhite),hasShots=(g.shotImgs||[]).some(Boolean),hasPromo=Object.values(g.promo||{}).some(Boolean),hasMedia=!!g.trailer||hasLogo||hasShots||hasPromo;
   const hasFact=fact.length>0,hasShort=!!String(g.short||'').trim(),hasDescP=(g.desc||[]).length>0,hasFeat=(g.feat||[]).some(f=>f[0]||f[1]),hasDesc=sealed||hasShort||hasDescP||hasFeat,hasAbout=!!String(pkAbout(g)||'').trim(),hasStudio=!!pkStudio(g,true),hasContact=pkContact(g).length>0;
   const media=sealed?`<div class="pk-sub"><h3>${pl('media','Media')} <small>${pl('embargoTag','EMBARGOED')}</small></h3><div class="emb">${pl('embargoText','Media embargoed until reveal day')}</div></div>`:
    `${g.trailer?`<div class="pk-sub"><h3>${pl('trailer','Trailer')}</h3><div class="trl-v" data-trailer></div></div>`:''}
